@@ -1,0 +1,197 @@
+/* === GLOBALS.CSS === */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&display=swap');
+@import "tailwindcss"; /* Для новых версий Next.js/Tailwind */
+
+/* Если прошлая версия не сработала, используй классику: */
+/* @tailwind base; */
+/* @tailwind components; */
+/* @tailwind utilities; */
+
+/* Настройка базовых переменных под стиль Orkin */
+:root {
+    /* Цветовая палитра */
+    --color-white: #FFFFFF;
+    --color-black: #000000;
+    --color-dark-grey: #212121; /* Для суб-хедеров */
+    --color-orkin-red: #C8102E; /* Тот самый красный */
+    --color-red-hover: #A00D25; /* Темнее для наведения */
+
+    /* Шрифтовые пары (как на скринах) */
+    --font-heading: 'Barlow Condensed', sans-serif; /* Для H1, H2, H3 */
+    --font-body: 'Inter', sans-serif;             /* Для текста и кнопок */
+
+    /* Системные настройки (как у Orkin) */
+    --spacing-main: 16px; /* Базовый отступ для мобилок */
+    --transition-fast: 0.2s ease-in-out;
+}
+
+/* === ОБНУЛЕНИЕ (RESET) === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+    background-color: var(--color-white);
+    color: var(--color-black);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+/* === ТИПОГРАФИКА (ORKIN STYLE) === */
+
+h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    font-weight: 800; /* Самый жирный */
+    text-transform: uppercase; /* Всегда капсом */
+    letter-spacing: -0.02em;   /* Сжатый трекинг */
+    line-height: 0.95;         /* Плотный интерлиньяж */
+    margin-bottom: 24px;
+}
+
+h1 {
+    font-size: 56px; /* Огромный на мобилке */
+}
+
+h2 {
+    font-size: 32px;
+}
+
+p {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--color-dark-grey);
+    margin-bottom: 32px;
+}
+
+/* Акцентный красный текст (как в 'RODENTS') */
+.text-accent-red {
+    color: var(--color-orkin-red);
+}
+
+/* === КНОПКИ (KILLEA BUTTONS) === */
+
+/* Общий стиль для всех кнопок */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; /* На мобилке всегда на всю ширину */
+    height: 56px; /* Фиксированная высота */
+    padding: 0 24px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase; /* Всегда капсом */
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    border: none;
+    border-radius: 0; /* Строго острые углы */
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+/* Основная красная кнопка (как 'GET A QUOTE') */
+.btn-primary {
+    background-color: var(--color-orkin-red);
+    color: var(--color-white);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-red-hover);
+}
+
+/* Вторичная кнопка (пустая с рамкой) */
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-black);
+    border: 2px solid var(--color-black);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+/* === ВЕРСТКА И БЛОКИ === */
+
+/* Главный контейнер (как Header у Orkin) */
+.header-top-bar {
+    background-color: var(--color-dark-grey);
+    color: var(--color-white);
+    font-size: 14px;
+    padding: 12px var(--spacing-main);
+    text-align: center;
+}
+
+/* Секция выбора (Residential / Commercial) */
+.segment-switcher {
+    display: flex;
+    height: 48px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.segment-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 15px;
+    color: #757575; /* Серый текст */
+    text-decoration: none;
+}
+
+.segment-item.active {
+    background-color: var(--color-orkin-red);
+    color: var(--color-white);
+}
+
+/* Главный блок контента */
+.hero-content {
+    padding: 64px var(--spacing-main);
+    text-align: left;
+}
+
+/* Картинка-фотография (как с дезинфектором) */
+.img-block {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* === UTILITIES (Для ускорения верстки) === */
+.p-main { padding: var(--spacing-main); }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+.mb-4 { margin-bottom: 32px; }
+
+/* Специальный фикс для линий в футере */
+.footer-divider-line {
+    display: block !important;
+    width: 100% !important;
+    height: 1px !important;
+    border-top: 1px solid #eeeeee !important;
+    clear: both !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    content: "" !important;
+}
+
+/* В самый конец globals.css */
+.custom-gray-line {
+    display: block !important;
+    width: 100% !important;
+    height: 1px !important;
+    background-color: #eeeeee !important; /* Тот самый светло-серый цвет */
+    border: none !important;
+    margin: 0 !important;
+}

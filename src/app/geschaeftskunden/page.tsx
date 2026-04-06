@@ -1,0 +1,172 @@
+'use client';
+
+import React, { useState } from 'react';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+
+const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '12px 16px',
+    border: '1px solid #d1d5db',
+    borderRadius: '6px',
+    fontSize: '14px',
+    color: '#374151',
+    background: '#fff',
+    outline: 'none',
+    boxSizing: 'border-box',
+    fontFamily: 'inherit',
+    transition: 'border-color 0.15s',
+};
+
+const labelStyle: React.CSSProperties = {
+    display: 'block',
+    fontSize: '13px',
+    fontWeight: 500,
+    color: '#374151',
+    marginBottom: '6px',
+};
+
+function KontaktForm() {
+    const [form, setForm] = useState({
+        name: '', unternehmen: '', telefon: '', email: '', nachricht: '',
+    });
+    const [sent, setSent] = useState(false);
+
+    const set = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+        setForm(p => ({ ...p, [e.target.name]: e.target.value }));
+
+    if (sent) {
+        return (
+            <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <div style={{ fontSize: '44px', marginBottom: '12px' }}>✅</div>
+                <h3 style={{
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    fontSize: '28px', fontWeight: 900,
+                    textTransform: 'uppercase', color: '#1E293B', margin: '0 0 8px',
+                }}>Vielen Dank!</h3>
+                <p style={{ color: '#64748b' }}>Wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
+            </div>
+        );
+    }
+
+    return (
+        <div>
+            <p style={{ fontSize: '14px', color: '#374151', marginBottom: '6px' }}>
+                Füllen Sie das folgende Formular aus und wir rufen Sie innerhalb von 24 Stunden zurück.
+            </p>
+            <p style={{ fontSize: '14px', color: '#374151', marginBottom: '24px' }}>
+                Oder rufen Sie uns direkt an unter:{' '}
+                <a href="tel:03046690747" style={{ color: '#C8102E', fontWeight: 600, textDecoration: 'none' }}>
+                    +49 30 46690747
+                </a>{' '}
+                (Mo – Fr, 9–18 Uhr)
+            </p>
+
+            <form onSubmit={e => { e.preventDefault(); setSent(true); }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
+            >
+                <div>
+                    <label style={labelStyle}>Vor- und Nachname</label>
+                    <input name="name" value={form.name} onChange={set} style={inputStyle} />
+                </div>
+                <div>
+                    <label style={labelStyle}>Name Ihres Unternehmens</label>
+                    <input name="unternehmen" value={form.unternehmen} onChange={set} style={inputStyle} />
+                </div>
+                <div>
+                    <label style={labelStyle}>Telefonnummer</label>
+                    <input name="telefon" type="tel" value={form.telefon} onChange={set} style={inputStyle} />
+                </div>
+                <div>
+                    <label style={labelStyle}>E-Mail-Adresse</label>
+                    <input name="email" type="email" value={form.email} onChange={set} style={inputStyle} />
+                </div>
+                <div>
+                    <label style={labelStyle}>Anmerkungen (optional)</label>
+                    <textarea name="nachricht" value={form.nachricht} onChange={set} rows={4}
+                        style={{ ...inputStyle, resize: 'vertical' }}
+                        placeholder="Schildern Sie uns mehr weitere relevante Informationen..."
+                    />
+                </div>
+                <div style={{ paddingTop: '6px' }}>
+                    <button type="submit" style={{
+                        padding: '12px 28px', background: '#C8102E', color: '#fff',
+                        border: 'none', borderRadius: '6px', fontSize: '14px',
+                        fontWeight: 700, cursor: 'pointer', transition: 'background 0.15s',
+                    }}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#a50d25')}
+                        onMouseLeave={e => (e.currentTarget.style.background = '#C8102E')}
+                    >
+                        Anfrage senden
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
+}
+
+export default function GeschaeftskundenPage() {
+    return (
+        <>
+            <Header />
+
+            <main style={{ paddingTop: '68px' }} className="min-h-screen bg-white flex flex-col items-center w-full overflow-x-hidden">
+
+                {/* ── Hero ── */}
+                <section className="w-full flex justify-center border-b border-gray-100"
+                    style={{ padding: '4px 0 80px' }}
+                >
+                    <div className="w-full max-w-[1200px] px-6 space-y-6">
+
+
+                        <h1
+                            className="text-5xl md:text-7xl font-black leading-[1.05] uppercase tracking-tight"
+                            style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900 }}
+                        >
+                            <span className="block text-[#1E293B]">Für Unternehmen &amp; Gewerbe</span>
+                            <span className="block text-[#1E293B]">Professionelle Schädlings-</span>
+                            <span className="block text-[#C8102E]">bekämpfung.</span>
+                        </h1>
+
+
+                        <p className="text-xl text-gray-500 max-w-xl font-medium" style={{ lineHeight: 1.6 }}>
+                            Maßgeschneiderte Lösungen für Gastronomie, Büros und Industrie.
+                            Diskret, schnell und rechtssicher — täglich deutschlandweit.
+                        </p>
+
+                        <div className="flex items-center gap-6">
+                            <button
+                                className="bg-[#C8102E] text-white rounded-full font-black shadow-xl shadow-red-100 uppercase whitespace-nowrap inline-flex items-center justify-center"
+                                style={{ fontSize: '14px', padding: '16px 42px', lineHeight: '1', border: 'none', cursor: 'pointer' }}
+                                onClick={() => document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' })}
+                            >
+                                Jetzt anfragen
+                            </button>
+                            <a href="tel:03046690747" className="text-[#C8102E] font-bold flex items-center gap-2"
+                                style={{ fontSize: '15px', textDecoration: 'none' }}>
+                                📞 030 46690747
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ── Контактная форма ── */}
+                <section id="kontakt" className="w-full bg-[#F8FAFC] py-20 px-6">
+                    <div style={{ maxWidth: '740px', margin: '0 auto' }}>
+                        <h2 style={{
+                            fontFamily: "'Barlow Condensed', sans-serif",
+                            fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)',
+                            fontWeight: 900, color: '#1E293B', marginBottom: '16px',
+                        }}>
+                            Interesse? Kontaktieren Sie uns!
+                        </h2>
+                        <KontaktForm />
+                    </div>
+                </section>
+
+            </main>
+
+            <Footer />
+        </>
+    );
+}

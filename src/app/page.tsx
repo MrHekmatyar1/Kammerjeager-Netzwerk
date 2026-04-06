@@ -10,33 +10,35 @@ export default function Home() {
     return (
         <main className="min-h-screen bg-white flex flex-col items-center w-full overflow-x-hidden">
 
-            {/* --- HERO SECTION --- */}
+            {/* ── Hero ── */}
             <Hero />
 
-            {/* --- REVIEWS SECTION --- */}
-            <section className="w-full flex flex-col items-center bg-[#F8FAFC] pt-24 pb-10 px-6">
-                <ReviewSlider />
-            </section>
-
-            {/* --- UNSER PROZESS SECTION --- */}
+            {/* ── Как это работает ── */}
             <UnserProzess />
 
-            {/* --- WIZARD SECTION --- */}
-            <section className="w-full flex flex-col items-center bg-[#F8FAFC] py-16 px-6">
+            {/* ── Выбор вредителя ── */}
+            <section className="w-full flex flex-col items-center bg-white px-6" style={{ paddingTop: '128px', paddingBottom: '200px' }}>
                 <div className="w-full max-w-[850px]">
-                    <div className="bg-white rounded-[40px] shadow-[0_30px_80px_rgba(0,0,0,0.06)] border border-gray-100">
+                    <div className="bg-[#F8FAFC] rounded-[40px] shadow-[0_30px_80px_rgba(0,0,0,0.05)] border border-gray-100">
                         <div className="px-8 pt-10 pb-14 md:px-14 md:pt-12 md:pb-16">
-                            <h2 className="text-3xl md:text-5xl font-black text-[#1E293B] uppercase leading-[0.9] tracking-tighter text-center mb-8">
+                            <h2 className="text-3xl md:text-5xl font-black text-[#1E293B] uppercase leading-[0.9] tracking-tighter text-center mb-8"
+                                style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
                                 Welcher Schädling <br /> bereitet Probleme?
                             </h2>
-                            <div className="w-full border-t border-gray-100 mb-8"></div>
+                            <div className="w-full border-t border-gray-100 mb-8" />
                             <LeadWizard />
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* --- FOOTER --- */}
+            {/* ── Отзывы — под выбором вредителя ── */}
+            <section className="w-full bg-[#F8FAFC] border-t border-gray-100" style={{ paddingTop: '80px', paddingBottom: '32px' }}>
+                <ReviewSlider />
+            </section>
+
+
+            {/* ── Footer ── */}
             <Footer />
 
         </main>

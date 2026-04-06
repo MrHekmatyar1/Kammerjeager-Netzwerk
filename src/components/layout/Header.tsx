@@ -53,7 +53,21 @@ export default function Header() {
     };
 
     return (
-        <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, backgroundColor: 'white', borderBottom: atTop && !activeMenu ? '2px solid #C8102E' : '1px solid #f1f5f9' }}>
+        <>
+            {/* Backdrop — накрывает Hero когда дропдаун открыт */}
+            <div
+                onClick={() => setActiveMenu(null)}
+                style={{
+                    position: 'fixed', inset: 0,
+                    background: 'rgba(0,0,0,0.45)',
+                    zIndex: 9998,
+                    opacity: activeMenu ? 1 : 0,
+                    pointerEvents: activeMenu ? 'auto' : 'none',
+                    transition: 'opacity 0.2s ease',
+                }}
+            />
+
+            <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, backgroundColor: 'white', borderBottom: atTop && !activeMenu ? '2px solid #C8102E' : '1px solid #f1f5f9' }}>
             {/* Main bar */}
             <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 32px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px' }}>
 
@@ -75,17 +89,32 @@ export default function Header() {
                             onMouseLeave={() => { handleLeave(); setHoveredMenu(null); }}
                             style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}
                         >
-                            <button style={{
-                                background: 'none', border: 'none', cursor: 'pointer',
-                                padding: '0 18px', height: '100%',
-                                fontSize: '15px', fontWeight: 500,
-                                color: hoveredMenu === key ? '#C8102E' : '#475569',
-                                borderBottom: hoveredMenu === key ? '3px solid #C8102E' : '3px solid transparent',
-                                transition: 'color 0.15s, border-color 0.15s',
-                                whiteSpace: 'nowrap',
-                            }}>
-                                {key}
-                            </button>
+                            {/* Geschäftskunden — ссылка на отдельную страницу в нашем стиле */}
+                            {key === 'Geschäftskunden' ? (
+                                <Link href="/geschaeftskunden" style={{
+                                    display: 'flex', alignItems: 'center', height: '100%',
+                                    padding: '0 18px',
+                                    fontSize: '15px', fontWeight: 500,
+                                    color: hoveredMenu === key ? '#C8102E' : '#475569',
+                                    borderBottom: hoveredMenu === key ? '3px solid #C8102E' : '3px solid transparent',
+                                    transition: 'color 0.15s, border-color 0.15s',
+                                    whiteSpace: 'nowrap', textDecoration: 'none',
+                                }}>
+                                    {key}
+                                </Link>
+                            ) : (
+                                <button style={{
+                                    background: 'none', border: 'none', cursor: 'pointer',
+                                    padding: '0 18px', height: '100%',
+                                    fontSize: '15px', fontWeight: 500,
+                                    color: hoveredMenu === key ? '#C8102E' : '#475569',
+                                    borderBottom: hoveredMenu === key ? '3px solid #C8102E' : '3px solid transparent',
+                                    transition: 'color 0.15s, border-color 0.15s',
+                                    whiteSpace: 'nowrap',
+                                }}>
+                                    {key}
+                                </button>
+                            )}
                         </div>
                     ))}
                 </nav>
@@ -128,7 +157,7 @@ export default function Header() {
 
                         {/* Left: Title + description + CTA */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                            <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 900, color: '#1E293B', textTransform: 'uppercase', fontStyle: 'italic', letterSpacing: '-0.02em' }}>
+                            <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 900, color: '#1E293B', textTransform: 'uppercase', letterSpacing: '-0.02em' }}>
                                 {MENUS[activeMenu].title}
                             </h3>
                             <p style={{ margin: 0, fontSize: '14px', color: '#64748b', lineHeight: 1.6 }}>
@@ -157,5 +186,6 @@ export default function Header() {
                 )}
             </div>
         </header>
+        </>
     );
 }

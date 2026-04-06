@@ -64,8 +64,8 @@ export default function UnserProzess() {
             <style jsx>{`
                 .unser-prozess-section {
                     width: 100%;
-                    background: #f2f2f2;
-                    padding: 72px 24px 88px;
+                    background: #ffffff;
+                    padding: 100px 24px 120px;
                 }
 
                 .unser-prozess-inner {

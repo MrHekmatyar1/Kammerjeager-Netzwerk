@@ -56,8 +56,8 @@ function KontaktForm() {
             </p>
             <p style={{ fontSize: '14px', color: '#374151', marginBottom: '24px' }}>
                 Oder rufen Sie uns direkt an unter:{' '}
-                <a href="tel:03046690747" style={{ color: '#C8102E', fontWeight: 600, textDecoration: 'none' }}>
-                    +49 30 46690747
+                <a href="tel:016092376320" style={{ color: '#C8102E', fontWeight: 600, textDecoration: 'none' }}>
+                    0160 92376320
                 </a>{' '}
                 (Mo – Fr, 9–18 Uhr)
             </p>
@@ -124,7 +124,8 @@ export default function GeschaeftskundenPage() {
                             style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900 }}
                         >
                             <span className="block text-[#1E293B]">Für Unternehmen &amp; Gewerbe</span>
-                            <span className="block text-[#1E293B]">Professionelle Schädlings-</span>
+                            <span className="block text-[#1E293B]">Professionelle</span>
+                            <span className="block text-[#1E293B]">Schädlings</span>
                             <span className="block text-[#C8102E]">bekämpfung.</span>
                         </h1>
 
@@ -136,15 +137,15 @@ export default function GeschaeftskundenPage() {
 
                         <div className="flex items-center gap-6">
                             <button
-                                className="bg-[#C8102E] text-white rounded-full font-black shadow-xl shadow-red-100 uppercase whitespace-nowrap inline-flex items-center justify-center"
+                                className="bg-[#C8102E] text-white rounded-none font-black shadow-xl shadow-red-100 uppercase whitespace-nowrap inline-flex items-center justify-center"
                                 style={{ fontSize: '14px', padding: '16px 42px', lineHeight: '1', border: 'none', cursor: 'pointer' }}
                                 onClick={() => document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' })}
                             >
                                 Jetzt anfragen
                             </button>
-                            <a href="tel:03046690747" className="text-[#C8102E] font-bold flex items-center gap-2"
+                            <a href="tel:016092376320" className="text-[#C8102E] font-bold flex items-center gap-2"
                                 style={{ fontSize: '15px', textDecoration: 'none' }}>
-                                📞 030 46690747
+                                📞 0160 92376320
                             </a>
                         </div>
                     </div>

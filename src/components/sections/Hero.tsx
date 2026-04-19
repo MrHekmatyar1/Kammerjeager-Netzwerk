@@ -116,7 +116,7 @@ export default function Hero() {
 
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                         <button
-                            className="bg-[#C8102E] text-white rounded-full font-black shadow-xl shadow-red-100 uppercase whitespace-nowrap inline-flex items-center justify-center"
+                            className="bg-[#C8102E] text-white rounded-none font-black shadow-xl shadow-red-100 uppercase whitespace-nowrap inline-flex items-center justify-center"
                             style={{ fontSize: '14px', padding: '16px 42px', lineHeight: '1', border: 'none', cursor: 'pointer' }}
                         >
                             Anfrage senden

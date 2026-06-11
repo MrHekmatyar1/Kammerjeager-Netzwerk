@@ -201,7 +201,7 @@ export default function DashboardOrders() {
             {/* Order cards */}
             <div style={{ display: 'grid', gap: '20px' }}>
                 {orders.map(order => {
-                    const cfg = STATUS_CONFIG[order.status] || STATUS_CONFIG['angenommen'];
+                    const cfg = STATUS_CONFIG[order.status] || STATUS_CONFIG['angenommen']!;
                     const isCompleted = order.status === 'abgeschlossen';
                     const isCancelled = order.status === 'storniert';
                     const isClosing = closingId === order.id;

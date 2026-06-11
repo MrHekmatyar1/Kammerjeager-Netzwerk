@@ -91,7 +91,7 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                         {leads.map((lead) => (
                             <tr key={lead.id} className="hover:bg-slate-50/50 transition-colors">
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    {new Date(lead.created_at || lead.erstellt_am).toLocaleDateString('de-DE', {
+                                    {new Date(lead.created_at || lead.erstellt_am || new Date()).toLocaleDateString('de-DE', {
                                         day: '2-digit', month: '2-digit', year: 'numeric',
                                         hour: '2-digit', minute: '2-digit'
                                     })}
@@ -154,8 +154,8 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                                 {lead.firma && <div className="text-sm text-slate-500 mt-0.5">{lead.firma}</div>}
                             </div>
                             <div className="text-right text-xs text-slate-400 font-medium whitespace-nowrap">
-                                {new Date(lead.created_at || lead.erstellt_am).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}<br/>
-                                {new Date(lead.created_at || lead.erstellt_am).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
+                                {new Date(lead.created_at || lead.erstellt_am || new Date()).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}<br/>
+                                {new Date(lead.created_at || lead.erstellt_am || new Date()).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
                             </div>
                         </div>
 

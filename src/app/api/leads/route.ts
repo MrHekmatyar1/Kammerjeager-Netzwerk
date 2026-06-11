@@ -11,7 +11,7 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 // ─── Умный поиск лучшего партнёра ─────────────────────────────────────────
 // 1. Фильтр по PLZ + is_active
 // 2. Load balancing: выбираем партнёра с наименьшим числом активных лидов
-async function findBestPartner(supabase: ReturnType<typeof createClient>, plz: string) {
+async function findBestPartner(supabase: any, plz: string) {
     const { data: masters, error } = await supabase
         .from('masters')
         .select('*')

@@ -133,24 +133,29 @@ export async function POST(req: NextRequest) {
                 }
             }
 
-            // Admin Telegram Notification
-            const adminTgId = process.env.ADMIN_TELEGRAM_CHAT_ID;
-            if (adminTgId) {
-                const { sendTelegramMessage } = await import('@/lib/telegram');
-                const tgMessage = 
-                    `🚨 <b>Neuer Lead eingegangen!</b>\n\n` +
-                    `<b>Name:</b> ${entry.name}\n` +
-                    `<b>Telefon:</b> <a href="tel:${entry.telefon}">${entry.telefon}</a>\n` +
-                    `<b>PLZ:</b> ${entry.plz}\n` +
-                    `<b>Schädling:</b> ${entry.schaedling || 'Nicht angegeben'}\n` +
-                    `<b>Kundentyp:</b> ${entry.kunde_typ || '-'}\n` +
-                    `<b>Status:</b> ${assignedMaster ? 'Zugewiesen an ' + assignedMaster.name : 'UNASSIGNED ⚠️'}\n\n` +
-                    `📲 <a href="https://kammerjaeger-structon.de/admin">Admin Dashboard öffnen</a>`;
-                sendTelegramMessage(adminTgId, tgMessage).catch(e => console.error('[Admin TG Error]:', e));
-            }
-
         } else {
-            await saveFallback(entry);
+            try {
+                await saveFallback(entry);
+            } catch (fsErr) {
+                console.error('[leads] Fallback save failed:', fsErr);
+            }
+        }
+
+        // Admin Telegram Notification (ALWAYS run)
+        const adminTgId = process.env.ADMIN_TELEGRAM_CHAT_ID;
+        if (adminTgId) {
+            const { sendTelegramMessage } = await import('@/lib/telegram');
+            const masterName = entry.master_id ? 'Ein Partner' : 'UNASSIGNED ⚠️'; // simplification for fallback
+            const tgMessage = 
+                `🚨 <b>Neuer Lead eingegangen!</b>\n\n` +
+                `<b>Name:</b> ${entry.name}\n` +
+                `<b>Telefon:</b> <a href="tel:${entry.telefon}">${entry.telefon}</a>\n` +
+                `<b>PLZ:</b> ${entry.plz}\n` +
+                `<b>Schädling:</b> ${entry.schaedling || 'Nicht angegeben'}\n` +
+                `<b>Kundentyp:</b> ${entry.kunde_typ || '-'}\n` +
+                `<b>Status:</b> ${masterName}\n\n` +
+                `📲 <a href="https://kammerjaeger-structon.de/admin">Admin Dashboard öffnen</a>`;
+            sendTelegramMessage(adminTgId, tgMessage).catch(e => console.error('[Admin TG Error]:', e));
         }
 
         // Email клиенту и Admin — всегда асинхронно

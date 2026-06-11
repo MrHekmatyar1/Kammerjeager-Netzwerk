@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
         '/api/',       // Закрываем системные API
       ],
     },
-    sitemap: 'https://kammerjaeger-zentrale.de/sitemap.xml',
+    sitemap: 'https://kammerjaeger-structon.de/sitemap.xml',
   }
 }

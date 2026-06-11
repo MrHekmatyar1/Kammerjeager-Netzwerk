@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
                             `<b>Schädling:</b> ${entry.schaedling || 'Nicht angegeben'}\n` +
                             `<b>Kundentyp:</b> ${entry.kunde_typ || ''} ${entry.objekt_typ ? `(${entry.objekt_typ})` : ''}\n` +
                             `<b>Befall:</b> ${entry.befall || '-'}, ${entry.raeume ? `${entry.raeume} Räume` : ''}\n\n` +
-                            `📲 Jetzt im Dashboard ansehen: https://kammerjaeger-zentrale.de/dashboard`;
+                            `📲 Jetzt im Dashboard ansehen: https://kammerjaeger-structon.de/dashboard`;
                         sendTelegramMessage(assignedMaster.telegram_chat_id, tgMessage)
                             .catch(e => console.error('[TG] Send Error:', e));
                     }
@@ -145,7 +145,7 @@ export async function POST(req: NextRequest) {
                     `<b>Schädling:</b> ${entry.schaedling || 'Nicht angegeben'}\n` +
                     `<b>Kundentyp:</b> ${entry.kunde_typ || '-'}\n` +
                     `<b>Status:</b> ${assignedMaster ? 'Zugewiesen an ' + assignedMaster.name : 'UNASSIGNED ⚠️'}\n\n` +
-                    `📲 <a href="https://kammerjaeger-zentrale.de/admin">Admin Dashboard öffnen</a>`;
+                    `📲 <a href="https://kammerjaeger-structon.de/admin">Admin Dashboard öffnen</a>`;
                 sendTelegramMessage(adminTgId, tgMessage).catch(e => console.error('[Admin TG Error]:', e));
             }
 

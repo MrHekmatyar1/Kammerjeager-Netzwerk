@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 import { CITIES } from '@/lib/data/cities'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://kammerjaeger-zentrale.de'
+  const baseUrl = 'https://kammerjaeger-structon.de'
 
   // Основные статические страницы сайта
   const staticPages = [

@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
                     `<b>PLZ:</b> ${lead.plz}\n` +
                     `<b>Schädling:</b> ${lead.schaedling || 'Nicht angegeben'}\n` +
                     `<b>Befall:</b> ${lead.befall || '-'}\n\n` +
-                    `📲 Jetzt im Dashboard: https://kammerjaeger-zentrale.de/dashboard`;
+                    `📲 Jetzt im Dashboard: https://kammerjaeger-structon.de/dashboard`;
                 sendTelegramMessage(nextMaster.telegram_chat_id, tgMessage)
                     .catch(e => console.error('[TG reject] Error:', e));
             }

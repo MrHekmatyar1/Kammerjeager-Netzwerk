@@ -68,7 +68,7 @@ export async function sendPartnerLeadNotification(partnerEmail: string, partnerN
 
                 <!-- CTA -->
                 <div style="text-align: center; margin-bottom: 24px;">
-                    <a href="https://kammerjaeger-zentrale.de/dashboard" style="display: inline-block; background: #C8102E; color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.05em;">
+                    <a href="https://kammerjaeger-structon.de/dashboard" style="display: inline-block; background: #C8102E; color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.05em;">
                         → Jetzt im Dashboard ansehen
                     </a>
                 </div>

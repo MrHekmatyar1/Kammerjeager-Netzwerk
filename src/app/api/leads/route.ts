@@ -132,6 +132,23 @@ export async function POST(req: NextRequest) {
                     console.warn(`[leads] No partner found for PLZ ${entry.plz} — lead is UNASSIGNED`);
                 }
             }
+
+            // Admin Telegram Notification
+            const adminTgId = process.env.ADMIN_TELEGRAM_CHAT_ID;
+            if (adminTgId) {
+                const { sendTelegramMessage } = await import('@/lib/telegram');
+                const tgMessage = 
+                    `🚨 <b>Neuer Lead eingegangen!</b>\n\n` +
+                    `<b>Name:</b> ${entry.name}\n` +
+                    `<b>Telefon:</b> <a href="tel:${entry.telefon}">${entry.telefon}</a>\n` +
+                    `<b>PLZ:</b> ${entry.plz}\n` +
+                    `<b>Schädling:</b> ${entry.schaedling || 'Nicht angegeben'}\n` +
+                    `<b>Kundentyp:</b> ${entry.kunde_typ || '-'}\n` +
+                    `<b>Status:</b> ${assignedMaster ? 'Zugewiesen an ' + assignedMaster.name : 'UNASSIGNED ⚠️'}\n\n` +
+                    `📲 <a href="https://kammerjaeger-zentrale.de/admin">Admin Dashboard öffnen</a>`;
+                sendTelegramMessage(adminTgId, tgMessage).catch(e => console.error('[Admin TG Error]:', e));
+            }
+
         } else {
             await saveFallback(entry);
         }

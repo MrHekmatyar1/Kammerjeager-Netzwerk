@@ -28,12 +28,43 @@ const labelStyle: React.CSSProperties = {
 
 function KontaktForm() {
     const [form, setForm] = useState({
-        name: '', unternehmen: '', telefon: '', email: '', nachricht: '',
+        name: '', unternehmen: '', telefon: '', email: '', plz: '', nachricht: '',
     });
     const [sent, setSent] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const set = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
         setForm(p => ({ ...p, [e.target.name]: e.target.value }));
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!form.name || !form.telefon || !form.email || !form.plz) {
+            alert('Bitte füllen Sie alle Pflichtfelder aus.');
+            return;
+        }
+        setLoading(true);
+        try {
+            await fetch('/api/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: form.name,
+                    firma: form.unternehmen,
+                    telefon: form.telefon,
+                    email: form.email,
+                    plz: form.plz,
+                    kundeTyp: 'B2B',
+                    zugangInfo: form.nachricht
+                })
+            });
+            setSent(true);
+        } catch (error) {
+            console.error('Error submitting B2B form:', error);
+            alert('Fehler beim Senden. Bitte versuchen Sie es später noch einmal.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     if (sent) {
         return (
@@ -61,7 +92,7 @@ function KontaktForm() {
                 (Mo – Fr, 9–18 Uhr)
             </p>
 
-            <form onSubmit={e => { e.preventDefault(); setSent(true); }}
+            <form onSubmit={handleSubmit}
                 style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
             >
                 <div>
@@ -77,6 +108,10 @@ function KontaktForm() {
                     <input name="telefon" type="tel" value={form.telefon} onChange={set} style={inputStyle} />
                 </div>
                 <div>
+                    <label style={labelStyle}>Postleitzahl (PLZ)</label>
+                    <input name="plz" type="text" value={form.plz} onChange={set} style={inputStyle} placeholder="12345" />
+                </div>
+                <div>
                     <label style={labelStyle}>E-Mail-Adresse</label>
                     <input name="email" type="email" value={form.email} onChange={set} style={inputStyle} />
                 </div>
@@ -88,15 +123,15 @@ function KontaktForm() {
                     />
                 </div>
                 <div style={{ paddingTop: '6px' }}>
-                    <button type="submit" style={{
-                        padding: '12px 28px', background: '#C8102E', color: '#fff',
+                    <button type="submit" disabled={loading} style={{
+                        padding: '12px 28px', background: loading ? '#9ca3af' : '#C8102E', color: '#fff',
                         border: 'none', borderRadius: '6px', fontSize: '14px',
-                        fontWeight: 700, cursor: 'pointer', transition: 'background 0.15s',
+                        fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.15s',
                     }}
-                        onMouseEnter={e => (e.currentTarget.style.background = '#a50d25')}
-                        onMouseLeave={e => (e.currentTarget.style.background = '#C8102E')}
+                        onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#a50d25'; }}
+                        onMouseLeave={e => { if (!loading) e.currentTarget.style.background = '#C8102E'; }}
                     >
-                        Anfrage senden
+                        {loading ? 'Wird gesendet...' : 'Anfrage senden'}
                     </button>
                 </div>
             </form>

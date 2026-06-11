@@ -143,6 +143,9 @@ export async function POST(req: NextRequest) {
 
         // Admin Telegram Notification (ALWAYS run)
         const adminTgId = process.env.ADMIN_TELEGRAM_CHAT_ID;
+        let tgSent = false;
+        let tgErrorStr = null;
+        
         if (adminTgId) {
             const { sendTelegramMessage } = await import('@/lib/telegram');
             const masterName = entry.master_id ? 'Ein Partner' : 'UNASSIGNED ⚠️'; // simplification for fallback
@@ -155,14 +158,27 @@ export async function POST(req: NextRequest) {
                 `<b>Kundentyp:</b> ${entry.kunde_typ || '-'}\n` +
                 `<b>Status:</b> ${masterName}\n\n` +
                 `📲 <a href="https://kammerjaeger-structon.de/admin">Admin Dashboard öffnen</a>`;
-            sendTelegramMessage(adminTgId, tgMessage).catch(e => console.error('[Admin TG Error]:', e));
+            try {
+                tgSent = await sendTelegramMessage(adminTgId, tgMessage);
+            } catch (e) {
+                console.error('[Admin TG Error]:', e);
+                tgErrorStr = String(e);
+            }
         }
 
         // Email клиенту и Admin — всегда асинхронно
         sendAdminNotification(entry).catch(e => console.error('[Email Admin] Error:', e));
         sendCustomerConfirmation(entry).catch(e => console.error('[Email Customer] Error:', e));
 
-        return NextResponse.json({ success: true });
+        return NextResponse.json({ 
+            success: true, 
+            debug: { 
+                adminTgId: adminTgId || null, 
+                hasBotToken: !!process.env.TELEGRAM_BOT_TOKEN,
+                tgSent,
+                tgErrorStr
+            } 
+        });
     } catch (err) {
         console.error('[leads] Error:', err);
         return NextResponse.json({ error: 'Server-Fehler.' }, { status: 500 });

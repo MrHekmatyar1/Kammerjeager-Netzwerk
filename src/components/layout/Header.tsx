@@ -1,190 +1,401 @@
 'use client';
 
+// ==========================================
+// [EN] HEADER - Main Navigation Bar
+// [RU] ШАПКА - Главная навигационная панель
+// ==========================================
+// Features: Desktop hover dropdowns, mobile hamburger menu, scroll-reactive transparency.
+// Функции: Выпадающие меню при наведении (ПК), бургер-меню (Мобильные), прозрачность при скролле.
+// ==========================================
+
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { createClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
 
+// ==========================================
+// [EN] CONFIGURATION DATA
+// [RU] КОНФИГУРАЦИОННЫЕ ДАННЫЕ
+// ==========================================
 const PESTS = [
     'Wespen', 'Bettwanzen', 'Ratten', 'Mäuse',
     'Schaben', 'Ameisen', 'Motten', 'Flöhe',
     'Tauben', 'Fliegen', 'Käfer', 'Andere',
 ];
 
-const MENUS: Record<string, { title: string; description: string; links: string[]; cta: string }> = {
+const MENUS: Record<string, { title: string; description: string; links: string[]; cta: string; href: string }> = {
     Privatkunden: {
         title: 'Für Privatkunden',
         description: 'Professionelle Schädlingsbekämpfung für Ihr Zuhause.',
         links: PESTS,
         cta: 'Alle Schädlinge ansehen',
+        href: '/',
     },
     Geschäftskunden: {
         title: 'Für Geschäftskunden',
         description: 'Maßgeschneiderte Lösungen für Unternehmen, Gastronomie und Industrie.',
         links: ['Gastronomie & Hotels', 'Büros & Gebäude', 'Lager & Industrie', 'Einzelhandel', 'Öffentliche Einrichtungen'],
         cta: 'Mehr erfahren',
+        href: '/geschaeftskunden',
     },
     'Über uns': {
         title: 'Über uns',
         description: 'Wir vermitteln geprüfte Kammerjäger in ganz Deutschland.',
         links: ['Unser Team', 'Unsere Mission', 'Qualitätsstandards', 'Für Schädlingsbekämpfer', 'Kontakt'],
         cta: 'Kontakt aufnehmen',
+        href: '/ueber-uns',
     },
 };
 
+const NAV_LINKS = [
+    { label: 'Privatkunden', href: '/' },
+    { label: 'Geschäftskunden', href: '/geschaeftskunden' },
+    { label: 'Über uns', href: '/ueber-uns' },
+];
+
 export default function Header() {
+    // ==========================================
+    // [EN] STATE MANAGEMENT
+    // [RU] УПРАВЛЕНИЕ СОСТОЯНИЕМ
+    // ==========================================
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
     const [atTop, setAtTop] = useState(true);
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [isTouch, setIsTouch] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    
+    // Auth state
+    const [user, setUser] = useState<User | null>(null);
+    const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+    const supabase = createClient();
 
+    useEffect(() => {
+        supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
+        return () => subscription.unsubscribe();
+    }, []);
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        setProfileMenuOpen(false);
+    };
+
+    // ==========================================
+    // [EN] SCROLL & TOUCH LISTENERS
+    // [RU] ОБРАБОТЧИКИ СКРОЛЛА И КАСАНИЙ
+    // ==========================================
     useEffect(() => {
         const onScroll = () => setAtTop(window.scrollY < 10);
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
+    useEffect(() => {
+        const onTouch = () => {
+            setIsTouch(true);
+            setActiveMenu(null);
+        };
+        window.addEventListener('touchstart', onTouch, { once: true, passive: true });
+        return () => window.removeEventListener('touchstart', onTouch);
+    }, []);
+
+    useEffect(() => {
+        setMobileOpen(false);
+        setActiveMenu(null);
+    }, []);
+
     const handleEnter = (key: string) => {
+        if (isTouch) return;
         if (closeTimer.current) clearTimeout(closeTimer.current);
         setActiveMenu(key);
     };
 
     const handleLeave = () => {
+        if (isTouch) return;
         closeTimer.current = setTimeout(() => setActiveMenu(null), 100);
     };
 
+    const isSolid = atTop || activeMenu || hoveredMenu;
+
     return (
         <>
-            {/* Backdrop — накрывает Hero когда дропдаун открыт */}
-            <div
-                onClick={() => setActiveMenu(null)}
-                style={{
-                    position: 'fixed', inset: 0,
-                    background: 'rgba(0,0,0,0.45)',
-                    zIndex: 9998,
-                    opacity: activeMenu ? 1 : 0,
-                    pointerEvents: activeMenu ? 'auto' : 'none',
-                    transition: 'opacity 0.2s ease',
-                }}
-            />
+            {/* ==========================================
+                [EN] BACKDROP (For Desktop Dropdown)
+                [RU] ЗАТЕМНЕНИЕ (Для выпадающего меню на ПК)
+                ========================================== */}
+            {!isTouch && (
+                <div
+                    onClick={() => setActiveMenu(null)}
+                    className={`fixed inset-0 bg-black/45 z-[9997] transition-opacity duration-200 ${
+                        activeMenu ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                    }`}
+                />
+            )}
 
-            <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, backgroundColor: 'white', borderBottom: atTop && !activeMenu ? '2px solid #C8102E' : '1px solid #f1f5f9' }}>
-                {/* Main bar */}
-                <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 32px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px' }}>
-
-                    {/* Logo */}
-                    <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', flexShrink: 0 }}>
-                        <Image src="/logo_k.png" alt="Kammerjäger Structon" width={44} height={44} style={{ objectFit: 'contain' }} />
-                        <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-                            <span style={{ fontWeight: 900, fontSize: '19px', color: '#1E293B', letterSpacing: '-0.03em', textTransform: 'uppercase' }}>Kammerjäger</span>
-                            <span style={{ fontWeight: 700, fontSize: '10px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.18em' }}>Structon</span>
+            {/* ==========================================
+                [EN] MAIN HEADER CONTAINER
+                [RU] ГЛАВНЫЙ КОНТЕЙНЕР ШАПКИ
+                ========================================== */}
+            <header className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
+                isSolid 
+                    ? 'bg-white shadow-none' 
+                    : 'bg-white/45 backdrop-blur-[8px] shadow-[0_4px_30px_rgba(0,0,0,0.05)]'
+            }`}
+            style={{
+                borderBottom: (isSolid && !mobileOpen) ? '2px solid #C8102E' : '1px solid rgba(255, 255, 255, 0.2)'
+            }}>
+                
+                <div className="max-w-[1280px] mx-auto px-5 h-[68px] flex items-center justify-between gap-4">
+                    
+                    {/* ==========================================
+                        [EN] BRAND LOGO
+                        [RU] ЛОГОТИП
+                        ========================================== */}
+                    <Link href="/" className="flex items-center gap-3 no-underline shrink-0">
+                        <Image 
+                            src="/logo_k.png" 
+                            alt="Kammerjäger Structon" 
+                            width={44} 
+                            height={44} 
+                            className="object-contain [clip-path:circle(31%_at_50%_50%)]" 
+                        />
+                        <div className="flex flex-col leading-none">
+                            <span className="font-black text-[19px] text-[#1E293B] tracking-[-0.03em] uppercase">Kammerjäger</span>
+                            <span className="font-bold text-[10px] text-slate-400 uppercase tracking-[0.18em]">Structon</span>
                         </div>
                     </Link>
 
-                    {/* Nav */}
-                    <nav style={{ display: 'flex', alignItems: 'center', height: '68px' }}>
+                    {/* ==========================================
+                        [EN] DESKTOP NAVIGATION
+                        [RU] НАВИГАЦИЯ ДЛЯ ПК
+                        ========================================== */}
+                    <nav className="hidden lg:flex items-center h-[68px]">
                         {Object.keys(MENUS).map((key) => (
                             <div
                                 key={key}
                                 onMouseEnter={() => { handleEnter(key); setHoveredMenu(key); }}
                                 onMouseLeave={() => { handleLeave(); setHoveredMenu(null); }}
-                                style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}
+                                className="relative h-full flex items-center"
                             >
-                                {/* Geschäftskunden und Über uns — ссылки на отдельные страницы в нашем стиле */}
-                                {key === 'Geschäftskunden' || key === 'Über uns' ? (
-                                    <Link href={key === 'Geschäftskunden' ? "/geschaeftskunden" : "/ueber-uns"} style={{
-                                        display: 'flex', alignItems: 'center', height: '100%',
-                                        padding: '0 18px',
-                                        fontSize: '15px', fontWeight: 500,
-                                        color: hoveredMenu === key ? '#C8102E' : '#475569',
-                                        borderBottom: hoveredMenu === key ? '3px solid #C8102E' : '3px solid transparent',
-                                        transition: 'color 0.15s, border-color 0.15s',
-                                        whiteSpace: 'nowrap', textDecoration: 'none',
-                                    }}>
-                                        {key}
-                                    </Link>
-                                ) : (
-                                    <button style={{
-                                        background: 'none', border: 'none', cursor: 'pointer',
-                                        padding: '0 18px', height: '100%',
-                                        fontSize: '15px', fontWeight: 500,
-                                        color: hoveredMenu === key ? '#C8102E' : '#475569',
-                                        borderBottom: hoveredMenu === key ? '3px solid #C8102E' : '3px solid transparent',
-                                        transition: 'color 0.15s, border-color 0.15s',
-                                        whiteSpace: 'nowrap',
-                                    }}>
-                                        {key}
-                                    </button>
-                                )}
+                                <Link
+                                    href={MENUS[key]!.href}
+                                    className={`flex items-center h-full px-[18px] text-[15px] font-medium whitespace-nowrap transition-colors border-b-[3px] duration-150 ${
+                                        hoveredMenu === key 
+                                            ? 'text-[#C8102E] border-[#C8102E]' 
+                                            : 'text-slate-600 border-transparent'
+                                    }`}
+                                >
+                                    {key}
+                                </Link>
                             </div>
                         ))}
                     </nav>
 
-                    {/* Right side */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-                        <a href="tel:016092376320" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '15px', fontWeight: 500, color: '#C8102E', textDecoration: 'none' }}>
+                    {/* ==========================================
+                        [EN] DESKTOP ACTIONS (CALL & BOOKING)
+                        [RU] ДЕЙСТВИЯ НА ПК (ЗВОНОК И БРОНЬ)
+                        ========================================== */}
+                    <div className="hidden lg:flex items-center gap-3 shrink-0">
+                        <a href="tel:016092376320" className="flex items-center gap-1.5 text-[15px] font-medium text-[#C8102E] no-underline">
                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                             </svg>
                             Kontakt
                         </a>
-                        <a href="tel:016092376320" style={{ border: 'none', padding: '7px 18px', fontSize: '15px', fontWeight: 700, color: '#C8102E', textDecoration: 'none', backgroundColor: 'transparent', whiteSpace: 'nowrap' }}>
+                        <a href="tel:016092376320" className="px-[18px] py-[7px] text-[15px] font-bold text-[#C8102E] whitespace-nowrap">
                             0160 92376320
                         </a>
-                        <Link href="#" style={{ backgroundColor: '#C8102E', color: 'white', borderRadius: '0', padding: '9px 22px', fontSize: '14px', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap', boxShadow: '0 4px 14px rgba(200,16,46,0.25)' }}>
+                        
+                        <div className="relative">
+                            {user ? (
+                                <button
+                                    onClick={() => setProfileMenuOpen(prev => !prev)}
+                                    className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-white shadow-sm overflow-hidden bg-slate-100 cursor-pointer p-0"
+                                    aria-label="Profile"
+                                >
+                                    {user.user_metadata?.avatar_url ? (
+                                        <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <span className="text-slate-600 font-bold uppercase text-[15px]">{user.email?.charAt(0)}</span>
+                                    )}
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))}
+                                    className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 transition-colors cursor-pointer border-none"
+                                    aria-label="Account"
+                                >
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </button>
+                            )}
+
+                            {/* Profile Dropdown */}
+                            {profileMenuOpen && user && (
+                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 py-2 z-50">
+                                    <div className="px-4 py-2 border-b border-slate-100 mb-1">
+                                        <div className="text-[13px] text-slate-500">Angemeldet als</div>
+                                        <div className="text-[14px] font-bold text-slate-800 truncate">{user.email}</div>
+                                    </div>
+                                    <Link href="/dashboard" onClick={() => setProfileMenuOpen(false)} className="block px-4 py-2 text-[14px] text-slate-700 hover:bg-slate-50 hover:text-[#C8102E] transition-colors">
+                                        Mein Konto
+                                    </Link>
+                                    <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-[14px] text-slate-700 hover:bg-slate-50 hover:text-[#C8102E] transition-colors border-none bg-transparent cursor-pointer">
+                                        Abmelden
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                        <button
+                            onClick={() => window.dispatchEvent(new CustomEvent('open-quiz-modal'))}
+                            className="bg-[#C8102E] text-white px-[22px] py-[9px] text-[14px] font-bold whitespace-nowrap shadow-[0_4px_14px_rgba(200,16,46,0.25)] rounded-none cursor-pointer"
+                        >
                             Online Termin buchen
-                        </Link>
+                        </button>
+                    </div>
+
+                    {/* ==========================================
+                        [EN] MOBILE ACTIONS (CALL & HAMBURGER)
+                        [RU] ДЕЙСТВИЯ НА МОБИЛЬНОМ (ЗВОНОК И БУРГЕР)
+                        ========================================== */}
+                    <div className="flex lg:hidden items-center gap-2">
+                        {user ? (
+                            <button
+                                onClick={() => setProfileMenuOpen(prev => !prev)}
+                                className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-white shadow-sm overflow-hidden bg-slate-100 cursor-pointer p-0"
+                            >
+                                {user.user_metadata?.avatar_url ? (
+                                    <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="text-slate-600 font-bold uppercase text-[15px]">{user.email?.charAt(0)}</span>
+                                )}
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))}
+                                className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 text-slate-500 border-none"
+                                aria-label="Account"
+                            >
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </button>
+                        )}
+                        <a href="tel:016092376320" className="flex items-center justify-center w-10 h-10 text-[#C8102E]" aria-label="Anrufen">
+                            <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                        </a>
+                        <button
+                            onClick={() => setMobileOpen(o => !o)}
+                            className="flex flex-col justify-center items-center gap-[5px] w-10 h-10 bg-transparent border-none cursor-pointer p-2"
+                            aria-label="Menü öffnen"
+                        >
+                            <span className={`block w-[22px] h-[2px] transition-all duration-200 ${mobileOpen ? 'bg-[#C8102E] rotate-45 translate-x-[5px] translate-y-[5px]' : 'bg-[#1E293B]'}`} />
+                            <span className={`block w-[22px] h-[2px] bg-[#1E293B] transition-opacity duration-200 ${mobileOpen ? 'opacity-0' : 'opacity-100'}`} />
+                            <span className={`block w-[22px] h-[2px] transition-all duration-200 ${mobileOpen ? 'bg-[#C8102E] -rotate-45 translate-x-[5px] -translate-y-[5px]' : 'bg-[#1E293B]'}`} />
+                        </button>
                     </div>
                 </div>
 
-                {/* Dropdown panel */}
-                <div
-                    onMouseEnter={() => { if (closeTimer.current) clearTimeout(closeTimer.current); }}
-                    onMouseLeave={handleLeave}
-                    style={{
-                        position: 'absolute', top: '68px', left: 0, right: 0,
-                        backgroundColor: 'white',
-                        borderTop: '2px solid #C8102E',
-                        boxShadow: '0 20px 40px rgba(0,0,0,0.10)',
-                        overflow: 'hidden',
-                        maxHeight: activeMenu ? '400px' : '0px',
-                        opacity: activeMenu ? 1 : 0,
-                        transition: 'max-height 0.22s ease, opacity 0.15s ease',
-                        pointerEvents: activeMenu ? 'auto' : 'none',
-                    }}
-                >
-                    {activeMenu && MENUS[activeMenu] && (
-                        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '36px 32px', display: 'grid', gridTemplateColumns: '280px 1fr', gap: '48px' }}>
-
-                            {/* Left: Title + description + CTA */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 900, color: '#1E293B', textTransform: 'uppercase', letterSpacing: '-0.02em' }}>
-                                    {MENUS[activeMenu].title}
-                                </h3>
-                                <p style={{ margin: 0, fontSize: '14px', color: '#64748b', lineHeight: 1.6 }}>
-                                    {MENUS[activeMenu].description}
-                                </p>
-                                <Link href="#" style={{ marginTop: '8px', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: 700, color: '#C8102E', textDecoration: 'none' }}>
-                                    {MENUS[activeMenu].cta} →
+                {/* ==========================================
+                    [EN] MOBILE MENU DROPDOWN
+                    [RU] ВЫПАДАЮЩЕЕ МЕНЮ ДЛЯ МОБИЛЬНЫХ
+                    ========================================== */}
+                <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out bg-white ${
+                    mobileOpen ? 'max-h-[400px] border-t border-slate-100' : 'max-h-0 border-none'
+                }`}>
+                    <div className="px-5 pt-4 pb-6 flex flex-col">
+                        {NAV_LINKS.map(({ label, href }) => (
+                            <Link
+                                key={label}
+                                href={href}
+                                onClick={() => setMobileOpen(false)}
+                                className="block py-[14px] text-[17px] font-semibold text-[#1E293B] border-b border-slate-100"
+                            >
+                                {label}
+                            </Link>
+                        ))}
+                        {user && (
+                            <>
+                                <Link
+                                    href="/dashboard"
+                                    onClick={() => setMobileOpen(false)}
+                                    className="block py-[14px] text-[17px] font-semibold text-[#1E293B] border-b border-slate-100"
+                                >
+                                    Mein Konto
                                 </Link>
-                            </div>
-
-                            {/* Right: Links grid */}
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '8px 24px' }}>
-                                {MENUS[activeMenu].links.map((link) => (
-                                    <Link
-                                        key={link}
-                                        href="#"
-                                        style={{ fontSize: '14px', color: '#374151', textDecoration: 'none', fontWeight: 500, padding: '4px 0', borderBottom: '1px solid transparent', transition: 'color 0.1s' }}
-                                        onMouseEnter={e => (e.currentTarget.style.color = '#C8102E')}
-                                        onMouseLeave={e => (e.currentTarget.style.color = '#374151')}
-                                    >
-                                        {link}
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                                <button
+                                    onClick={() => {
+                                        setMobileOpen(false);
+                                        handleLogout();
+                                    }}
+                                    className="block w-full text-left py-[14px] text-[17px] font-semibold text-[#C8102E] border-b border-slate-100 bg-transparent"
+                                >
+                                    Abmelden
+                                </button>
+                            </>
+                        )}
+                        <button
+                            onClick={() => {
+                                setMobileOpen(false);
+                                window.dispatchEvent(new CustomEvent('open-quiz-modal'));
+                            }}
+                            className="mt-4 w-full bg-[#C8102E] text-white p-[14px] text-[15px] font-bold uppercase tracking-[0.05em]"
+                        >
+                            Online Termin buchen
+                        </button>
+                        <a href="tel:016092376320" className="mt-2.5 block text-center text-[16px] font-bold text-[#C8102E] py-2.5">
+                            📞 0160 92376320
+                        </a>
+                    </div>
                 </div>
+
+                {/* ==========================================
+                    [EN] DESKTOP MEGA-MENU DROPDOWN
+                    [RU] МЕГА-МЕНЮ ДЛЯ ПК
+                    ========================================== */}
+                {!isTouch && (
+                    <div
+                        onMouseEnter={() => { if (closeTimer.current) clearTimeout(closeTimer.current); }}
+                        onMouseLeave={handleLeave}
+                        className={`absolute top-[68px] left-0 right-0 bg-white border-t-2 border-[#C8102E] shadow-[0_20px_40px_rgba(0,0,0,0.10)] overflow-hidden transition-all duration-200 z-[9998] ${
+                            activeMenu ? 'max-h-[400px] opacity-100 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'
+                        }`}
+                    >
+                        {activeMenu && MENUS[activeMenu] && (
+                            <div className="max-w-[1280px] mx-auto py-9 px-8 grid grid-cols-[280px_1fr] gap-12">
+                                <div className="flex flex-col gap-3">
+                                    <h3 className="m-0 text-[20px] font-black text-[#1E293B] uppercase tracking-[-0.02em]">
+                                        {MENUS[activeMenu].title}
+                                    </h3>
+                                    <p className="m-0 text-[14px] text-slate-500 leading-[1.6]">
+                                        {MENUS[activeMenu].description}
+                                    </p>
+                                    <Link href={MENUS[activeMenu].href} className="mt-2 inline-flex items-center gap-1.5 text-[14px] font-bold text-[#C8102E]">
+                                        {MENUS[activeMenu].cta} →
+                                    </Link>
+                                </div>
+                                <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-y-2 gap-x-6">
+                                    {MENUS[activeMenu].links.map((link) => (
+                                        <Link
+                                            key={link}
+                                            href="#"
+                                            className="text-[14px] text-slate-700 font-medium py-1 transition-colors hover:text-[#C8102E]"
+                                        >
+                                            {link}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
             </header>
         </>
     );

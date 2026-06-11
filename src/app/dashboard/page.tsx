@@ -1,0 +1,372 @@
+'use client';
+
+// ==========================================
+// [DE] PARTNER DASHBOARD — Marktplatz
+// Zeigt neue (zugewiesene) Leads, die noch nicht angenommen wurden.
+// Echte Daten aus Supabase via /api/partner/leads
+// ==========================================
+
+import { useEffect, useState, useCallback } from 'react';
+
+interface Lead {
+    id: number;
+    plz: string;
+    strasse?: string;
+    hausnummer?: string;
+    schaedling: string | null;
+    kunde_typ: string | null;
+    objekt_typ: string | null;
+    befall: string | null;
+    raeume: string | null;
+    flaeche: string | null;
+    zugang: string | null;
+    zugang_beschreibung: string | null;
+    created_at: string;
+    status: string;
+}
+
+// Время с момента создания в читаемом формате
+function timeAgo(dateStr: string): string {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Gerade eben';
+    if (mins < 60) return `Vor ${mins} Min.`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `Vor ${hours} Std.`;
+    return `Vor ${Math.floor(hours / 24)} Tag(en)`;
+}
+
+// Urgency: чем свежее — тем краснее
+function getUrgencyColor(dateStr: string): string {
+    const mins = Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000);
+    if (mins < 30) return '#C8102E';
+    if (mins < 120) return '#f97316';
+    return '#64748b';
+}
+
+export default function DashboardMarketplace() {
+    const [leads, setLeads] = useState<Lead[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+    const [actionLoading, setActionLoading] = useState(false);
+    const [rejectReason, setRejectReason] = useState('');
+    const [showRejectModal, setShowRejectModal] = useState(false);
+    const [agreed, setAgreed] = useState(false);
+
+    const loadLeads = useCallback(async () => {
+        try {
+            setLoading(true);
+            setError('');
+            const res = await fetch('/api/partner/leads?status=neu');
+            if (!res.ok) {
+                const d = await res.json();
+                if (res.status === 401) {
+                    setLeads([]);
+                    return;
+                }
+                setError(d.error || 'Fehler beim Laden.');
+                return;
+            }
+            const { leads: data } = await res.json();
+            setLeads(data || []);
+        } catch {
+            setError('Netzwerkfehler. Bitte Seite neu laden.');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => { loadLeads(); }, [loadLeads]);
+
+    const handleAccept = async () => {
+        if (!selectedLead || !agreed) return;
+        setActionLoading(true);
+        try {
+            const res = await fetch('/api/leads/accept', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ leadId: selectedLead.id }),
+            });
+            const data = await res.json();
+            if (!res.ok) { alert(data.error || 'Fehler beim Annehmen.'); return; }
+
+            // Убираем из списка
+            setLeads(prev => prev.filter(l => l.id !== selectedLead.id));
+            setSelectedLead(null);
+            setAgreed(false);
+            alert('✅ Auftrag erfolgreich angenommen! Sie finden ihn unter "Meine Aufträge".');
+        } catch {
+            alert('Netzwerkfehler. Bitte versuchen Sie es erneut.');
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    const handleReject = async () => {
+        if (!selectedLead) return;
+        setActionLoading(true);
+        try {
+            const res = await fetch('/api/leads/reject', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ leadId: selectedLead.id, reason: rejectReason }),
+            });
+            const data = await res.json();
+            if (!res.ok) { alert(data.error || 'Fehler beim Ablehnen.'); return; }
+
+            setLeads(prev => prev.filter(l => l.id !== selectedLead.id));
+            setSelectedLead(null);
+            setShowRejectModal(false);
+            setRejectReason('');
+        } catch {
+            alert('Netzwerkfehler.');
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    // ─── Loading State ─────────────────────────────────────────────────────
+    if (loading) return (
+        <div>
+            <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '8px', color: '#0f172a', lineHeight: 1 }}>
+                Marktplatz
+            </h1>
+            <p style={{ color: '#64748b', fontSize: '15px', marginBottom: '32px' }}>Verfügbare Aufträge in Ihrem Einsatzgebiet.</p>
+            <div style={{ display: 'grid', gap: '16px' }}>
+                {[1, 2].map(i => (
+                    <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', height: '100px', animation: 'pulse 2s infinite' }}>
+                        <div style={{ background: '#f1f5f9', height: '16px', width: '60%', borderRadius: '4px', marginBottom: '12px' }} />
+                        <div style={{ background: '#f1f5f9', height: '12px', width: '40%', borderRadius: '4px' }} />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+
+    return (
+        <div>
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px', flexWrap: 'wrap', gap: '12px' }}>
+                <div>
+                    <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '8px', color: '#0f172a', lineHeight: 1 }}>
+                        Marktplatz
+                    </h1>
+                    <p style={{ color: '#64748b', fontSize: '15px', margin: 0 }}>
+                        Verfügbare Aufträge in Ihrem Einsatzgebiet.
+                    </p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {leads.length > 0 && (
+                        <span style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#C8102E', fontSize: '13px', fontWeight: 700, padding: '4px 12px', borderRadius: '20px' }}>
+                            {leads.length} Neu
+                        </span>
+                    )}
+                    <button
+                        onClick={loadLeads}
+                        style={{ background: '#f1f5f9', border: '1px solid #e2e8f0', color: '#475569', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
+                    >
+                        ↻ Aktualisieren
+                    </button>
+                </div>
+            </div>
+
+            {/* Error */}
+            {error && (
+                <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: '12px 16px', borderRadius: '8px', marginBottom: '24px', fontSize: '14px' }}>
+                    {error}
+                </div>
+            )}
+
+            {/* Empty state */}
+            {!error && leads.length === 0 && (
+                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '64px 32px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '48px', marginBottom: '16px' }}>📭</div>
+                    <h3 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '22px', fontWeight: 900, textTransform: 'uppercase', color: '#0f172a', marginBottom: '8px' }}>
+                        Keine neuen Aufträge
+                    </h3>
+                    <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>
+                        Aktuell liegen keine neuen Aufträge in Ihrem Einsatzgebiet vor.<br />
+                        Sie werden per E-Mail & Telegram benachrichtigt, sobald ein neuer Auftrag eingeht.
+                    </p>
+                </div>
+            )}
+
+            {/* Lead cards */}
+            <div style={{ display: 'grid', gap: '16px' }}>
+                {leads.map(lead => (
+                    <div key={lead.id} style={{
+                        background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                        transition: 'box-shadow 0.2s',
+                        flexWrap: 'wrap', gap: '16px'
+                    }}>
+                        <div style={{ flex: 1, minWidth: '220px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
+                                <span style={{ background: 'rgba(200,16,46,0.08)', color: '#C8102E', fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Neu</span>
+                                <span style={{ color: getUrgencyColor(lead.created_at), fontSize: '12px', fontWeight: 600 }}>
+                                    {timeAgo(lead.created_at)}
+                                </span>
+                                {lead.kunde_typ && (
+                                    <span style={{ background: '#f1f5f9', color: '#475569', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '4px' }}>
+                                        {lead.kunde_typ}
+                                    </span>
+                                )}
+                            </div>
+                            <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>
+                                {lead.schaedling || 'Schädling unbekannt'} · {lead.plz}
+                            </h3>
+                            <div style={{ color: '#64748b', fontSize: '13px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                                {lead.objekt_typ && <span>🏠 {lead.objekt_typ}</span>}
+                                {lead.raeume && <span>🚪 {lead.raeume} Räume</span>}
+                                {lead.befall && <span>⚠️ {lead.befall}</span>}
+                            </div>
+                        </div>
+                        <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                            <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '10px' }}>Provision: <strong>20%</strong></div>
+                            <button
+                                onClick={() => { setSelectedLead(lead); setAgreed(false); setShowRejectModal(false); }}
+                                style={{
+                                    background: '#0f172a', color: '#fff', border: 'none', padding: '10px 22px',
+                                    borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+                                    fontFamily: 'inherit', whiteSpace: 'nowrap'
+                                }}
+                            >
+                                Auftrag ansehen →
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* ── Modal: Lead Detail / Accept ──────────────────────────────── */}
+            {selectedLead && !showRejectModal && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '16px' }}>
+                    <div style={{ background: '#fff', width: '100%', maxWidth: '540px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.25)', maxHeight: '90vh', overflowY: 'auto' }}>
+
+                        {/* Modal Header */}
+                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div>
+                                <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>Auftragsdetails</h2>
+                                <p style={{ color: '#64748b', fontSize: '13px', margin: '2px 0 0' }}>
+                                    {selectedLead.schaedling} · PLZ {selectedLead.plz} · {timeAgo(selectedLead.created_at)}
+                                </p>
+                            </div>
+                            <button onClick={() => setSelectedLead(null)} style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer', color: '#94a3b8', lineHeight: 1, padding: '4px' }}>×</button>
+                        </div>
+
+                        {/* Lead Details */}
+                        <div style={{ padding: '20px 24px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                                {[
+                                    { label: 'Schädling', value: selectedLead.schaedling },
+                                    { label: 'PLZ', value: selectedLead.plz },
+                                    { label: 'Kundentyp', value: selectedLead.kunde_typ },
+                                    { label: 'Objekt', value: selectedLead.objekt_typ },
+                                    { label: 'Befall', value: selectedLead.befall },
+                                    { label: 'Räume', value: selectedLead.raeume },
+                                    { label: 'Fläche', value: selectedLead.flaeche },
+                                    { label: 'Zugang', value: selectedLead.zugang },
+                                ].filter(f => f.value).map(f => (
+                                    <div key={f.label} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 14px' }}>
+                                        <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '3px' }}>{f.label}</div>
+                                        <div style={{ fontSize: '14px', color: '#0f172a', fontWeight: 600 }}>{f.value}</div>
+                                    </div>
+                                ))}
+                            </div>
+                            {selectedLead.zugang_beschreibung && (
+                                <div style={{ marginTop: '12px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 14px' }}>
+                                    <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', marginBottom: '3px' }}>Zugangsbeschreibung</div>
+                                    <div style={{ fontSize: '14px', color: '#0f172a' }}>{selectedLead.zugang_beschreibung}</div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Legal agreement */}
+                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0' }}>
+                            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '14px', marginBottom: '16px' }}>
+                                <div style={{ fontSize: '12px', fontWeight: 700, color: '#b91c1c', marginBottom: '6px' }}>⚠️ Rechtliche Vereinbarung</div>
+                                <p style={{ fontSize: '12px', color: '#7f1d1d', lineHeight: 1.6, margin: 0 }}>
+                                    Durch Annahme verpflichten Sie sich, den <strong>korrekten und vollständigen Rechnungsbetrag</strong> im Portal einzutragen.
+                                    Bei Falschangaben wird eine <strong>Vertragsstrafe von 500 € + entgangene Provision</strong> fällig.
+                                </p>
+                            </div>
+                            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={agreed}
+                                    onChange={e => setAgreed(e.target.checked)}
+                                    style={{ marginTop: '2px', width: '16px', height: '16px', accentColor: '#C8102E', flexShrink: 0 }}
+                                />
+                                <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: 500, lineHeight: 1.5 }}>
+                                    Ich akzeptiere die Bedingungen und bestätige, den korrekten Rechnungsbetrag einzutragen.
+                                </span>
+                            </label>
+                        </div>
+
+                        {/* Action buttons */}
+                        <div style={{ padding: '20px 24px', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                            <button
+                                onClick={() => setShowRejectModal(true)}
+                                disabled={actionLoading}
+                                style={{ background: 'none', border: '1px solid #e2e8f0', padding: '10px 20px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', color: '#64748b', fontFamily: 'inherit' }}
+                            >
+                                Ablehnen
+                            </button>
+                            <button
+                                disabled={!agreed || actionLoading}
+                                onClick={handleAccept}
+                                style={{
+                                    background: agreed && !actionLoading ? '#C8102E' : '#e2e8f0',
+                                    color: agreed && !actionLoading ? '#fff' : '#94a3b8',
+                                    border: 'none', padding: '10px 24px', borderRadius: '8px',
+                                    fontSize: '14px', fontWeight: 700,
+                                    cursor: agreed && !actionLoading ? 'pointer' : 'not-allowed',
+                                    fontFamily: 'inherit', transition: 'all 0.2s'
+                                }}
+                            >
+                                {actionLoading ? 'Wird verarbeitet...' : '✓ Auftrag annehmen'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ── Modal: Reject Reason ─────────────────────────────────────── */}
+            {selectedLead && showRejectModal && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1001, padding: '16px' }}>
+                    <div style={{ background: '#fff', width: '100%', maxWidth: '420px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.25)' }}>
+                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0' }}>
+                            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>Auftrag ablehnen</h2>
+                        </div>
+                        <div style={{ padding: '20px 24px' }}>
+                            <label style={{ display: 'block', fontSize: '13px', color: '#475569', fontWeight: 600, marginBottom: '8px' }}>
+                                Grund (optional)
+                            </label>
+                            <select
+                                value={rejectReason}
+                                onChange={e => setRejectReason(e.target.value)}
+                                style={{ width: '100%', padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', fontFamily: 'inherit', outline: 'none', marginBottom: '20px' }}
+                            >
+                                <option value="">Kein Grund angeben</option>
+                                <option value="Keine Kapazität">Keine Kapazität</option>
+                                <option value="Zu weit entfernt">Zu weit entfernt</option>
+                                <option value="Nicht meine Spezialisierung">Nicht meine Spezialisierung</option>
+                                <option value="Urlaub / Krankheit">Urlaub / Krankheit</option>
+                            </select>
+                            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                                <button onClick={() => setShowRejectModal(false)} style={{ background: 'none', border: '1px solid #e2e8f0', padding: '10px 18px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', color: '#64748b', fontFamily: 'inherit' }}>
+                                    Zurück
+                                </button>
+                                <button onClick={handleReject} disabled={actionLoading} style={{ background: '#0f172a', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontSize: '14px', fontWeight: 700, cursor: actionLoading ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>
+                                    {actionLoading ? 'Wird verarbeitet...' : 'Ablehnen bestätigen'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}

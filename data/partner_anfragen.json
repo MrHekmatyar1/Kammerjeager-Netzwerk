@@ -1,0 +1,50 @@
+[
+  {
+    "typ": "schaedlingsbekaempfer",
+    "name": "Nourov",
+    "email": "vladyslavnourov@gmail.com",
+    "telefon": "+380638177825",
+    "firma": "Analkriminal GmbH",
+    "plz": "12205",
+    "anmerkung": "Schalom",
+    "datenschutz": true,
+    "erstellt_am": "2026-05-02T19:29:21.689Z",
+    "status": "neu"
+  },
+  {
+    "typ": "schaedlingsbekaempfer",
+    "name": "Yehor Kalchuk",
+    "email": "edorkalchuk@gmail.com",
+    "telefon": "+4916092376320",
+    "firma": "NHV",
+    "plz": "12205",
+    "anmerkung": "",
+    "datenschutz": true,
+    "erstellt_am": "2026-05-15T08:40:25.648Z",
+    "status": "neu"
+  },
+  {
+    "typ": "schaedlingsbekaempfer",
+    "name": "Yehor Kalchuk",
+    "email": "edorkalchuk@gmail.com",
+    "telefon": "+4916092376320",
+    "firma": "NHV",
+    "plz": "12205",
+    "anmerkung": "",
+    "datenschutz": true,
+    "erstellt_am": "2026-05-15T08:43:14.776Z",
+    "status": "neu"
+  },
+  {
+    "typ": "schaedlingsbekaempfer",
+    "name": "Yehor Kalchuk",
+    "email": "edorkalchuk@gmail.com",
+    "telefon": "+4916092376320",
+    "firma": "NHV",
+    "plz": "12205",
+    "anmerkung": "",
+    "datenschutz": true,
+    "erstellt_am": "2026-05-15T08:45:28.643Z",
+    "status": "neu"
+  }
+]

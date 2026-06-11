@@ -38,7 +38,6 @@ function KontaktForm() {
     if (sent) {
         return (
             <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                <div style={{ fontSize: '44px', marginBottom: '12px' }}>✅</div>
                 <h3 style={{
                     fontFamily: "'Barlow Condensed', sans-serif",
                     fontSize: '28px', fontWeight: 900,
@@ -137,16 +136,81 @@ export default function GeschaeftskundenPage() {
 
                         <div className="flex items-center gap-6">
                             <button
-                                className="bg-[#C8102E] text-white rounded-none font-black shadow-xl shadow-red-100 uppercase whitespace-nowrap inline-flex items-center justify-center"
+                                className="bg-[#C8102E] text-white rounded-none font-black shadow-xl shadow-red-100 uppercase whitespace-nowrap inline-flex items-center justify-center hover:bg-red-800 transition-colors"
                                 style={{ fontSize: '14px', padding: '16px 42px', lineHeight: '1', border: 'none', cursor: 'pointer' }}
                                 onClick={() => document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' })}
                             >
                                 Jetzt anfragen
                             </button>
-                            <a href="tel:016092376320" className="text-[#C8102E] font-bold flex items-center gap-2"
+                            <a href="tel:016092376320" className="text-[#C8102E] font-bold flex items-center gap-2 hover:text-red-800 transition-colors"
                                 style={{ fontSize: '15px', textDecoration: 'none' }}>
                                 📞 0160 92376320
                             </a>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ── Branchenlösungen (Отрасли - Orkin Style) ── */}
+                <section className="w-full bg-[#f8f8f8] py-24 px-6 flex justify-center">
+                    <div className="w-full max-w-[1200px]">
+                        <div className="mb-14">
+                            <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, color: '#1a1a1a', textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '-0.02em', maxWidth: '800px' }}>
+                                Fachgerechter Schutz für Ihre Branche
+                            </h2>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+                            {[
+                                {
+                                    title: 'Gastronomie & Lebensmittel',
+                                    desc: 'HACCP-konforme Maßnahmen und lückenlose Dokumentation. Diskrete Einsätze außerhalb der Öffnungszeiten zum Schutz Ihres Rufs.',
+                                    img: '/b2b/b2b_restaurant.png',
+                                    link: 'Mehr erfahren'
+                                },
+                                {
+                                    title: 'Hotellerie & Gewerbe',
+                                    desc: 'Schnelle und unauffällige Lösungen für höchste Gästezufriedenheit. Unsere Techniker arbeiten diskret in neutraler Kleidung.',
+                                    img: '/b2b/b2b_hotel.png',
+                                    link: 'Mehr erfahren'
+                                },
+                                {
+                                    title: 'Lager & Logistik',
+                                    desc: 'Kontinuierliches Monitoring und proaktive Prävention zum Schutz von Waren, Lieferketten und Gebäudeinfrastruktur.',
+                                    img: '/b2b/b2b_warehouse.png',
+                                    link: 'Mehr erfahren'
+                                },
+                                {
+                                    title: 'Öffentlicher Sektor',
+                                    desc: 'Sichere, umweltfreundliche und giftfreie Methoden für sensible Bereiche wie Schulen, Krankenhäuser und Behörden.',
+                                    img: '/b2b/b2b_school.png',
+                                    link: 'Mehr erfahren'
+                                }
+                            ].map((item, idx) => (
+                                <div key={idx} className="flex flex-col items-start group">
+                                    <div className="w-full aspect-[4/3] overflow-hidden mb-6 bg-slate-200">
+                                        <img 
+                                            src={item.img} 
+                                            alt={item.title}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                    </div>
+                                    <h3 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '26px', fontWeight: 800, textTransform: 'uppercase', color: '#1a1a1a', marginBottom: '12px', letterSpacing: '0.01em', lineHeight: 1.1 }}>
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-[#555] text-[15px] leading-relaxed mb-6 flex-grow font-medium" style={{ fontFamily: 'inherit' }}>
+                                        {item.desc}
+                                    </p>
+                                    <button 
+                                        className="text-[#C8102E] font-bold text-[13px] flex items-center gap-1.5 transition-all mt-auto uppercase tracking-[0.08em]"
+                                        onMouseEnter={e => (e.currentTarget.style.gap = '8px')}
+                                        onMouseLeave={e => (e.currentTarget.style.gap = '6px')}
+                                        style={{ transition: 'gap 0.2s ease', cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}
+                                    >
+                                        {item.link} 
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                    </button>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </section>

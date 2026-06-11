@@ -1,5 +1,8 @@
 'use client';
 
+// Floating chat widget — simple rule-based bot, no external API
+// Плавающий чат — простой бот на правилах, без внешнего API
+
 import { useState, useRef, useEffect } from 'react';
 
 interface Message {
@@ -123,7 +126,7 @@ export default function ChatBot() {
             const botMsg: Message = {
                 id: Date.now() + 1,
                 text: response.text,
-                options: response.options,
+                ...(response.options ? { options: response.options } : {}),
                 sender: 'bot',
                 time: getTime(),
             };

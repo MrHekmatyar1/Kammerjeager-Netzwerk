@@ -1,3 +1,5 @@
+// All pest types shown in the quiz grid
+// Все типы вредителей для сетки выбора
 export const PESTS_DATA = [
     { id: 'wespen', name: 'Wespen', img: '/pests/wespen.png' },
     { id: 'bettwanzen', name: 'Bettwanzen', img: '/pests/bettwanzen.png' },
@@ -10,9 +12,11 @@ export const PESTS_DATA = [
     { id: 'tauben', name: 'Tauben', img: '/pests/tauben.png' },
     { id: 'fliegen', name: 'Fliegen', img: '/pests/fliegen.png' },
     { id: 'kaefer', name: 'Käfer', img: '/pests/kaefer.png' },
-    { id: 'andere', name: 'Andere', img: '/pests/andere.png' },
+    { id: 'kombination', name: 'Kombination', img: '/pests/andere.png' },
 ];
 
+// Fake reviews for the slider — replace with real ones later
+// Фейковые отзывы для слайдера — потом заменить на настоящие
 export const REVIEWS_DATA = [
     { id: 1, stars: 5, date: '02.01.2026', text: 'Sehr freundlicher Mitarbeiter mit sehr guter Expertise. Das Problem mit den Wespen wurde schnell und professionell gelöst. Wir buchen bei Bedarf gerne wieder!' },
     { id: 2, stars: 5, date: '05.01.2026', text: 'Kompetenter Mitarbeiter, weiß genau was er tut. Pünktlich, zuverlässig und sehr gründlich bei der Arbeit. Ich bin mit dem Ergebnis mehr als zufrieden.' },
@@ -25,5 +29,5 @@ export const REVIEWS_DATA = [
     { id: 9, stars: 5, date: '25.01.2026', text: 'Schnelle Terminvergabe, Problem innerhalb kürzester Zeit gelöst. Bin sehr zufrieden mit dem gesamten Ablauf.' },
     { id: 10, stars: 5, date: '28.01.2026', text: 'Super nett und extrem professionell. Die Beratung vorab am Telefon war schon sehr hilfreich. Die Ausführung vor Ort war tadellos.' },
     { id: 11, stars: 5, date: '30.01.2026', text: 'Absolut empfehlenswert! Alles verlief reibungslos und das Ungeziefer wurde nachhaltig entfernt. Ein tolles Team!' },
-    { id: 12, stars: 5, date: '01.02.2026', text: 'Beste Bewertung verdient. Alles perfekt gelöst, sauber hinterlassen und sehr höflich. So wünscht man sich das.' }
+    { id: 12, stars: 5, date: '01.02.2026', text: 'Beste Bewertung verdient. Alles perfekt gelöst, sauber hinterlassen und sehr höflich. So wünscht man sich das.' },
 ];

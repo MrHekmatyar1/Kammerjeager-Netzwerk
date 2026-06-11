@@ -1,5 +1,8 @@
 'use client';
 
+// Bottom footer — logo, nav links, copyright
+// Нижний футер — лого, ссылки, копирайт
+
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -24,11 +27,11 @@ export default function Footer() {
                 {/* Nav links */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '8px 32px', fontSize: '13px', fontWeight: 500, color: '#9ca3af' }}>
                     <Link href="/ueber-uns" style={{ color: '#9ca3af', textDecoration: 'none' }}>Über uns</Link>
-                    <Link href="#" style={{ color: '#9ca3af', textDecoration: 'none' }}>Für Geschäftskunden</Link>
-                    <Link href="#" style={{ color: '#9ca3af', textDecoration: 'none' }}>Für Schädlingsbekämpfer</Link>
+                    <Link href="/geschaeftskunden" style={{ color: '#9ca3af', textDecoration: 'none' }}>Für Geschäftskunden</Link>
+                    <Link href="/fuer-schaedlingsbekaempfer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Für Schädlingsbekämpfer</Link>
                     <Link href="/impressum" style={{ color: '#9ca3af', textDecoration: 'none' }}>Impressum</Link>
-                    <Link href="#" style={{ color: '#9ca3af', textDecoration: 'none' }}>AGB</Link>
-                    <Link href="#" style={{ color: '#9ca3af', textDecoration: 'none' }}>Datenschutz</Link>
+                    <Link href="/agb" style={{ color: '#9ca3af', textDecoration: 'none' }}>AGB</Link>
+                    <Link href="/datenschutz" style={{ color: '#9ca3af', textDecoration: 'none' }}>Datenschutz</Link>
                     <a href={`mailto:${feedbackEmail}?subject=${feedbackSubject}`} style={{ color: '#9ca3af', textDecoration: 'none' }}>Ideen & Verbesserungen</a>
                 </div>
 

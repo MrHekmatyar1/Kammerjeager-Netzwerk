@@ -1,6 +1,7 @@
 /* === GLOBALS.CSS === */
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&display=swap');
-@import "tailwindcss"; /* Для новых версий Next.js/Tailwind */
+@import "tailwindcss";
+/* Для новых версий Next.js/Tailwind */
 
 /* Если прошлая версия не сработала, используй классику: */
 /* @tailwind base; */
@@ -12,54 +13,85 @@
     /* Цветовая палитра */
     --color-white: #FFFFFF;
     --color-black: #000000;
-    --color-dark-grey: #212121; /* Для суб-хедеров */
-    --color-orkin-red: #C8102E; /* Тот самый красный */
-    --color-red-hover: #A00D25; /* Темнее для наведения */
+    --color-dark-grey: #212121;
+    /* Для суб-хедеров */
+    --color-orkin-red: #C8102E;
+    /* Тот самый красный */
+    --color-red-hover: #A00D25;
+    /* Темнее для наведения */
 
     /* Шрифтовые пары (как на скринах) */
-    --font-heading: 'Barlow Condensed', sans-serif; /* Для H1, H2, H3 */
-    --font-body: 'Inter', sans-serif;             /* Для текста и кнопок */
+    --font-heading: 'Barlow Condensed', sans-serif;
+    /* Для H1, H2, H3 */
+    --font-body: 'Inter', sans-serif;
+    /* Для текста и кнопок */
 
     /* Системные настройки (как у Orkin) */
-    --spacing-main: 16px; /* Базовый отступ для мобилок */
+    --spacing-main: 16px;
+    /* Базовый отступ для мобилок */
     --transition-fast: 0.2s ease-in-out;
 }
 
-/* === ОБНУЛЕНИЕ (RESET) === */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+/* === ОБНУЛЕНИЕ (RESET) — inside @layer base so Tailwind utilities override it === */
+@layer base {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    html,
+    body {
+        background-color: var(--color-white);
+        color: var(--color-black);
+        font-family: var(--font-body);
+        font-size: 16px;
+        line-height: 1.5;
+        overflow-x: hidden;
+    }
 }
 
-html, body {
-    background-color: var(--color-white);
-    color: var(--color-black);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.5;
-    overflow-x: hidden;
+/* === МОБИЛЬНЫЕ ФИКСЫ  убирает 300ms задержку === */
+button,
+a,
+[role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* === ТИПОГРАФИКА (ORKIN STYLE) === */
+/* === ТИПОГРАФИКА (стиль) === */
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-family: var(--font-heading);
-    font-weight: 800; /* Самый жирный */
-    text-transform: uppercase; /* Всегда капсом */
-    letter-spacing: -0.02em;   /* Сжатый трекинг */
-    line-height: 0.95;         /* Плотный интерлиньяж */
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
     margin-bottom: 24px;
 }
 
 h1 {
-    font-size: 56px; /* Огромный на мобилке */
+    font-size: 56px;
 }
 
 h2 {
     font-size: 32px;
+}
+
+/* Responsive heading sizes on mobile — prevent overflow */
+@media (max-width: 768px) {
+    h1 {
+        font-size: clamp(1.8rem, 9vw, 3rem);
+    }
+
+    h2 {
+        font-size: clamp(1.4rem, 6vw, 2rem);
+    }
 }
 
 p {
@@ -83,17 +115,21 @@ p {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 100%; /* На мобилке всегда на всю ширину */
-    height: 56px; /* Фиксированная высота */
+    width: 100%;
+    /* На мобилке всегда на всю ширину */
+    height: 56px;
+    /* Фиксированная высота */
     padding: 0 24px;
     font-family: var(--font-body);
     font-weight: 700;
     font-size: 16px;
-    text-transform: uppercase; /* Всегда капсом */
+    text-transform: uppercase;
+    /* Всегда капсом */
     letter-spacing: 0.05em;
     text-decoration: none;
     border: none;
-    border-radius: 0; /* Строго острые углы */
+    border-radius: 0;
+    /* Строго острые углы */
     cursor: pointer;
     transition: background-color var(--transition-fast);
 }
@@ -135,7 +171,7 @@ p {
 .segment-switcher {
     display: flex;
     height: 48px;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .segment-item {
@@ -146,7 +182,8 @@ p {
     font-family: var(--font-body);
     font-weight: 700;
     font-size: 15px;
-    color: #757575; /* Серый текст */
+    color: #757575;
+    /* Серый текст */
     text-decoration: none;
 }
 
@@ -169,10 +206,21 @@ p {
 }
 
 /* === UTILITIES (Для ускорения верстки) === */
-.p-main { padding: var(--spacing-main); }
-.mb-2 { margin-bottom: 16px; }
-.mb-3 { margin-bottom: 24px; }
-.mb-4 { margin-bottom: 32px; }
+.p-main {
+    padding: var(--spacing-main);
+}
+
+.mb-2 {
+    margin-bottom: 16px;
+}
+
+.mb-3 {
+    margin-bottom: 24px;
+}
+
+.mb-4 {
+    margin-bottom: 32px;
+}
 
 /* Специальный фикс для линий в футере */
 .footer-divider-line {
@@ -191,7 +239,55 @@ p {
     display: block !important;
     width: 100% !important;
     height: 1px !important;
-    background-color: #eeeeee !important; /* Тот самый светло-серый цвет */
+    background-color: #eeeeee !important;
+    /* Тот самый светло-серый цвет */
     border: none !important;
     margin: 0 !important;
+}
+
+/* Responsive wizard border — matches review card border (#c8cdd5) */
+:root {
+    --wiz-border: #c8cdd5;
+    /* Same as review cards: subtle, neutral, 4K-visible */
+}
+
+@media (max-width: 768px) {
+    :root {
+        --wiz-border: #d1d5db;
+        /* Slightly lighter on mobile */
+    }
+}
+
+/* Interactive Pest Card styles to fix animations and mobile touch glitches */
+.pest-card-btn {
+    border: 1.5px solid var(--wiz-border) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06) !important;
+    transform: scale(1);
+    color: #374151 !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease, color 0.15s ease !important;
+}
+
+/* Selected state (for combinations) */
+.pest-card-btn.selected {
+    border-color: var(--color-orkin-red) !important;
+    background-color: #fff8f8 !important;
+    box-shadow: 0 2px 8px rgba(200, 16, 46, 0.15) !important;
+    color: var(--color-orkin-red) !important;
+}
+
+/* Desktop hover (avoids sticky hover on mobile) */
+@media (hover: hover) {
+    .pest-card-btn:not(.selected):hover {
+        border-color: var(--color-orkin-red) !important;
+        box-shadow: 0 6px 20px rgba(200, 16, 46, 0.14) !important;
+        color: var(--color-orkin-red) !important;
+    }
+}
+
+/* Mobile tap / active state */
+.pest-card-btn:not(.selected):active {
+    border-color: var(--color-orkin-red) !important;
+    box-shadow: 0 2px 8px rgba(200, 16, 46, 0.18) !important;
+    transform: scale(0.97) !important;
+    color: var(--color-orkin-red) !important;
 }

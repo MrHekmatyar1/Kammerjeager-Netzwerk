@@ -5,18 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49d96b99-52a2-4e4d-a22c-a11898f61559" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/public/logo_k.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/logo_text.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/pests/andere.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/pests/andere.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/pests/andere1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/pests/fliegen.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/pests/fliegen.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/pests/flohe.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/pests/flohe.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/pests/kaefer.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/pests/kaefer.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/pests/motten.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/pests/motten.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/pests/tauben.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/pests/tauben.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/leads/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/leads/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/geschaeftskunden/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/geschaeftskunden/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/globals.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChatBot.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/LeadWizard.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ReviewSlider.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/ueber-uns/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ueber-uns/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/interactive/ChatBot.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/interactive/ChatBot.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/interactive/LeadWizard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/interactive/LeadWizard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/layout/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/layout/Footer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/layout/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/layout/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sections/Hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sections/Hero.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sections/PestStrip.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sections/PestStrip.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sections/ReviewSlider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sections/ReviewSlider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sections/UnserProzess.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sections/UnserProzess.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/constants/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/supabase.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/supabase.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +37,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="42" />
+    <option name="cachedIndexableFilesCount" value="63" />
   </component>
   <component name="ExportToHTMLSettings">
     <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../Kammerjaeger-Zentrale.de\exportToHTML" />
@@ -70,7 +83,7 @@
   </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/MrHekmatyar1/Kammerjaeger-Zentrale.de.git&quot;,
+    &quot;url&quot;: &quot;https://github.com/MrHekmatyar1/Kammerjeager-Netzwerk.git&quot;,
     &quot;accountId&quot;: &quot;c9ceb248-653a-42ea-a348-ef86d24686f3&quot;
   }
 }</component>
@@ -116,7 +129,7 @@
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Yehor/WebstormProjects/Kammerjaeger-Zentrale.de/src/main.ts&quot;,
     &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\Users\\Yehor\\WebstormProjects\\Kammerjaeger-Zentrale.de\\node_modules\\prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;consents&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Yehor\\WebstormProjects\\Kammerjaeger-Zentrale.de\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -180,6 +193,9 @@
       <workItem from="1774135457926" duration="4377000" />
       <workItem from="1774204548204" duration="23238000" />
       <workItem from="1774927641772" duration="1054000" />
+      <workItem from="1779277293152" duration="11000" />
+      <workItem from="1779277312673" duration="54000" />
+      <workItem from="1779279571844" duration="4790000" />
     </task>
     <task id="LOCAL-00001" summary="Kammerjaeger.web">
       <option name="closed" value="true" />

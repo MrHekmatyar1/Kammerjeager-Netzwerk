@@ -62,19 +62,30 @@ function RoachRunner({ route }: { route: typeof ROACH_ROUTES[0] }) {
                     pointer-events: none;
                     z-index: 10;
                     animation: roach-run 5s ease-in-out forwards;
+                    mix-blend-mode: multiply;
+                }
+                .roach-inner {
+                    width: 100%;
+                    height: 100%;
                     transform: rotate(${route.rot}deg);
                     transform-origin: center;
-                    mix-blend-mode: multiply;
+                    position: relative;
+                }
+                /* Hide on mobile — mix-blend-mode unreliable on Android with GPU layers */
+                @media (max-width: 639px) {
+                    .roach-runner { display: none; }
                 }
             `}</style>
             <div className="roach-runner">
-                <Image
-                    src="/pests/roach_runner.png"
-                    alt=""
-                    fill
-                    style={{ objectFit: 'contain' }}
-                    sizes="44px"
-                />
+                <div className="roach-inner">
+                    <Image
+                        src="/pests/roach_runner.png"
+                        alt=""
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        sizes="44px"
+                    />
+                </div>
             </div>
         </>
     );
@@ -134,8 +145,8 @@ function ReviewCard({ review, authorIdx, isThird }: {
             display: 'flex',
             flexDirection: 'column',
             gap: '12px',
-            width: 'calc(33.333% - 11px)',
-            minWidth: 'calc(33.333% - 11px)',
+            width: 'calc(var(--slide-width, 33.333%) - 11px)',
+            minWidth: 'calc(var(--slide-width, 33.333%) - 11px)',
             height: '220px',
             position: 'relative',
             overflow: 'hidden',
@@ -206,34 +217,82 @@ const extendedReviews = [...REVIEWS_DATA.slice(-3), ...REVIEWS_DATA, ...REVIEWS_
 export default function ReviewSlider() {
     const [currentIndex, setCurrentIndex] = useState(3);
     const [isAnimating, setIsAnimating] = useState(false);
-    const visibleCards = 3;
+    const [visibleCards, setVisibleCards] = useState(3);
+
+    // Live drag state
+    const [dragOffset, setDragOffset] = useState(0); // px offset during drag
+    const [isDragging, setIsDragging] = useState(false);
+    const touchStartX = useRef<number>(0);
+    const touchStartTime = useRef<number>(0);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    // Responsive: 2 cards on mobile, 3 on desktop
+    useEffect(() => {
+        const update = () => {
+            const v = window.innerWidth < 640 ? 2 : 3;
+            setVisibleCards(v);
+            document.documentElement.style.setProperty('--slide-width', `${100 / v}%`);
+        };
+        update();
+        window.addEventListener('resize', update);
+        return () => window.removeEventListener('resize', update);
+    }, []);
 
     const jumpToIndex = (index: number) => {
         setIsAnimating(false);
         setCurrentIndex(index);
     };
 
-    const nextSlide = () => {
-        if (!isAnimating) {
-            setIsAnimating(true);
-            setCurrentIndex((prev) => prev + 1);
-        }
+    const goTo = (newIndex: number) => {
+        setIsAnimating(true);
+        setCurrentIndex(newIndex);
+        setDragOffset(0);
+        setIsDragging(false);
     };
 
-    const prevSlide = () => {
-        if (!isAnimating) {
-            setIsAnimating(true);
-            setCurrentIndex((prev) => prev - 1);
-        }
+    const nextSlide = () => goTo(currentIndex + 1);
+    const prevSlide = () => goTo(currentIndex - 1);
+
+    // Touch handlers — live drag
+    const onTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0]!.clientX;
+        touchStartTime.current = Date.now();
+        setIsDragging(true);
+        setIsAnimating(false);
+    };
+
+    const onTouchMove = (e: React.TouchEvent) => {
+        if (!isDragging) return;
+        const dx = e.touches[0]!.clientX - touchStartX.current;
+        setDragOffset(dx);
+    };
+
+    const onTouchEnd = (e: React.TouchEvent) => {
+        const dx = e.changedTouches[0]!.clientX - touchStartX.current;
+        const dt = Date.now() - touchStartTime.current;
+        const velocity = Math.abs(dx) / dt; // px per ms
+        const containerWidth = containerRef.current?.offsetWidth ?? 300;
+        const cardWidth = containerWidth / visibleCards;
+
+        // Number of cards to skip: based on velocity + distance
+        let skip = Math.round(Math.abs(dx) / cardWidth);
+        if (velocity > 0.5) skip = Math.max(skip, 1); // fast flick = at least 1
+        if (velocity > 1.2) skip = Math.max(skip, 2); // very fast = at least 2
+        if (velocity > 2.0) skip = Math.max(skip, 3); // lightning = 3
+        skip = Math.max(1, Math.min(skip, 3)); // clamp 1–3
+
+        if (dx < -30) goTo(currentIndex + skip);
+        else if (dx > 30) goTo(currentIndex - skip);
+        else { setDragOffset(0); setIsDragging(false); }
     };
 
     useEffect(() => {
         if (isAnimating) {
             const timer = setTimeout(() => {
                 setIsAnimating(false);
-                if (currentIndex === extendedReviews.length - visibleCards) jumpToIndex(3);
-                if (currentIndex === 0) jumpToIndex(extendedReviews.length - (visibleCards * 2));
-            }, 500);
+                if (currentIndex >= extendedReviews.length - visibleCards) jumpToIndex(3);
+                if (currentIndex <= 0) jumpToIndex(extendedReviews.length - visibleCards * 2);
+            }, 350);
             return () => clearTimeout(timer);
         }
     }, [currentIndex, isAnimating]);
@@ -253,14 +312,19 @@ export default function ReviewSlider() {
                     </div>
 
                     {/* Слайдер */}
-                    <div style={{ position: 'relative' }}>
+                    <div style={{ position: 'relative' }}
+                        onTouchStart={onTouchStart}
+                        onTouchMove={onTouchMove}
+                        onTouchEnd={onTouchEnd}
+                        ref={containerRef}
+                    >
                         <div style={{ overflow: 'hidden' }}>
                             <div
                                 style={{
                                     display: 'flex',
                                     gap: '16px',
-                                    transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
-                                    transition: isAnimating ? 'transform 500ms ease-in-out' : 'none',
+                                    transform: `translateX(calc(-${currentIndex * (100 / visibleCards)}% + ${dragOffset}px))`,
+                                    transition: isDragging ? 'none' : 'transform 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                                 }}
                             >
                                 {extendedReviews.map((review, index) => (

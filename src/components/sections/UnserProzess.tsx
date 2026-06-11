@@ -1,5 +1,13 @@
 'use client';
 
+// ==========================================
+// [EN] 'HOW IT WORKS' SECTION
+// [RU] СЕКЦИЯ 'КАК ЭТО РАБОТАЕТ'
+// ==========================================
+// Displays the 3-step process of the service.
+// Отображает 3-шаговый процесс предоставления услуги.
+// ==========================================
+
 import React from 'react';
 import { Barlow_Condensed } from 'next/font/google';
 
@@ -9,6 +17,10 @@ const barlowCondensed = Barlow_Condensed({
     display: 'swap',
 });
 
+// ==========================================
+// [EN] STEPS DATA
+// [RU] ДАННЫЕ ШАГОВ
+// ==========================================
 const steps = [
     {
         number: '01',
@@ -32,130 +44,52 @@ const steps = [
 
 export default function UnserProzess() {
     return (
-        <section className="unser-prozess-section">
-            <div className="unser-prozess-inner">
-                {/* Header */}
-                <div className="unser-prozess-header">
-                    <p className="unser-prozess-label">UNSER PROZESS</p>
-                    <h2 className="unser-prozess-title">
+        <section className="w-full bg-transparent pt-[100px] px-6 pb-[120px] relative z-10">
+            <div className="max-w-[1200px] mx-auto">
+                
+                {/* ==========================================
+                    [EN] SECTION HEADER
+                    [RU] ЗАГОЛОВОК СЕКЦИИ
+                    ========================================== */}
+                <div className="max-w-[600px] mb-14">
+                    <p className="text-[11px] font-bold tracking-[0.14em] text-[#c8102e] uppercase mb-3.5">
+                        UNSER PROZESS
+                    </p>
+                    <h2 className="text-[clamp(1.8rem,3.5vw,2.75rem)] font-black leading-[1.05] text-[#1a1a1a] mb-[18px] tracking-[-0.02em]">
                         So einfach funktioniert&nbsp;es.
                     </h2>
-                    <p className="unser-prozess-subtitle">
+                    <p className="text-[0.97rem] leading-[1.65] text-[#666] max-w-[500px]">
                         Von der Anfrage bis zur erfolgreichen, rechtssicheren Schädlingsbekämpfung –
                         transparent und professionell.
                     </p>
                 </div>
 
-                {/* Steps grid — always 3 columns */}
-                <div className="unser-prozess-grid">
+                {/* ==========================================
+                    [EN] STEPS GRID (3 Columns Desktop, 1 Column Mobile)
+                    [RU] СЕТКА ШАГОВ (3 колонки на ПК, 1 колонка на мобильном)
+                    ========================================== */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-y-10 md:gap-y-0 md:gap-x-12">
                     {steps.map((step) => (
-                        <div key={step.number} className="unser-prozess-card">
-                            <span className={`unser-prozess-number ${barlowCondensed.className}`}>
+                        <div key={step.number} className="flex flex-col">
+                            {/* Step Number (Barlow Condensed Font) */}
+                            <span className={`text-[clamp(3.2rem,5vw,5rem)] font-bold text-[#c8102e] leading-none tracking-[-0.01em] ${barlowCondensed.className}`}>
                                 {step.number}
                             </span>
-                            <div className="unser-prozess-divider" />
-                            <h3 className="unser-prozess-step-title">{step.title}</h3>
-                            <p className="unser-prozess-step-desc">{step.description}</p>
+                            
+                            {/* Red Divider Line */}
+                            <div className="w-8 h-[3px] bg-[#c8102e] mt-3.5 mb-[18px] rounded-sm" />
+                            
+                            {/* Step Title & Description */}
+                            <h3 className="text-[1.1rem] font-extrabold text-[#1a1a1a] mb-3 leading-[1.3] tracking-[-0.01em]">
+                                {step.title}
+                            </h3>
+                            <p className="text-[0.93rem] leading-[1.7] text-[#555]">
+                                {step.description}
+                            </p>
                         </div>
                     ))}
                 </div>
             </div>
-
-            <style jsx>{`
-                .unser-prozess-section {
-                    width: 100%;
-                    background: #ffffff;
-                    padding: 100px 24px 120px;
-                }
-
-                .unser-prozess-inner {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                }
-
-                /* ── Header ── */
-                .unser-prozess-header {
-                    max-width: 600px;
-                    margin-bottom: 56px;
-                }
-
-                .unser-prozess-label {
-                    font-size: 11px;
-                    font-weight: 700;
-                    letter-spacing: 0.14em;
-                    color: #c8102e;
-                    text-transform: uppercase;
-                    margin-bottom: 14px;
-                }
-
-                .unser-prozess-title {
-                    font-size: clamp(1.8rem, 3.5vw, 2.75rem);
-                    font-weight: 900;
-                    line-height: 1.05;
-                    color: #1a1a1a;
-                    margin-bottom: 18px;
-                    letter-spacing: -0.02em;
-                }
-
-                .unser-prozess-subtitle {
-                    font-size: 0.97rem;
-                    line-height: 1.65;
-                    color: #666;
-                    max-width: 500px;
-                }
-
-                /* ── Grid — always 3 columns ── */
-                .unser-prozess-grid {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 0 48px;
-                }
-
-                @media (max-width: 780px) {
-                    .unser-prozess-grid {
-                        grid-template-columns: 1fr;
-                        gap: 40px 0;
-                    }
-                }
-
-                /* ── Card ── */
-                .unser-prozess-card {
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                /* Lighter weight (700) condensed numbers like Orkin */
-                .unser-prozess-number {
-                    font-size: clamp(3.2rem, 5vw, 5rem);
-                    font-weight: 700;
-                    color: #c8102e;
-                    line-height: 1;
-                    letter-spacing: -0.01em;
-                }
-
-                .unser-prozess-divider {
-                    width: 32px;
-                    height: 3px;
-                    background: #c8102e;
-                    margin: 14px 0 18px;
-                    border-radius: 2px;
-                }
-
-                .unser-prozess-step-title {
-                    font-size: 1.1rem;
-                    font-weight: 800;
-                    color: #1a1a1a;
-                    margin-bottom: 12px;
-                    line-height: 1.3;
-                    letter-spacing: -0.01em;
-                }
-
-                .unser-prozess-step-desc {
-                    font-size: 0.93rem;
-                    line-height: 1.7;
-                    color: #555;
-                }
-            `}</style>
         </section>
     );
 }

@@ -21,9 +21,9 @@ interface Item { src: string; w: number; h: number; rot: number }
 
 function buildRow(picks: number[], sizes: number[]): Item[] {
     return picks.map((idx, i) => {
-        const base = sizes[i % sizes.length];
-        const rot  = ROTATIONS[i % ROTATIONS.length];
-        return { src: INSECTS[idx % INSECTS.length], w: base, h: base, rot };
+        const base = sizes[i % sizes.length] as number;
+        const rot  = ROTATIONS[i % ROTATIONS.length] as number;
+        return { src: INSECTS[idx % INSECTS.length] as string, w: base, h: base, rot };
     });
 }
 

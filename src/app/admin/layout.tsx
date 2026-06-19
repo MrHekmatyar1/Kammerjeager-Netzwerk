@@ -18,22 +18,32 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     }
 
     return (
-        <div className="flex min-h-screen bg-slate-50 font-sans">
+        <div className="flex flex-col md:flex-row min-h-screen bg-slate-50 font-sans">
             {/* Sidebar */}
-            <aside className="w-64 bg-white border-r border-slate-200 flex flex-col fixed h-full z-10">
-                <div className="p-6 border-b border-slate-100">
-                    <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight">Super<span className="text-[#C8102E]">Admin</span></h2>
-                    <p className="text-xs font-medium text-slate-400 mt-1">{session.user.email}</p>
+            <aside className="w-full md:w-64 bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col md:fixed h-auto md:h-full z-10">
+                <div className="p-4 md:p-6 border-b border-slate-100 flex justify-between items-center md:block">
+                    <div>
+                        <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight">Super<span className="text-[#C8102E]">Admin</span></h2>
+                        <p className="text-xs font-medium text-slate-400 mt-1">{session.user.email}</p>
+                    </div>
+                    {/* Logout button for mobile (header) */}
+                    <form action="/auth/signout" method="post" className="md:hidden">
+                        <button type="submit" className="p-2 text-slate-500 hover:text-slate-800 transition-colors">
+                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                        </button>
+                    </form>
                 </div>
                 
-                <nav className="flex-1 p-4 space-y-1">
-                    <Link href="/admin" className="flex items-center gap-3 px-4 py-3 bg-red-50 text-[#C8102E] rounded-xl font-bold text-sm">
+                <nav className="flex-1 p-4 flex md:flex-col gap-2 overflow-x-auto">
+                    <Link href="/admin" className="flex items-center gap-2 md:gap-3 px-4 py-2 md:py-3 bg-red-50 text-[#C8102E] rounded-xl font-bold text-sm whitespace-nowrap">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                         </svg>
                         Alle Leads
                     </Link>
-                    <div className="flex items-center gap-3 px-4 py-3 text-slate-400 font-medium text-sm cursor-not-allowed">
+                    <div className="flex items-center gap-2 md:gap-3 px-4 py-2 md:py-3 text-slate-400 font-medium text-sm cursor-not-allowed whitespace-nowrap">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
@@ -41,7 +51,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                     </div>
                 </nav>
 
-                <div className="p-6 border-t border-slate-100">
+                {/* Logout button for desktop (bottom) */}
+                <div className="hidden md:block p-6 border-t border-slate-100">
                     <form action="/auth/signout" method="post">
                         <button type="submit" className="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-semibold text-sm transition-colors">
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -54,7 +65,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </aside>
 
             {/* Main content area */}
-            <main className="flex-1 ml-64 p-8 max-w-7xl">
+            <main className="flex-1 w-full md:ml-64 p-4 md:p-8 max-w-[100vw] overflow-x-hidden">
                 {children}
             </main>
         </div>

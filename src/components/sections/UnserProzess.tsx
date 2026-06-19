@@ -1,12 +1,7 @@
 'use client';
 
-// ==========================================
-// [EN] 'HOW IT WORKS' SECTION
-// [RU] СЕКЦИЯ 'КАК ЭТО РАБОТАЕТ'
-// ==========================================
-// Displays the 3-step process of the service.
-// Отображает 3-шаговый процесс предоставления услуги.
-// ==========================================
+// 'How it works' section — 3-step service process
+// Секция "Как это работает" — трёхшаговый процесс услуги
 
 import React from 'react';
 import { Barlow_Condensed } from 'next/font/google';
@@ -17,10 +12,8 @@ const barlowCondensed = Barlow_Condensed({
     display: 'swap',
 });
 
-// ==========================================
-// [EN] STEPS DATA
-// [RU] ДАННЫЕ ШАГОВ
-// ==========================================
+// Steps data: number, title, description
+// Данные шагов: номер, заголовок, описание
 const steps = [
     {
         number: '01',
@@ -47,10 +40,7 @@ export default function UnserProzess() {
         <section className="w-full bg-transparent pt-[100px] px-6 pb-[120px] relative z-10">
             <div className="max-w-[1200px] mx-auto">
                 
-                {/* ==========================================
-                    [EN] SECTION HEADER
-                    [RU] ЗАГОЛОВОК СЕКЦИИ
-                    ========================================== */}
+                {/* Section header / Заголовок секции */}
                 <div className="max-w-[600px] mb-14">
                     <p className="text-[11px] font-bold tracking-[0.14em] text-[#c8102e] uppercase mb-3.5">
                         UNSER PROZESS
@@ -64,10 +54,7 @@ export default function UnserProzess() {
                     </p>
                 </div>
 
-                {/* ==========================================
-                    [EN] STEPS GRID (3 Columns Desktop, 1 Column Mobile)
-                    [RU] СЕТКА ШАГОВ (3 колонки на ПК, 1 колонка на мобильном)
-                    ========================================== */}
+                {/* Steps grid: 3 columns on desktop, 1 on mobile / Сетка шагов: 3 колонки на ПК, 1 на мобильном */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-y-10 md:gap-y-0 md:gap-x-12">
                     {steps.map((step) => (
                         <div key={step.number} className="flex flex-col">

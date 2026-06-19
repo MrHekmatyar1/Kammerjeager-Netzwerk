@@ -1,12 +1,9 @@
 'use client';
 
-// ==========================================
-// [EN] HEADER - Main Navigation Bar
-// [RU] ШАПКА - Главная навигационная панель
-// ==========================================
-// Features: Desktop hover dropdowns, mobile hamburger menu, scroll-reactive transparency.
-// Функции: Выпадающие меню при наведении (ПК), бургер-меню (Мобильные), прозрачность при скролле.
-// ==========================================
+// Header — Main Navigation Bar
+// Шапка — главная навигационная панель
+// Desktop: hover mega-menu dropdowns. Mobile: hamburger menu. Scroll: transparency effect.
+// ПК: выпадающие мега-меню. Мобильные: бургер. Скролл: прозрачность.
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
@@ -14,10 +11,8 @@ import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 
-// ==========================================
-// [EN] CONFIGURATION DATA
-// [RU] КОНФИГУРАЦИОННЫЕ ДАННЫЕ
-// ==========================================
+// Configuration: navigation menus and pest list
+// Конфигурация: меню навигации и список вредителей
 const PESTS = [
     'Wespen', 'Bettwanzen', 'Ratten', 'Mäuse',
     'Schaben', 'Ameisen', 'Motten', 'Flöhe',
@@ -55,10 +50,8 @@ const NAV_LINKS = [
 ];
 
 export default function Header() {
-    // ==========================================
-    // [EN] STATE MANAGEMENT
-    // [RU] УПРАВЛЕНИЕ СОСТОЯНИЕМ
-    // ==========================================
+    // State: active menus, scroll position, mobile menu, auth user
+    // Состояние: активные меню, позиция скролла, мобильное меню, авторизованный пользователь
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
     const [atTop, setAtTop] = useState(true);
@@ -84,10 +77,8 @@ export default function Header() {
         setProfileMenuOpen(false);
     };
 
-    // ==========================================
-    // [EN] SCROLL & TOUCH LISTENERS
-    // [RU] ОБРАБОТЧИКИ СКРОЛЛА И КАСАНИЙ
-    // ==========================================
+    // Event listeners: scroll position and touch detection
+    // Слушатели событий: позиция скролла и определение касания
     useEffect(() => {
         const onScroll = () => setAtTop(window.scrollY < 10);
         window.addEventListener('scroll', onScroll, { passive: true });
@@ -123,10 +114,7 @@ export default function Header() {
 
     return (
         <>
-            {/* ==========================================
-                [EN] BACKDROP (For Desktop Dropdown)
-                [RU] ЗАТЕМНЕНИЕ (Для выпадающего меню на ПК)
-                ========================================== */}
+            {/* Backdrop overlay for desktop dropdown / Затемнение за выпадающим меню на ПК */}
             {!isTouch && (
                 <div
                     onClick={() => setActiveMenu(null)}
@@ -136,10 +124,7 @@ export default function Header() {
                 />
             )}
 
-            {/* ==========================================
-                [EN] MAIN HEADER CONTAINER
-                [RU] ГЛАВНЫЙ КОНТЕЙНЕР ШАПКИ
-                ========================================== */}
+            {/* Main header container / Главный контейнер шапки */}
             <header className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
                 isSolid 
                     ? 'bg-white shadow-none' 
@@ -151,10 +136,7 @@ export default function Header() {
                 
                 <div className="max-w-[1280px] mx-auto px-5 h-[68px] flex items-center justify-between gap-4">
                     
-                    {/* ==========================================
-                        [EN] BRAND LOGO
-                        [RU] ЛОГОТИП
-                        ========================================== */}
+                    {/* Brand logo / Логотип */}
                     <Link href="/" className="flex items-center gap-3 no-underline shrink-0">
                         <Image 
                             src="/logo_k.png" 
@@ -169,10 +151,7 @@ export default function Header() {
                         </div>
                     </Link>
 
-                    {/* ==========================================
-                        [EN] DESKTOP NAVIGATION
-                        [RU] НАВИГАЦИЯ ДЛЯ ПК
-                        ========================================== */}
+                    {/* Desktop navigation / Навигация для ПК */}
                     <nav className="hidden lg:flex items-center h-[68px]">
                         {Object.keys(MENUS).map((key) => (
                             <div
@@ -195,10 +174,7 @@ export default function Header() {
                         ))}
                     </nav>
 
-                    {/* ==========================================
-                        [EN] DESKTOP ACTIONS (CALL & BOOKING)
-                        [RU] ДЕЙСТВИЯ НА ПК (ЗВОНОК И БРОНЬ)
-                        ========================================== */}
+                    {/* Desktop action buttons: phone & booking / Кнопки на ПК: звонок и бронь */}
                     <div className="hidden lg:flex items-center gap-3 shrink-0">
                         <a href="tel:016092376320" className="flex items-center gap-1.5 text-[15px] font-medium text-[#C8102E] no-underline">
                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,10 +235,7 @@ export default function Header() {
                         </button>
                     </div>
 
-                    {/* ==========================================
-                        [EN] MOBILE ACTIONS (CALL & HAMBURGER)
-                        [RU] ДЕЙСТВИЯ НА МОБИЛЬНОМ (ЗВОНОК И БУРГЕР)
-                        ========================================== */}
+                    {/* Mobile action buttons: phone & hamburger / Кнопки на мобильных: звонок и бургер */}
                     <div className="flex lg:hidden items-center gap-2">
                         {user ? (
                             <button
@@ -303,10 +276,7 @@ export default function Header() {
                     </div>
                 </div>
 
-                {/* ==========================================
-                    [EN] MOBILE MENU DROPDOWN
-                    [RU] ВЫПАДАЮЩЕЕ МЕНЮ ДЛЯ МОБИЛЬНЫХ
-                    ========================================== */}
+                {/* Mobile dropdown menu / Выпадающее меню для мобильных */}
                 <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out bg-white ${
                     mobileOpen ? 'max-h-[400px] border-t border-slate-100' : 'max-h-0 border-none'
                 }`}>
@@ -356,10 +326,7 @@ export default function Header() {
                     </div>
                 </div>
 
-                {/* ==========================================
-                    [EN] DESKTOP MEGA-MENU DROPDOWN
-                    [RU] МЕГА-МЕНЮ ДЛЯ ПК
-                    ========================================== */}
+                {/* Desktop mega-menu dropdown / Мега-меню для ПК */}
                 {!isTouch && (
                     <div
                         onMouseEnter={() => { if (closeTimer.current) clearTimeout(closeTimer.current); }}

@@ -1,18 +1,14 @@
 'use client';
 
-// ==========================================
-// [EN] HERO SECTION - Animated headline & CTA
-// [RU] ГЛАВНЫЙ ЭКРАН - Анимированный заголовок и кнопка
-// ==========================================
+// Hero section — animated headline and CTA button
+// Главный экран — анимированный заголовок и кнопка
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import PriceCalculator from '../interactive/PriceCalculator';
 
-// ==========================================
-// [EN] CONFIGURATION DATA
-// [RU] КОНФИГУРАЦИОННЫЕ ДАННЫЕ
-// ==========================================
+// Configuration: rotating words in the headline
+// Конфигурация: сменяемые слова в заголовке
 const ROTATING_WORDS = [
     'Wespen', 'Ratten', 'Mäusen', 'Schaben',
     'Ameisen', 'Flöhen', 'Bettwanzen', 'Tauben',
@@ -24,10 +20,8 @@ export default function Hero({ cityName }: { cityName?: string }) {
     const [isExiting, setIsExiting] = useState(false);
     const [calcOpen, setCalcOpen] = useState(false);
 
-    // ==========================================
-    // [EN] WORD ROTATION LOGIC
-    // [RU] ЛОГИКА СМЕНЫ СЛОВ
-    // ==========================================
+    // Word rotation interval logic
+    // Логика переключения слов с интервалом
     useEffect(() => {
         const interval = setInterval(() => {
             setIsExiting(true);
@@ -42,10 +36,7 @@ export default function Hero({ cityName }: { cityName?: string }) {
 
     return (
         <>
-            {/* ==========================================
-                [EN] ANIMATION KEYFRAMES
-                [RU] КАДРЫ АНИМАЦИЙ
-                ========================================== */}
+            {/* Animation keyframes for word transitions / Кадры анимации для смены слов */}
             <style>{`
                 @keyframes slideInFromBottom {
                     from { transform: translateY(110%); opacity: 0; }
@@ -62,10 +53,7 @@ export default function Hero({ cityName }: { cityName?: string }) {
             <section
                 className="w-full flex justify-center border-b border-gray-100 -mt-[70px] pt-[150px] md:pt-[170px] pb-[200px] md:pb-[450px] mb-0 md:-mb-[250px] px-5 relative overflow-hidden"
             >
-                {/* ==========================================
-                    [EN] BACKGROUND LAYERS (OPTIMIZED)
-                    [RU] ФОНОВЫЕ СЛОИ (ОПТИМИЗИРОВАННЫЕ)
-                    ========================================== */}
+                {/* Background image layers / Фоновые слои */}
                 
                 {/* Base Sky Background (Desktop & Mobile) */}
                 <div className="absolute inset-0 z-0 pointer-events-none">
@@ -113,10 +101,7 @@ export default function Hero({ cityName }: { cityName?: string }) {
                     </div>
                 </div>
 
-                {/* ==========================================
-                    [EN] OVERLAYS & BLURS
-                    [RU] НАЛОЖЕНИЯ И РАЗМЫТИЯ
-                    ========================================== */}
+                {/* Overlay gradients and blur effects / Градиентные наложения и размытия */}
 
                 {/* Bottom White Fade (Seamless transition to next section) */}
                 <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent from-0% via-transparent via-40% to-white to-100%" />
@@ -126,10 +111,7 @@ export default function Hero({ cityName }: { cityName?: string }) {
                     background: 'radial-gradient(circle at 30% center, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 65%)',
                 }} />
 
-                {/* ==========================================
-                    [EN] MAIN CONTENT
-                    [RU] ОСНОВНОЙ КОНТЕНТ
-                    ========================================== */}
+                {/* Main content block / Основной блок контента */}
                 <div className="w-full max-w-[1200px] relative z-10">
 
                     <h1 className="text-4xl md:text-8xl font-black text-[#1E293B] leading-[1.0] uppercase tracking-tight max-w-[900px] mb-7 font-['Barlow_Condensed',_sans-serif]">

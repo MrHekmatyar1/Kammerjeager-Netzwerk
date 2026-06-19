@@ -174,7 +174,7 @@ export async function sendAdminNotification(lead: any) {
         <p><strong>Zugang:</strong> ${lead.zugang || '-'}</p>
         <p><strong>Beschreibung:</strong> ${lead.zugang_beschreibung || '-'}</p>
         <br />
-        <p style="font-size: 10px; color: #aaaaaa;">Влад лох</p>
+        <p style="font-size: 10px; color: #aaaaaa;">Kammerjaeger-Zentrale.de</p>
     `;
 
     if (!resend) {

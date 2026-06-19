@@ -293,12 +293,12 @@ export default function Header() {
                         </a>
                         <button
                             onClick={() => setMobileOpen(o => !o)}
-                            className="flex flex-col justify-center items-center gap-[5px] w-10 h-10 bg-transparent border-none cursor-pointer p-2"
+                            className="flex flex-col justify-center items-center gap-[5px] w-10 h-10 bg-transparent border-none cursor-pointer p-2 relative"
                             aria-label="Menü öffnen"
                         >
-                            <span className={`block w-[22px] h-[2px] transition-all duration-200 ${mobileOpen ? 'bg-[#C8102E] rotate-45 translate-x-[5px] translate-y-[5px]' : 'bg-[#1E293B]'}`} />
-                            <span className={`block w-[22px] h-[2px] bg-[#1E293B] transition-opacity duration-200 ${mobileOpen ? 'opacity-0' : 'opacity-100'}`} />
-                            <span className={`block w-[22px] h-[2px] transition-all duration-200 ${mobileOpen ? 'bg-[#C8102E] -rotate-45 translate-x-[5px] -translate-y-[5px]' : 'bg-[#1E293B]'}`} />
+                            <span className={`block absolute w-[22px] h-[2px] transition-all duration-300 ${mobileOpen ? 'bg-[#C8102E] rotate-45' : 'bg-[#1E293B] -translate-y-[7px]'}`} />
+                            <span className={`block absolute w-[22px] h-[2px] transition-opacity duration-300 ${mobileOpen ? 'opacity-0 bg-[#C8102E]' : 'opacity-100 bg-[#1E293B]'}`} />
+                            <span className={`block absolute w-[22px] h-[2px] transition-all duration-300 ${mobileOpen ? 'bg-[#C8102E] -rotate-45' : 'bg-[#1E293B] translate-y-[7px]'}`} />
                         </button>
                     </div>
                 </div>

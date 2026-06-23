@@ -264,67 +264,20 @@ export default function Header() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                             </svg>
                         </a>
+                        {/* Round dark hamburger button / Тёмная круглая кнопка-гамбургер */}
                         <button
                             onClick={() => setMobileOpen(o => !o)}
-                            className="flex flex-col justify-center items-center gap-[5px] w-10 h-10 bg-transparent border-none cursor-pointer p-2 relative"
+                            className="flex flex-col justify-center items-center gap-[5.5px] w-11 h-11 bg-[#1E293B] rounded-full border-none cursor-pointer shrink-0 shadow-[0_2px_10px_rgba(0,0,0,0.18)]"
                             aria-label="Menü öffnen"
                         >
-                            <span className={`block absolute w-[22px] h-[2px] transition-all duration-300 ${mobileOpen ? 'bg-[#C8102E] rotate-45' : 'bg-[#1E293B] -translate-y-[7px]'}`} />
-                            <span className={`block absolute w-[22px] h-[2px] transition-opacity duration-300 ${mobileOpen ? 'opacity-0 bg-[#C8102E]' : 'opacity-100 bg-[#1E293B]'}`} />
-                            <span className={`block absolute w-[22px] h-[2px] transition-all duration-300 ${mobileOpen ? 'bg-[#C8102E] -rotate-45' : 'bg-[#1E293B] translate-y-[7px]'}`} />
+                            <span className="block w-[18px] h-[1.5px] bg-white rounded-full" />
+                            <span className="block w-[18px] h-[1.5px] bg-white rounded-full" />
+                            <span className="block w-[12px] h-[1.5px] bg-white rounded-full self-start ml-[11px]" />
                         </button>
                     </div>
                 </div>
 
-                {/* Mobile dropdown menu / Выпадающее меню для мобильных */}
-                <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out bg-white ${
-                    mobileOpen ? 'max-h-[400px] border-t border-slate-100' : 'max-h-0 border-none'
-                }`}>
-                    <div className="px-5 pt-4 pb-6 flex flex-col">
-                        {NAV_LINKS.map(({ label, href }) => (
-                            <Link
-                                key={label}
-                                href={href}
-                                onClick={() => setMobileOpen(false)}
-                                className="block py-[14px] text-[17px] font-semibold text-[#1E293B] border-b border-slate-100"
-                            >
-                                {label}
-                            </Link>
-                        ))}
-                        {user && (
-                            <>
-                                <Link
-                                    href="/dashboard"
-                                    onClick={() => setMobileOpen(false)}
-                                    className="block py-[14px] text-[17px] font-semibold text-[#1E293B] border-b border-slate-100"
-                                >
-                                    Mein Konto
-                                </Link>
-                                <button
-                                    onClick={() => {
-                                        setMobileOpen(false);
-                                        handleLogout();
-                                    }}
-                                    className="block w-full text-left py-[14px] text-[17px] font-semibold text-[#C8102E] border-b border-slate-100 bg-transparent"
-                                >
-                                    Abmelden
-                                </button>
-                            </>
-                        )}
-                        <button
-                            onClick={() => {
-                                setMobileOpen(false);
-                                window.dispatchEvent(new CustomEvent('open-quiz-modal'));
-                            }}
-                            className="mt-4 w-full bg-[#C8102E] text-white p-[14px] text-[15px] font-bold uppercase tracking-[0.05em]"
-                        >
-                            Online Termin buchen
-                        </button>
-                        <a href="tel:016092376320" className="mt-2.5 block text-center text-[16px] font-bold text-[#C8102E] py-2.5">
-                            📞 0160 92376320
-                        </a>
-                    </div>
-                </div>
+                {/* (Mobile dropdown removed — replaced by bottom sheet below) */}
 
                 {/* Desktop mega-menu dropdown / Мега-меню для ПК */}
                 {!isTouch && (
@@ -364,6 +317,97 @@ export default function Header() {
                     </div>
                 )}
             </header>
+
+            {/* ── MOBILE BOTTOM SHEET ── / Мобильный боттом-шит */}
+            {/* Dark overlay / Тёмная подложка */}
+            <div
+                className={`lg:hidden fixed inset-0 z-[10000] transition-all duration-300 ${
+                    mobileOpen ? 'bg-black/50 pointer-events-auto' : 'bg-transparent pointer-events-none'
+                }`}
+                onClick={() => setMobileOpen(false)}
+            />
+
+            {/* Bottom sheet panel / Панель боттом-шита */}
+            <div
+                className={`lg:hidden fixed left-0 right-0 bottom-0 z-[10001] bg-white rounded-t-[28px] shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out ${
+                    mobileOpen ? 'translate-y-0' : 'translate-y-full'
+                }`}
+            >
+                {/* Drag handle / Ручка */}
+                <div className="flex justify-center pt-3 pb-1">
+                    <div className="w-10 h-1 bg-slate-200 rounded-full" />
+                </div>
+
+                <div className="px-5 pt-2 pb-8">
+                    {/* Nav links / Навигационные ссылки */}
+                    {NAV_LINKS.map(({ label, href }) => (
+                        <Link
+                            key={label}
+                            href={href}
+                            onClick={() => setMobileOpen(false)}
+                            className="flex items-center justify-between py-[15px] text-[17px] font-semibold text-[#1E293B] border-b border-slate-100 no-underline"
+                        >
+                            {label}
+                            <svg width="16" height="16" fill="none" stroke="#94a3b8" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                            </svg>
+                        </Link>
+                    ))}
+
+                    {/* Auth links / Ссылки авторизации */}
+                    {user ? (
+                        <>
+                            <Link
+                                href="/dashboard"
+                                onClick={() => setMobileOpen(false)}
+                                className="flex items-center justify-between py-[15px] text-[17px] font-semibold text-[#1E293B] border-b border-slate-100 no-underline"
+                            >
+                                Mein Konto
+                                <svg width="16" height="16" fill="none" stroke="#94a3b8" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </Link>
+                            <button
+                                onClick={() => { setMobileOpen(false); handleLogout(); }}
+                                className="flex items-center justify-between w-full py-[15px] text-[17px] font-semibold text-[#C8102E] border-b border-slate-100 bg-transparent border-none cursor-pointer px-0"
+                            >
+                                Abmelden
+                                <svg width="16" height="16" fill="none" stroke="#C8102E" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </>
+                    ) : (
+                        <button
+                            onClick={() => { setMobileOpen(false); window.dispatchEvent(new CustomEvent('open-auth-modal')); }}
+                            className="flex items-center justify-between w-full py-[15px] text-[17px] font-semibold text-[#1E293B] border-b border-slate-100 bg-transparent border-none cursor-pointer px-0"
+                        >
+                            Anmelden
+                            <svg width="16" height="16" fill="none" stroke="#94a3b8" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    )}
+
+                    {/* CTA Button / Кнопка записи */}
+                    <button
+                        onClick={() => { setMobileOpen(false); window.dispatchEvent(new CustomEvent('open-quiz-modal')); }}
+                        className="mt-5 w-full bg-[#C8102E] text-white py-[15px] text-[15px] font-bold uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_14px_rgba(200,16,46,0.25)] border-none cursor-pointer"
+                    >
+                        Online Termin buchen
+                    </button>
+
+                    <a
+                        href="tel:016092376320"
+                        className="mt-3 flex items-center justify-center gap-2 text-[16px] font-bold text-[#C8102E] py-2 no-underline"
+                    >
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        0160 92376320
+                    </a>
+                </div>
+            </div>
         </>
     );
 }

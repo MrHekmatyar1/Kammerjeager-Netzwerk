@@ -109,7 +109,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         alignItems: 'center',
                         justifyContent: 'center',
                         paddingBottom: '4px',
-                        transition: 'background 0.2s'
+                        transition: 'opacity 0.2s, background 0.2s',
+                        opacity: drawerOpen ? 0 : 1,
+                        pointerEvents: drawerOpen ? 'none' : 'auto',
                     }}
                 >
                     {/* Downward chevron inside the tube */}
@@ -165,7 +167,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             {/* ══════════════════════════════════════
                 DESKTOP: classic sidebar layout (unchanged)
             ══════════════════════════════════════ */}
-            <div style={{ display: 'flex' }} className="hidden md:flex">
+            <div className="hidden md:flex">
                 <aside style={{
                     width: '250px',
                     background: '#fff',

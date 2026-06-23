@@ -95,7 +95,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         position: 'fixed',
                         top: '68px',        // Right below the header
                         left: '20px',       // Align near the logo
-                        zIndex: 9998,       // Above the drawer, below header (if header was higher)
+                        zIndex: 9998,       // Above the drawer, below header (9999)
                         width: '44px',
                         height: '38px',     // Tube length
                         background: '#fff',
@@ -124,7 +124,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     style={{
                         position: 'fixed', inset: 0,
                         background: 'rgba(0,0,0,0.35)',
-                        zIndex: 10000,
+                        zIndex: 9996,       // Below header (9999) and below drawer
                         opacity: drawerOpen ? 1 : 0,
                         pointerEvents: drawerOpen ? 'auto' : 'none',
                         transition: 'opacity 0.2s',
@@ -137,7 +137,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     top: '68px',
                     left: 0,
                     width: '240px',     // narrow panel hugging left wall
-                    zIndex: 10001,
+                    zIndex: 9997,       // Below tube button (9998)
                     background: '#fff',
                     borderRight: '1px solid #e2e8f0',
                     borderBottom: '1px solid #e2e8f0',

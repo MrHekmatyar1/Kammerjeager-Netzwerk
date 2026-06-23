@@ -10,8 +10,8 @@ import PriceCalculator from '../interactive/PriceCalculator';
 // Configuration: rotating words in the headline
 // Конфигурация: сменяемые слова в заголовке
 const ROTATING_WORDS = [
-    'Wespen', 'Ratten', 'Mäusen', 'Schaben',
-    'Ameisen', 'Flöhen', 'Bettwanzen', 'Tauben',
+    'Wespen', 'Ratten', 'Mäuse', 'Schaben',
+    'Ameisen', 'Flöhe', 'Bettwanzen', 'Tauben',
 ];
 
 export default function Hero({ cityName }: { cityName?: string }) {
@@ -117,7 +117,7 @@ export default function Hero({ cityName }: { cityName?: string }) {
                     <h1 className="text-4xl md:text-8xl font-black text-[#1E293B] leading-[1.0] uppercase tracking-tight max-w-[900px] mb-7 font-['Barlow_Condensed',_sans-serif]">
                         <span className="block">Ihr Kammerjäger{cityName ? ` in ${cityName}` : '.'}</span>
                         <span className="block">Der Beste Experte</span>
-                        <span className="block">für ganz</span>
+                        <span className="block">gegen</span>
                         <span className="block text-[#C8102E] overflow-hidden leading-[1.05]">
                             <span key={animKey} className={`inline-block ${isExiting ? 'hero-word-exit' : 'hero-word-enter'}`}>
                                 {ROTATING_WORDS[wordIndex]}.

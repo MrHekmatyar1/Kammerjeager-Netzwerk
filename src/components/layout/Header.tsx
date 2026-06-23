@@ -264,15 +264,15 @@ export default function Header() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                             </svg>
                         </a>
-                        {/* Round dark hamburger button / Тёмная круглая кнопка-гамбургер */}
+                        {/* Round hamburger button / Круглая кнопка-гамбургер */}
                         <button
                             onClick={() => setMobileOpen(o => !o)}
-                            className="flex flex-col justify-center items-center gap-[5.5px] w-11 h-11 bg-[#1E293B] rounded-full border-none cursor-pointer shrink-0 shadow-[0_2px_10px_rgba(0,0,0,0.18)]"
+                            className="flex flex-col justify-center items-center gap-[5px] w-10 h-10 bg-white rounded-full border border-slate-300 cursor-pointer shrink-0 shadow-sm"
                             aria-label="Menü öffnen"
                         >
-                            <span className="block w-[18px] h-[1.5px] bg-white rounded-full" />
-                            <span className="block w-[18px] h-[1.5px] bg-white rounded-full" />
-                            <span className="block w-[12px] h-[1.5px] bg-white rounded-full self-start ml-[11px]" />
+                            <span className="block w-[16px] h-[1.5px] bg-[#1E293B] rounded-full" />
+                            <span className="block w-[16px] h-[1.5px] bg-[#1E293B] rounded-full" />
+                            <span className="block w-[16px] h-[1.5px] bg-[#1E293B] rounded-full" />
                         </button>
                     </div>
                 </div>

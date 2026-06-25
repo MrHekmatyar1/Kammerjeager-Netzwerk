@@ -5,7 +5,7 @@ const resendApiKey = process.env.RESEND_API_KEY;
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
 // Эмейл, на который будут приходить уведомления о заявках
-const ADMIN_EMAIL = 'asus017447@gmail.com';
+const ADMIN_EMAIL = 'edorkalchuk@gmail.com';
 
 // Отправитель. Пока домен не подтвержден в Resend, можно использовать только тестовый адрес
 const FROM_EMAIL = 'onboarding@resend.dev';

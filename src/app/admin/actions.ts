@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
-const ADMIN_EMAIL = 'asus017447@gmail.com';
+const ADMIN_EMAIL = 'edorkalchuk@gmail.com';
 
 export async function updateLeadStatus(id: number, status: string) {
     const supabase = await createClient();

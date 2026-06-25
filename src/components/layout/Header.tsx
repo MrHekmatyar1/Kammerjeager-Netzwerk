@@ -66,8 +66,9 @@ export default function Header() {
     const supabase = createClient();
     const router = useRouter();
 
+    const isAdmin = user?.email === 'edorkalchuk@gmail.com';
     const isKunde = user?.user_metadata?.role === 'kunden';
-    const accountLink = isKunde ? '/kunden' : '/dashboard';
+    const accountLink = isAdmin ? '/admin' : (isKunde ? '/kunden' : '/dashboard');
 
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }) => setUser(user));

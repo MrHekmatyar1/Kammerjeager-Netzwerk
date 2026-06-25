@@ -266,8 +266,9 @@ export default function AuthModal() {
                                             if (error) setError(error.message);
                                             else {
                                                 setOpen(false);
+                                                const isAdmin = authData.user?.email === 'edorkalchuk@gmail.com';
                                                 const isKunde = authData.user?.user_metadata?.role === 'kunden';
-                                                router.push(isKunde ? '/kunden' : '/dashboard');
+                                                router.push(isAdmin ? '/admin' : (isKunde ? '/kunden' : '/dashboard'));
                                             }
                                         } else {
                                             const { error } = await supabase.auth.signUp({

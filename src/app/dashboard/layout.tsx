@@ -33,7 +33,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (!user) return null;
 
     const navItems = [
-        { name: 'Marktplatz', href: '/dashboard' },
+        { name: 'Neue Aufträge', href: '/dashboard' },
         { name: 'Meine Aufträge', href: '/dashboard/orders' },
         { name: 'Einstellungen', href: '/dashboard/settings' },
         { name: 'Abrechnung', href: '/dashboard/billing' },

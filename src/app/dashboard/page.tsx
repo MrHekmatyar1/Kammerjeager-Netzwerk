@@ -130,7 +130,7 @@ export default function DashboardMarketplace() {
     if (loading) return (
         <div>
             <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '8px', color: '#0f172a', lineHeight: 1 }}>
-                Marktplatz
+                Neue Aufträge
             </h1>
             <p style={{ color: '#64748b', fontSize: '15px', marginBottom: '32px' }}>Verfügbare Aufträge in Ihrem Einsatzgebiet.</p>
             <div style={{ display: 'grid', gap: '16px' }}>
@@ -150,7 +150,7 @@ export default function DashboardMarketplace() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px', flexWrap: 'wrap', gap: '12px' }}>
                 <div>
                     <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '8px', color: '#0f172a', lineHeight: 1 }}>
-                        Marktplatz
+                        Neue Aufträge
                     </h1>
                     <p style={{ color: '#64748b', fontSize: '15px', margin: 0 }}>
                         Verfügbare Aufträge in Ihrem Einsatzgebiet.

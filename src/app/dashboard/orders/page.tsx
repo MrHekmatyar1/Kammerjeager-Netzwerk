@@ -187,13 +187,12 @@ export default function DashboardOrders() {
 
             {/* Empty state */}
             {!error && orders.length === 0 && (
-                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '64px 32px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '48px', marginBottom: '16px' }}>📋</div>
+                <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '16px', padding: '64px 32px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
                     <h3 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '22px', fontWeight: 900, textTransform: 'uppercase', color: '#0f172a', marginBottom: '8px' }}>
                         Noch keine Aufträge
                     </h3>
                     <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>
-                        Nehmen Sie Aufträge aus dem <strong>Marktplatz</strong> an, um sie hier zu verwalten.
+                        Nehmen Sie Aufträge aus <strong>Neue Aufträge</strong> an, um sie hier zu verwalten.
                     </p>
                 </div>
             )}

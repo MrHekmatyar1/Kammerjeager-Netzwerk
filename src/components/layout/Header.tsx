@@ -10,6 +10,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
 
 // Configuration: navigation menus and pest list
 // Конфигурация: меню навигации и список вредителей
@@ -63,6 +64,7 @@ export default function Header() {
     const [user, setUser] = useState<User | null>(null);
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
     const supabase = createClient();
+    const router = useRouter();
 
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
@@ -75,6 +77,7 @@ export default function Header() {
     const handleLogout = async () => {
         await supabase.auth.signOut();
         setProfileMenuOpen(false);
+        router.push('/');
     };
 
     // Event listeners: scroll position and touch detection

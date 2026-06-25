@@ -161,8 +161,8 @@ export default function SettingsPage() {
                 </div>
 
                 {/* 1. Persönliche Daten */}
-                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #e2e8f0' }}>
+                <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #cbd5e1' }}>
                         <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Unternehmensprofil</h2>
                     </div>
                     <div style={{ padding: '24px', display: 'grid', gap: '20px' }}>
@@ -173,7 +173,7 @@ export default function SettingsPage() {
                                 value={form.firma}
                                 onChange={e => setForm({ ...form, firma: e.target.value })}
                                 placeholder="z.B. Schmidt Schädlingsbekämpfung GmbH"
-                                style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none' }}
+                                style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #94a3b8', fontSize: '14px', outline: 'none' }}
                             />
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -183,7 +183,7 @@ export default function SettingsPage() {
                                     type="text"
                                     value={form.name}
                                     onChange={e => setForm({ ...form, name: e.target.value })}
-                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none' }}
+                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #94a3b8', fontSize: '14px', outline: 'none' }}
                                 />
                             </div>
                             <div style={{ display: 'grid', gap: '8px' }}>
@@ -192,7 +192,7 @@ export default function SettingsPage() {
                                     type="tel"
                                     value={form.telefon}
                                     onChange={e => setForm({ ...form, telefon: e.target.value })}
-                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none' }}
+                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #94a3b8', fontSize: '14px', outline: 'none' }}
                                 />
                             </div>
                         </div>
@@ -200,8 +200,8 @@ export default function SettingsPage() {
                 </div>
 
                 {/* 2. Einsatzgebiet */}
-                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #e2e8f0' }}>
+                <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #cbd5e1' }}>
                         <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Einsatzgebiete (PLZ)</h2>
                     </div>
                     <div style={{ padding: '24px' }}>
@@ -214,14 +214,14 @@ export default function SettingsPage() {
                             onChange={e => setForm({ ...form, service_plz: e.target.value })}
                             placeholder="10115, 10117, 10119..."
                             rows={3}
-                            style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none', resize: 'vertical', minHeight: '80px', maxHeight: '250px' }}
+                            style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #94a3b8', fontSize: '14px', outline: 'none', resize: 'vertical', minHeight: '80px', maxHeight: '250px' }}
                         />
                     </div>
                 </div>
 
                 {/* 3. Spezialisierung (Schädlinge) */}
-                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #e2e8f0' }}>
+                <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #cbd5e1' }}>
                         <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Spezialisierung</h2>
                     </div>
                     <div style={{ padding: '24px' }}>
@@ -258,8 +258,8 @@ export default function SettingsPage() {
                 </div>
 
                 {/* 4. Benachrichtigungen (Telegram) */}
-                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #e2e8f0' }}>
+                <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #cbd5e1' }}>
                         <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Benachrichtigungen (Telegram)</h2>
                     </div>
                     <div style={{ padding: '24px' }}>
@@ -274,7 +274,7 @@ export default function SettingsPage() {
                                 value={form.telegram_chat_id}
                                 onChange={e => setForm({ ...form, telegram_chat_id: e.target.value })}
                                 placeholder="z.B. 123456789"
-                                style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none' }}
+                                style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #94a3b8', fontSize: '14px', outline: 'none' }}
                             />
                             <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
                                 Tipp: Senden Sie eine Nachricht an den Bot <strong style={{ color: '#0f172a' }}>@userinfobot</strong> in Telegram, um Ihre ID herauszufinden.
@@ -284,8 +284,8 @@ export default function SettingsPage() {
                 </div>
 
                 {/* 5. Abrechnungsmodell */}
-                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #e2e8f0' }}>
+                <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #cbd5e1' }}>
                         <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Abrechnungsmodell</h2>
                     </div>
                     <div style={{ padding: '24px', display: 'grid', gap: '16px' }}>

@@ -43,7 +43,10 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { firma, name, telefon, service_plz, billing_model } = body;
+        const { 
+            firma, name, telefon, service_plz, billing_model,
+            is_active, telegram_chat_id, pests_handled 
+        } = body;
 
         const supabase = supabaseAdmin();
         
@@ -58,6 +61,9 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Partner-Profil nicht gefunden.' }, { status: 404 });
         }
 
+        // Convert array of pests back to comma-separated string for easy DB storage
+        const pestsString = Array.isArray(pests_handled) ? pests_handled.join(',') : null;
+
         // Update settings
         const { error: updateError } = await supabase
             .from('masters')
@@ -66,7 +72,10 @@ export async function POST(req: NextRequest) {
                 name: name || null,
                 telefon: telefon || null,
                 service_plz: service_plz || null,
-                billing_model: billing_model || 'commission'
+                billing_model: billing_model || 'commission',
+                is_active: is_active !== false, // default true
+                telegram_chat_id: telegram_chat_id || null,
+                pests_handled: pestsString
             })
             .eq('id', master.id);
 
@@ -76,7 +85,7 @@ export async function POST(req: NextRequest) {
             // Helpful error if columns are missing
             if (updateError.message.includes('column') && updateError.message.includes('does not exist')) {
                 return NextResponse.json({ 
-                    error: `Datenbank-Fehler: Die benötigten Spalten fehlen in Supabase. Bitte erstellen Sie "firma", "telefon", "service_plz" und "billing_model" als Text-Spalten in der Tabelle "masters".`,
+                    error: `Datenbank-Fehler: Es fehlen Spalten in Supabase! Bitte erstellen Sie: "is_active" (boolean), "telegram_chat_id" (text), "pests_handled" (text) in der Tabelle "masters".`,
                     details: updateError.message
                 }, { status: 400 });
             }

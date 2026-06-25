@@ -2,6 +2,10 @@
 
 import { useEffect, useState, useCallback } from 'react';
 
+const PEST_TYPES = [
+    'Wespen', 'Mäuse & Ratten', 'Bettwanzen', 'Schaben / Kakerlaken', 'Ameisen', 'Flöhe', 'Marder', 'Tauben', 'Sonstige'
+];
+
 export default function SettingsPage() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -13,6 +17,9 @@ export default function SettingsPage() {
         telefon: '',
         service_plz: '',
         billing_model: 'commission',
+        is_active: true,
+        telegram_chat_id: '',
+        pests_handled: [] as string[],
     });
 
     const loadSettings = useCallback(async () => {
@@ -28,6 +35,9 @@ export default function SettingsPage() {
                         telefon: data.master.telefon || '',
                         service_plz: data.master.service_plz || '',
                         billing_model: data.master.billing_model || 'commission',
+                        is_active: data.master.is_active !== false, // default true
+                        telegram_chat_id: data.master.telegram_chat_id || '',
+                        pests_handled: data.master.pests_handled ? data.master.pests_handled.split(',') : [],
                     });
                 }
             }
@@ -63,11 +73,18 @@ export default function SettingsPage() {
             setMessage({ text: '❌ Netzwerkfehler beim Speichern.', type: 'error' });
         } finally {
             setSaving(false);
-            // Hide success message after 3 seconds
             setTimeout(() => {
                 setMessage(prev => prev.type === 'success' ? { text: '', type: '' } : prev);
             }, 3000);
         }
+    };
+
+    const togglePest = (pest: string) => {
+        setForm(prev => {
+            const list = prev.pests_handled;
+            if (list.includes(pest)) return { ...prev, pests_handled: list.filter(p => p !== pest) };
+            return { ...prev, pests_handled: [...list, pest] };
+        });
     };
 
     if (loading) return (
@@ -106,6 +123,43 @@ export default function SettingsPage() {
 
             <form onSubmit={handleSave} style={{ display: 'grid', gap: '32px' }}>
                 
+                {/* 0. Verfügbarkeit (Aktiv/Pause) */}
+                <div style={{ background: '#fff', border: `2px solid ${form.is_active ? '#C8102E' : '#e2e8f0'}`, borderRadius: '12px', overflow: 'hidden', transition: 'all 0.2s' }}>
+                    <div style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+                        <div>
+                            <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: '0 0 4px 0' }}>Auftragsannahme</h2>
+                            <p style={{ margin: 0, fontSize: '13px', color: '#64748b' }}>
+                                {form.is_active 
+                                    ? 'Sie sind aktiv und erhalten Benachrichtigungen über neue Aufträge.' 
+                                    : 'Sie sind pausiert (z.B. Urlaub) und erhalten derzeit keine neuen Anfragen.'}
+                            </p>
+                        </div>
+                        <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                            <div style={{ position: 'relative' }}>
+                                <input 
+                                    type="checkbox" 
+                                    className="sr-only" 
+                                    checked={form.is_active} 
+                                    onChange={e => setForm({ ...form, is_active: e.target.checked })} 
+                                />
+                                <div style={{ 
+                                    width: '48px', height: '24px', borderRadius: '12px', 
+                                    background: form.is_active ? '#C8102E' : '#cbd5e1', 
+                                    transition: 'background 0.2s' 
+                                }} />
+                                <div style={{ 
+                                    position: 'absolute', top: '2px', left: form.is_active ? '26px' : '2px', 
+                                    width: '20px', height: '20px', borderRadius: '50%', background: '#fff', 
+                                    transition: 'left 0.2s', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' 
+                                }} />
+                            </div>
+                            <span style={{ marginLeft: '12px', fontSize: '14px', fontWeight: 700, color: form.is_active ? '#C8102E' : '#64748b' }}>
+                                {form.is_active ? 'Aktiv' : 'Pausiert'}
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
                 {/* 1. Persönliche Daten */}
                 <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
                     <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #e2e8f0' }}>
@@ -165,7 +219,71 @@ export default function SettingsPage() {
                     </div>
                 </div>
 
-                {/* 3. Abrechnungsmodell (Hiding fixpreis explicitly visually, but keeping it as an option) */}
+                {/* 3. Spezialisierung (Schädlinge) */}
+                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
+                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #e2e8f0' }}>
+                        <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Spezialisierung</h2>
+                    </div>
+                    <div style={{ padding: '24px' }}>
+                        <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>
+                            Wählen Sie aus, welche Schädlinge Sie bekämpfen. Sie erhalten nur Anfragen für diese Arten.
+                        </p>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                            {PEST_TYPES.map(pest => {
+                                const isSelected = form.pests_handled.includes(pest);
+                                return (
+                                    <button
+                                        key={pest}
+                                        type="button"
+                                        onClick={() => togglePest(pest)}
+                                        style={{
+                                            background: isSelected ? '#C8102E' : '#f1f5f9',
+                                            color: isSelected ? '#fff' : '#475569',
+                                            border: `1px solid ${isSelected ? '#C8102E' : '#cbd5e1'}`,
+                                            padding: '8px 16px',
+                                            borderRadius: '20px',
+                                            fontSize: '13px',
+                                            fontWeight: 600,
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s',
+                                            fontFamily: 'inherit'
+                                        }}
+                                    >
+                                        {isSelected ? '✓ ' : ''}{pest}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+
+                {/* 4. Benachrichtigungen (Telegram) */}
+                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
+                    <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #e2e8f0' }}>
+                        <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Benachrichtigungen (Telegram)</h2>
+                    </div>
+                    <div style={{ padding: '24px' }}>
+                        <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>
+                            Um sofort über neue Aufträge informiert zu werden, verbinden Sie Ihren Account mit Telegram.
+                            Geben Sie hier Ihre Telegram Chat-ID ein.
+                        </p>
+                        <div style={{ display: 'grid', gap: '8px' }}>
+                            <label style={{ fontSize: '13px', fontWeight: 600, color: '#475569' }}>Telegram Chat-ID</label>
+                            <input
+                                type="text"
+                                value={form.telegram_chat_id}
+                                onChange={e => setForm({ ...form, telegram_chat_id: e.target.value })}
+                                placeholder="z.B. 123456789"
+                                style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none' }}
+                            />
+                            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
+                                Tipp: Senden Sie eine Nachricht an den Bot <strong style={{ color: '#0f172a' }}>@userinfobot</strong> in Telegram, um Ihre ID herauszufinden.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 5. Abrechnungsmodell */}
                 <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
                     <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #e2e8f0' }}>
                         <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Abrechnungsmodell</h2>

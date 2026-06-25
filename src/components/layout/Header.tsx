@@ -213,8 +213,8 @@ export default function Header() {
 
                             {/* Profile Dropdown */}
                             {profileMenuOpen && user && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 py-2 z-50">
-                                    <div className="px-4 py-2 border-b border-slate-100 mb-1">
+                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-[#cbd5e1] py-2 z-50">
+                                    <div className="px-4 py-2 border-b border-[#cbd5e1] mb-1">
                                         <div className="text-[13px] text-slate-500">Angemeldet als</div>
                                         <div className="text-[14px] font-bold text-slate-800 truncate">{user.email}</div>
                                     </div>

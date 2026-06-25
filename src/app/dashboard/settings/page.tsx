@@ -214,7 +214,7 @@ export default function SettingsPage() {
                             onChange={e => setForm({ ...form, service_plz: e.target.value })}
                             placeholder="10115, 10117, 10119..."
                             rows={3}
-                            style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none', resize: 'vertical' }}
+                            style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none', resize: 'vertical', minHeight: '80px', maxHeight: '250px' }}
                         />
                     </div>
                 </div>

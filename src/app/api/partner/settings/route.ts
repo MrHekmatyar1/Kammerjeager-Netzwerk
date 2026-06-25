@@ -61,8 +61,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Partner-Profil nicht gefunden.' }, { status: 404 });
         }
 
-        // Convert array of pests back to comma-separated string for easy DB storage
-        const pestsString = Array.isArray(pests_handled) ? pests_handled.join(',') : null;
+        // Convert UI fields to DB columns
+        let plzArray = [];
+        if (service_plz) {
+            plzArray = service_plz.split(',').map((s: string) => s.trim()).filter(Boolean);
+        }
 
         // Update settings
         const { error: updateError } = await supabase
@@ -70,12 +73,12 @@ export async function POST(req: NextRequest) {
             .update({
                 firma: firma || null,
                 name: name || null,
-                telefon: telefon || null,
-                service_plz: service_plz || null,
+                phone: telefon || null,
+                plz_bereiche: plzArray,
                 billing_model: billing_model || 'commission',
                 is_active: is_active !== false, // default true
                 telegram_chat_id: telegram_chat_id || null,
-                pests_handled: pestsString
+                pests_handled: Array.isArray(pests_handled) ? pests_handled : []
             })
             .eq('id', master.id);
 

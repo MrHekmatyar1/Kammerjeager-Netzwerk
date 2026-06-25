@@ -32,12 +32,12 @@ export default function SettingsPage() {
                     setForm({
                         firma: data.master.firma || '',
                         name: data.master.name || '',
-                        telefon: data.master.telefon || '',
-                        service_plz: data.master.service_plz || '',
+                        telefon: data.master.phone || '',
+                        service_plz: Array.isArray(data.master.plz_bereiche) ? data.master.plz_bereiche.join(', ') : '',
                         billing_model: data.master.billing_model || 'commission',
                         is_active: data.master.is_active !== false, // default true
                         telegram_chat_id: data.master.telegram_chat_id || '',
-                        pests_handled: data.master.pests_handled ? data.master.pests_handled.split(',') : [],
+                        pests_handled: Array.isArray(data.master.pests_handled) ? data.master.pests_handled : [],
                     });
                 }
             }

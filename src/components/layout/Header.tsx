@@ -66,6 +66,9 @@ export default function Header() {
     const supabase = createClient();
     const router = useRouter();
 
+    const isKunde = user?.user_metadata?.role === 'kunden';
+    const accountLink = isKunde ? '/kunden' : '/dashboard';
+
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -221,7 +224,7 @@ export default function Header() {
                                         <div className="text-[13px] text-slate-500">Angemeldet als</div>
                                         <div className="text-[14px] font-bold text-slate-800 truncate">{user.email}</div>
                                     </div>
-                                    <Link href="/dashboard" onClick={() => setProfileMenuOpen(false)} className="block px-4 py-2 text-[14px] text-slate-700 hover:bg-slate-50 hover:text-[#C8102E] transition-colors">
+                                    <Link href={accountLink} onClick={() => setProfileMenuOpen(false)} className="block px-4 py-2 text-[14px] text-slate-700 hover:bg-slate-50 hover:text-[#C8102E] transition-colors">
                                         Mein Konto
                                     </Link>
                                     <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-[14px] text-slate-700 hover:bg-slate-50 hover:text-[#C8102E] transition-colors border-none bg-transparent cursor-pointer">
@@ -361,7 +364,7 @@ export default function Header() {
                     {user ? (
                         <>
                             <Link
-                                href="/dashboard"
+                                href={accountLink}
                                 onClick={() => setMobileOpen(false)}
                                 className="flex items-center justify-between py-[15px] text-[17px] font-semibold text-[#1E293B] border-b border-slate-100 no-underline"
                             >

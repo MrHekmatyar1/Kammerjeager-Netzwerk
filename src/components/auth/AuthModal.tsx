@@ -262,11 +262,12 @@ export default function AuthModal() {
                                         setSuccess(false);
 
                                         if (view === 'login') {
-                                            const { error } = await supabase.auth.signInWithPassword({ email, password });
+                                            const { data: authData, error } = await supabase.auth.signInWithPassword({ email, password });
                                             if (error) setError(error.message);
                                             else {
                                                 setOpen(false);
-                                                router.push('/dashboard');
+                                                const isKunde = authData.user?.user_metadata?.role === 'kunden';
+                                                router.push(isKunde ? '/kunden' : '/dashboard');
                                             }
                                         } else {
                                             const { error } = await supabase.auth.signUp({

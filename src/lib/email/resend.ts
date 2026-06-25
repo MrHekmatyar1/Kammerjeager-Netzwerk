@@ -68,13 +68,14 @@ export async function sendPartnerLeadNotification(partnerEmail: string, partnerN
 
                 <!-- CTA -->
                 <div style="text-align: center; margin-bottom: 24px;">
-                    <a href="https://kammerjaeger-structon.de/dashboard" style="display: inline-block; background: #C8102E; color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.05em;">
-                        → Jetzt im Dashboard ansehen
+                    <a href="https://kammerjaeger-structon.de/api/partner/leads/accept-from-email?lead_id=${lead.id}&master_id=${lead.master_id}" style="display: inline-block; background: #C8102E; color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.05em;">
+                        ✅ Auftrag jetzt annehmen
                     </a>
                 </div>
 
                 <p style="font-size: 13px; color: #94a3b8; text-align: center; margin: 0;">
-                    Melden Sie sich im Partner-Portal an, um den Auftrag anzunehmen oder abzulehnen.
+                    <em>Haben Sie versehentlich geklickt?</em><br>
+                    Keine Sorge! Sie können den Auftrag innerhalb von 10 Minuten in Ihrem Dashboard stornieren. Der Kunde wird erst danach informiert.
                 </p>
             </div>
 
@@ -108,7 +109,7 @@ export async function sendPartnerLeadNotification(partnerEmail: string, partnerN
 }
 
 // ─── Email клиенту при принятии заказа партнёром ──────────────────────────
-export async function sendClientStatusUpdate(lead: any, partnerName?: string) {
+export async function sendClientStatusUpdate(lead: any, partnerName?: string, delayMinutes: number = 0) {
     if (!lead.email) return { success: false, error: 'No customer email' };
 
     const subject = 'Ihr Experte ist gefunden! – Kammerjaeger-Zentrale';
@@ -148,11 +149,30 @@ export async function sendClientStatusUpdate(lead: any, partnerName?: string) {
     }
 
     try {
-        const { data, error } = await resend.emails.send({ from: FROM_EMAIL, to: lead.email, subject, html });
+        const payload: any = { from: FROM_EMAIL, to: lead.email, subject, html };
+        
+        if (delayMinutes > 0) {
+            // Calculate scheduled_at ISO8601 string in UTC
+            const scheduledDate = new Date(Date.now() + delayMinutes * 60 * 1000);
+            payload.scheduled_at = scheduledDate.toISOString();
+        }
+
+        const { data, error } = await resend.emails.send(payload);
         if (error) { console.error('[Resend ClientStatus] Error:', error); return { success: false, error }; }
         return { success: true, data };
     } catch (err) {
         console.error('[Resend ClientStatus] Exception:', err);
+        return { success: false, error: err };
+    }
+}
+
+export async function cancelScheduledEmail(emailId: string) {
+    if (!resend) return { success: true };
+    try {
+        await resend.emails.cancel(emailId);
+        return { success: true };
+    } catch (err) {
+        console.error('[Resend Cancel] Exception:', err);
         return { success: false, error: err };
     }
 }

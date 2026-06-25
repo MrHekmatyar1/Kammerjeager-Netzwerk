@@ -5,7 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { createClient as createServerClient } from '@/lib/supabase/server';
-import { sendPartnerLeadNotification } from '@/lib/email/resend';
+import { sendPartnerLeadNotification, cancelScheduledEmail } from '@/lib/email/resend';
 import { sendTelegramMessage } from '@/lib/telegram';
 
 const supabaseAdmin = () => createClient(
@@ -98,15 +98,23 @@ export async function POST(req: NextRequest) {
         }
 
         // Обновляем лид
+        const updatePayload: any = {
+            status: newStatus,
+            master_id: newMasterId,
+            rejected_by: rejectedBy,
+            rejection_reason: reason || null,
+            rejected_at: new Date().toISOString(),
+        };
+
+        // Если есть запланированное письмо клиенту, отменяем его
+        if (lead.client_notif_email_id) {
+            await cancelScheduledEmail(lead.client_notif_email_id);
+            updatePayload.client_notif_email_id = null;
+        }
+
         const { error: updateError } = await supabase
             .from('leads')
-            .update({
-                status: newStatus,
-                master_id: newMasterId,
-                rejected_by: rejectedBy,
-                rejection_reason: reason || null,
-                rejected_at: new Date().toISOString(),
-            })
+            .update(updatePayload)
             .eq('id', leadId);
 
         if (updateError) {

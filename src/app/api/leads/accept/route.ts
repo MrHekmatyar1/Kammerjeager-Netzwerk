@@ -68,9 +68,15 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Fehler beim Aktualisieren.' }, { status: 500 });
         }
 
-        // Email клиенту: подтверждение что эксперт найден
-        sendClientStatusUpdate(lead, master.name || undefined)
-            .catch(e => console.error('[accept] Client email error:', e));
+        // Email клиенту: подтверждение что эксперт найден (задержка 10 минут)
+        const emailResult = await sendClientStatusUpdate(lead, master.name || undefined, 10);
+        
+        if (emailResult?.success && emailResult.data?.id) {
+            await supabase
+                .from('leads')
+                .update({ client_notif_email_id: emailResult.data.id })
+                .eq('id', leadId);
+        }
 
         return NextResponse.json({ success: true, status: 'angenommen' });
     } catch (err) {

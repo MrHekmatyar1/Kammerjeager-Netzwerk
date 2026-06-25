@@ -40,7 +40,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     ];
 
     if (user?.email === 'asus017447@gmail.com') {
-        navItems.push({ name: '👑 Admin CRM', href: '/admin' });
+        navItems.push({ name: 'Admin CRM', href: '/admin' });
     }
 
     const NavLinks = () => (

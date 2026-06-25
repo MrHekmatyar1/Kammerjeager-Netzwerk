@@ -39,7 +39,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         { name: 'Abrechnung', href: '/dashboard/billing' },
     ];
 
-    if (user?.email === 'asus017447@gmail.com') {
+    if (user?.email === 'edorkalchuk@gmail.com') {
         navItems.push({ name: 'Admin CRM', href: '/admin' });
     }
 

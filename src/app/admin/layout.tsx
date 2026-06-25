@@ -6,7 +6,7 @@ export const metadata = {
     title: 'CRM - Kammerjaeger-Zentrale',
 };
 
-const ADMIN_EMAIL = 'asus017447@gmail.com';
+const ADMIN_EMAIL = 'edorkalchuk@gmail.com';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
     const supabase = await createClient();

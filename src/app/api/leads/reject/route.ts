@@ -106,6 +106,24 @@ export async function POST(req: NextRequest) {
             rejected_at: new Date().toISOString(),
         };
 
+        // Если отменяется уже принятый лид (возврат средств)
+        if (lead.status === 'angenommen') {
+            const LEAD_PRICE = 25;
+            // Refund the credits to current master
+            const { data: currentMasterData } = await supabase
+                .from('masters')
+                .select('credits')
+                .eq('id', currentMaster.id)
+                .single();
+                
+            if (currentMasterData) {
+                await supabase
+                    .from('masters')
+                    .update({ credits: (currentMasterData.credits || 0) + LEAD_PRICE })
+                    .eq('id', currentMaster.id);
+            }
+        }
+
         // Если есть запланированное письмо клиенту, отменяем его
         if (lead.client_notif_email_id) {
             await cancelScheduledEmail(lead.client_notif_email_id);

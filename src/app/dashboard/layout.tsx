@@ -8,6 +8,7 @@ import Link from 'next/link';
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<any>(null);
+    const [credits, setCredits] = useState(0);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
@@ -21,6 +22,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 setTimeout(() => window.dispatchEvent(new CustomEvent('open-auth-modal')), 500);
             } else {
                 setUser(session.user);
+                const { data: master } = await supabase
+                    .from('masters')
+                    .select('credits')
+                    .or(`email.eq.${session.user.email},user_id.eq.${session.user.id}`)
+                    .single();
+                setCredits(master?.credits || 0);
             }
             setLoading(false);
         };
@@ -84,24 +91,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             ══════════════════════════════════════ */}
             <div className="md:hidden">
 
-                {/* ──────────────────────────────
-                    "Tube" button hanging under the header.
-                    Header height is 68px.
-                ────────────────────────────── */}
                 <button
                     onClick={() => setDrawerOpen(o => !o)}
                     aria-label="Menü"
                     style={{
                         position: 'fixed',
-                        top: '68px',        // Right below the header
-                        left: '20px',       // Align near the logo
-                        zIndex: 9998,       // Above the drawer, below header (9999)
+                        top: '68px',
+                        left: '20px',
+                        zIndex: 9998,
                         width: '44px',
-                        height: '38px',     // Tube length
+                        height: '38px',
                         background: '#fff',
                         border: '1px solid #e2e8f0',
-                        borderTop: 'none',  // Seamless with header
-                        borderRadius: '0 0 22px 22px', // perfectly rounded bottom
+                        borderTop: 'none',
+                        borderRadius: '0 0 22px 22px',
                         cursor: 'pointer',
                         padding: 0,
                         boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
@@ -114,58 +117,54 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         pointerEvents: drawerOpen ? 'none' : 'auto',
                     }}
                 >
-                    {/* Downward chevron inside the tube */}
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#475569" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transform: drawerOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                 </button>
 
-                {/* ── Overlay ── */}
                 <div
                     onClick={() => setDrawerOpen(false)}
                     style={{
                         position: 'fixed', inset: 0,
                         background: 'rgba(0,0,0,0.35)',
-                        zIndex: 9996,       // Below header (9999) and below drawer
+                        zIndex: 9996,
                         opacity: drawerOpen ? 1 : 0,
                         pointerEvents: drawerOpen ? 'auto' : 'none',
                         transition: 'opacity 0.2s',
                     }}
                 />
 
-                {/* ── Narrow top-sliding drawer ── */}
                 <div style={{
                     position: 'fixed',
                     top: '68px',
                     left: 0,
-                    width: '240px',     // narrow panel hugging left wall
-                    zIndex: 9997,       // Below tube button (9998)
+                    width: '240px',
+                    zIndex: 9997,
                     background: '#fff',
                     borderRight: '1px solid #e2e8f0',
                     borderBottom: '1px solid #e2e8f0',
                     borderRadius: '0 0 16px 0',
                     boxShadow: '4px 8px 24px rgba(0,0,0,0.15)',
                     transform: drawerOpen ? 'translateY(0)' : 'translateY(-120%)',
-                    transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)', // Fast slide from top
+                    transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                 }}>
-                    {/* User info */}
                     <div style={{ padding: '20px 20px 12px', borderBottom: '1px solid #f1f5f9' }}>
                         <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>Partner-Portal</div>
                         <div style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a', wordBreak: 'break-all' }}>{user.email}</div>
+                        <div style={{ fontSize: '13px', color: '#C8102E', marginTop: '4px', fontWeight: 600 }}>Guthaben: {credits.toFixed(2)} €</div>
                     </div>
                     <div style={{ paddingBottom: '12px' }}>
                         <NavLinks />
                     </div>
                 </div>
 
-                {/* Mobile content — full width */}
                 <main style={{ padding: '40px 16px 40px' }}>
                     {children}
                 </main>
             </div>
 
             {/* ══════════════════════════════════════
-                DESKTOP: classic sidebar layout (unchanged)
+                DESKTOP: classic sidebar layout
             ══════════════════════════════════════ */}
             <div className="hidden md:flex">
                 <aside style={{
@@ -178,7 +177,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 }}>
                     <div style={{ padding: '0 24px', marginBottom: '24px' }}>
                         <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>Partner-Portal</div>
-                        <div style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', wordBreak: 'break-all' }}>{user.email}</div>
+                        <div style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', wordBreak: 'break-all', marginBottom: '4px' }}>{user.email}</div>
+                        <div style={{ fontSize: '14px', color: '#C8102E', fontWeight: 600 }}>Guthaben: {credits.toFixed(2)} €</div>
                     </div>
                     <NavLinks />
                 </aside>

@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
         // Находим мастера по email текущего пользователя
         const { data: master } = await supabase
             .from('masters')
-            .select('id, name, email')
+            .select('id, name, email, credits')
             .or(`email.eq.${user.email},user_id.eq.${user.id}`)
             .single();
 
@@ -54,7 +54,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: `Lead ist bereits im Status: ${lead.status}` }, { status: 409 });
         }
 
-        // Меняем статус на 'angenommen'
+        const LEAD_PRICE = 25; // 25 Credits / Euro
+        if ((master.credits || 0) < LEAD_PRICE) {
+            return NextResponse.json({ error: 'Nicht genügend Guthaben. Bitte laden Sie Ihr Konto auf.' }, { status: 402 });
+        }
+
+        // Меняем статус на 'angenommen' и списываем кредиты
         const { error: updateError } = await supabase
             .from('leads')
             .update({
@@ -65,8 +70,14 @@ export async function POST(req: NextRequest) {
 
         if (updateError) {
             console.error('[accept] Update error:', updateError);
-            return NextResponse.json({ error: 'Fehler beim Aktualisieren.' }, { status: 500 });
+            return NextResponse.json({ error: 'Fehler beim Aktualisieren des Leads.' }, { status: 500 });
         }
+
+        // Deduct credits
+        await supabase
+            .from('masters')
+            .update({ credits: master.credits - LEAD_PRICE })
+            .eq('id', master.id);
 
         // Email клиенту: подтверждение что эксперт найден (задержка 10 минут)
         const emailResult = await sendClientStatusUpdate(lead, master.name || undefined, 10);

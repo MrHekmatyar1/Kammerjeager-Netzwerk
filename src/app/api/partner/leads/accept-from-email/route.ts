@@ -37,6 +37,19 @@ export async function GET(req: NextRequest) {
             return NextResponse.redirect(new URL('/dashboard', req.url));
         }
 
+        // Get master details and check credits
+        const { data: master } = await supabase
+            .from('masters')
+            .select('name, credits')
+            .eq('id', masterId)
+            .single();
+
+        const LEAD_PRICE = 25;
+        if (!master || (master.credits || 0) < LEAD_PRICE) {
+            // Not enough credits, redirect to billing page with error
+            return NextResponse.redirect(new URL('/dashboard/billing?error=insufficient_funds', req.url));
+        }
+
         // Update status to 'angenommen'
         const { error: updateError } = await supabase
             .from('leads')
@@ -51,15 +64,14 @@ export async function GET(req: NextRequest) {
             return new NextResponse('Fehler beim Aktualisieren.', { status: 500 });
         }
 
-        // Get master details for the email
-        const { data: master } = await supabase
+        // Deduct credits
+        await supabase
             .from('masters')
-            .select('name')
-            .eq('id', masterId)
-            .single();
+            .update({ credits: master.credits - LEAD_PRICE })
+            .eq('id', masterId);
 
         // Send delayed email to client (10 minutes)
-        const emailResult = await sendClientStatusUpdate(lead, master?.name || undefined, 10);
+        const emailResult = await sendClientStatusUpdate(lead, master.name || undefined, 10);
         
         if (emailResult?.success && emailResult.data?.id) {
             // Save the scheduled email ID so we can cancel it later

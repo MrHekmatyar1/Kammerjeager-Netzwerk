@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { CreditCard, AlertCircle } from 'lucide-react';
+import { CreditCard } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function DashboardBilling() {

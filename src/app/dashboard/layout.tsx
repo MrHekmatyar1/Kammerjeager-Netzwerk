@@ -151,7 +151,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <div style={{ padding: '20px 20px 12px', borderBottom: '1px solid #f1f5f9' }}>
                         <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>Partner-Portal</div>
                         <div style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a', wordBreak: 'break-all' }}>{user.email}</div>
-                        <div style={{ fontSize: '13px', color: '#C8102E', marginTop: '4px', fontWeight: 600 }}>Guthaben: {credits.toFixed(2)} €</div>
                     </div>
                     <div style={{ paddingBottom: '12px' }}>
                         <NavLinks />
@@ -178,7 +177,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <div style={{ padding: '0 24px', marginBottom: '24px' }}>
                         <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>Partner-Portal</div>
                         <div style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', wordBreak: 'break-all', marginBottom: '4px' }}>{user.email}</div>
-                        <div style={{ fontSize: '14px', color: '#C8102E', fontWeight: 600 }}>Guthaben: {credits.toFixed(2)} €</div>
                     </div>
                     <NavLinks />
                 </aside>

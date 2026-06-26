@@ -150,9 +150,8 @@ export default function DashboardBilling() {
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.60)', zIndex: 99999, animation: 'am-backdrop-in 0.18s ease forwards', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }} onClick={() => setIsModalOpen(false)}>
                         <div style={{ background: '#fff', width: '100%', maxWidth: '400px', position: 'relative', animation: 'am-card-in 0.22s ease forwards', borderRadius: '20px', border: '2px solid #f0f0f0', boxShadow: '0 12px 48px rgba(0,0,0,0.12)', padding: '32px' }} onClick={e => e.stopPropagation()}>
                             
-                            {/* Peeking roaches in different corners! */}
-                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', top: '-20px', left: '-20px', width: '80px', transform: 'rotate(120deg)', zIndex: -1 }} />
-                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', bottom: '-20px', right: '-20px', width: '80px', transform: 'rotate(-45deg)', zIndex: -1 }} />
+                            {/* Top-Left Roach */}
+                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', top: '-25px', left: '-20px', width: '85px', transform: 'rotate(120deg)', zIndex: -1 }} />
 
                             <button onClick={() => setIsModalOpen(false)} style={{ position: 'absolute', top: '16px', right: '16px', width: '30px', height: '30px', border: '1px solid #edf0f4', background: '#fff', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12" /></svg>
@@ -173,17 +172,22 @@ export default function DashboardBilling() {
 
                             {error && <div style={{ color: '#ef4444', fontSize: '13px', marginBottom: '16px', textAlign: 'center' }}>{error}</div>}
 
-                            <button
-                                onClick={() => {
-                                    if (customAmount && customAmount >= 10) handleBuy(Number(customAmount));
-                                    else setError('Bitte geben Sie einen gültigen Betrag (min. 10 €) ein.');
-                                }}
-                                disabled={buying || !customAmount || customAmount < 10}
-                                style={{ width: '100%', background: '#0f172a', color: '#fff', padding: '16px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, cursor: (buying || !customAmount || customAmount < 10) ? 'not-allowed' : 'pointer', border: 'none', transition: 'all 0.2s', opacity: (buying || !customAmount || customAmount < 10) ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                            >
-                                <CreditCard className="w-5 h-5" />
-                                {buying ? 'Lädt...' : 'Jetzt aufladen'}
-                            </button>
+                            <div style={{ position: 'relative' }}>
+                                {/* Roach under the button */}
+                                <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', bottom: '-15px', right: '-40px', width: '90px', transform: 'rotate(-60deg)', zIndex: 1 }} />
+                                
+                                <button
+                                    onClick={() => {
+                                        if (customAmount && customAmount >= 10) handleBuy(Number(customAmount));
+                                        else setError('Bitte geben Sie einen gültigen Betrag (min. 10 €) ein.');
+                                    }}
+                                    disabled={buying || !customAmount || customAmount < 10}
+                                    style={{ position: 'relative', zIndex: 10, width: '100%', background: '#0f172a', color: '#fff', padding: '16px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, cursor: (buying || !customAmount || customAmount < 10) ? 'not-allowed' : 'pointer', border: 'none', transition: 'all 0.2s', opacity: (buying || !customAmount || customAmount < 10) ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                                >
+                                    <CreditCard className="w-5 h-5" />
+                                    {buying ? 'Lädt...' : 'Jetzt aufladen'}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </>

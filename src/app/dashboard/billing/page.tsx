@@ -70,7 +70,7 @@ export default function DashboardBilling() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '40px' }}>
                 {/* Stripe Status */}
-                <div style={{ background: '#fff', border: '1px solid #94a3b8', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', minHeight: '320px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+                <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', minHeight: '320px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
                         <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(99, 91, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#635BFF" strokeWidth="2">
@@ -102,7 +102,7 @@ export default function DashboardBilling() {
                 </div>
 
                 {/* Balance */}
-                <div style={{ background: '#fff', border: '1px solid #94a3b8', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', minHeight: '320px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+                <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', minHeight: '320px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
                     <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', marginBottom: '16px' }}>Plattform-Guthaben</h3>
                     <div style={{ fontSize: '48px', fontWeight: 900, color: '#0f172a', marginBottom: '8px', lineHeight: 1 }}>
                         {credits !== null ? credits.toFixed(2).replace('.', ',') : '...'} <span style={{ fontSize: '24px', color: '#94a3b8' }}>€</span>
@@ -133,7 +133,7 @@ export default function DashboardBilling() {
                     ].map((pkg) => (
                         <div
                             key={pkg.amount}
-                            className={`bg-white rounded-2xl shadow-md border-2 p-6 flex flex-col relative transition-all ${pkg.popular ? 'border-[#C8102E]' : 'border-slate-400 hover:border-slate-500'
+                            className={`bg-white rounded-2xl shadow-md border-2 p-6 flex flex-col relative transition-all ${pkg.popular ? 'border-[#C8102E]' : 'border-slate-300 hover:border-slate-400'
                                 }`}
                         >
                             {pkg.popular && (
@@ -174,7 +174,7 @@ export default function DashboardBilling() {
             </div>
 
             <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a', marginBottom: '16px' }}>Vergangene Rechnungen</h3>
-            <div style={{ background: '#fff', border: '1px solid #94a3b8', borderRadius: '12px', padding: '32px', textAlign: 'center', color: '#94a3b8', fontSize: '14px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+            <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '32px', textAlign: 'center', color: '#94a3b8', fontSize: '14px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
                 Sie haben noch keine Rechnungen erhalten.
             </div>
         </div>

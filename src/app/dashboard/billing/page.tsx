@@ -124,7 +124,6 @@ export default function DashboardBilling() {
             </div>
 
             <div id="packages">
-                <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a', marginBottom: '16px' }}>Pakete auswählen</h3>
                 <div className="grid md:grid-cols-3 gap-4">
                     {[
                         { amount: 50, bonus: 0, leads: 2, popular: false },

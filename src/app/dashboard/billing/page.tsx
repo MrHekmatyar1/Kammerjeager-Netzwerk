@@ -104,8 +104,8 @@ export default function DashboardBilling() {
                 {/* Balance */}
                 <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', minHeight: '320px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
                     <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', marginBottom: '16px' }}>Plattform-Guthaben</h3>
-                    <div style={{ fontSize: '48px', fontWeight: 900, color: '#0f172a', marginBottom: '8px', lineHeight: 1 }}>
-                        {credits !== null ? credits.toFixed(2).replace('.', ',') : '0,00'} <span style={{ fontSize: '24px', color: '#94a3b8' }}>€</span>
+                    <div style={{ fontSize: '36px', fontWeight: 900, color: '#0f172a', marginBottom: '8px', lineHeight: 1 }}>
+                        {credits !== null ? credits.toFixed(2).replace('.', ',') : '0,00'} <span style={{ fontSize: '20px', color: '#94a3b8' }}>€</span>
                     </div>
                     <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '24px', flex: 1 }}>
                         Alternativ können Sie Guthaben aufladen, um Leads zum Festpreis (CPL) zu kaufen, anstatt Provision zu zahlen.
@@ -133,8 +133,9 @@ export default function DashboardBilling() {
                     ].map((pkg) => (
                         <div
                             key={pkg.amount}
-                            className={`bg-white rounded-2xl shadow-md border-2 p-6 flex flex-col relative transition-all ${pkg.popular ? 'border-[#C8102E]' : 'border-slate-300 hover:border-slate-400'
-                                }`}
+                            onClick={() => !buying && handleBuy(pkg.amount)}
+                            className={`bg-white rounded-2xl shadow-md border-2 p-6 flex flex-col relative transition-all cursor-pointer ${pkg.popular ? 'border-[#C8102E] hover:bg-red-50' : 'border-slate-300 hover:border-slate-400 hover:bg-slate-50'
+                                } ${buying ? 'opacity-50 pointer-events-none' : 'hover:-translate-y-1 hover:shadow-lg'}`}
                         >
                             {pkg.popular && (
                                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#C8102E] text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">

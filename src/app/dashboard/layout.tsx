@@ -63,7 +63,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         textDecoration: 'none',
                         fontSize: '15px',
                         background: active ? 'rgba(200,16,46,0.08)' : 'transparent',
-                        borderBottom: '1px solid #e2e8f0',
+                        borderBottom: '1px solid #cbd5e1',
                     }}>
                         {item.name}
                     </Link>

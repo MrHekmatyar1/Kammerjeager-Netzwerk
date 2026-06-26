@@ -39,7 +39,7 @@ export default function DashboardBilling() {
                 body: JSON.stringify({ amount })
             });
             const data = await res.json();
-            
+
             if (data.url) {
                 window.location.href = data.url;
             } else {
@@ -70,7 +70,7 @@ export default function DashboardBilling() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '40px' }}>
                 {/* Stripe Status */}
-                <div style={{ background: '#fff', border: '1px solid #94a3b8', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', minHeight: '320px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', minHeight: '320px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
                         <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(99, 91, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#635BFF" strokeWidth="2">
@@ -86,9 +86,9 @@ export default function DashboardBilling() {
                             </div>
                         </div>
                     </div>
-                    
+
                     <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.5, marginBottom: '20px', flex: 1 }}>
-                        Um Leads auf Provisionsbasis zu erhalten, müssen Sie Ihr Bankkonto oder eine Kreditkarte über Stripe hinterlegen. 
+                        Um Leads auf Provisionsbasis zu erhalten, müssen Sie Ihr Bankkonto oder eine Kreditkarte über Stripe hinterlegen.
                         Es fallen nur Gebühren an, wenn Sie einen Auftrag erfolgreich abschließen.
                     </p>
 
@@ -102,7 +102,7 @@ export default function DashboardBilling() {
                 </div>
 
                 {/* Balance */}
-                <div style={{ background: '#fff', border: '1px solid #94a3b8', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', minHeight: '320px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', minHeight: '320px' }}>
                     <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', marginBottom: '16px' }}>Plattform-Guthaben</h3>
                     <div style={{ fontSize: '48px', fontWeight: 900, color: '#0f172a', marginBottom: '8px', lineHeight: 1 }}>
                         {credits !== null ? credits.toFixed(2).replace('.', ',') : '...'} <span style={{ fontSize: '24px', color: '#94a3b8' }}>€</span>
@@ -111,10 +111,10 @@ export default function DashboardBilling() {
                         Alternativ können Sie Guthaben aufladen, um Leads zum Festpreis (CPL) zu kaufen, anstatt Provision zu zahlen.
                     </p>
 
-                    <button 
+                    <button
                         onClick={() => document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth' })}
                         style={{
-                            width: '100%', background: '#fff', color: '#0f172a', border: '1px solid #94a3b8', padding: '12px',
+                            width: '100%', background: '#fff', color: '#0f172a', border: '1px solid #cbd5e1', padding: '12px',
                             borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit'
                         }}
                     >
@@ -131,11 +131,10 @@ export default function DashboardBilling() {
                         { amount: 125, bonus: 0, leads: 5, popular: true },
                         { amount: 250, bonus: 25, leads: 11, popular: false },
                     ].map((pkg) => (
-                        <div 
-                            key={pkg.amount} 
-                            className={`bg-white rounded-2xl shadow-md border-2 p-6 flex flex-col relative transition-all ${
-                                pkg.popular ? 'border-[#C8102E]' : 'border-slate-400 hover:border-slate-500'
-                            }`}
+                        <div
+                            key={pkg.amount}
+                            className={`bg-white rounded-2xl shadow-sm border-2 p-6 flex flex-col relative transition-all ${pkg.popular ? 'border-[#C8102E]' : 'border-slate-200 hover:border-slate-300'
+                                }`}
                         >
                             {pkg.popular && (
                                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#C8102E] text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
@@ -146,7 +145,7 @@ export default function DashboardBilling() {
                             <div className="text-sm font-medium text-slate-500 mb-4">
                                 = {pkg.leads} Aufträge
                             </div>
-                            
+
                             {pkg.bonus > 0 ? (
                                 <div className="bg-emerald-50 text-emerald-700 text-xs font-bold px-2 py-1 rounded mb-6 text-center">
                                     + {pkg.bonus}€ Bonus inklusive!
@@ -158,11 +157,10 @@ export default function DashboardBilling() {
                             <button
                                 onClick={() => handleBuy(pkg.amount)}
                                 disabled={buying}
-                                className={`mt-auto w-full py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${
-                                    pkg.popular 
-                                        ? 'bg-[#C8102E] text-white hover:bg-red-700' 
+                                className={`mt-auto w-full py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${pkg.popular
+                                        ? 'bg-[#C8102E] text-white hover:bg-red-700'
                                         : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                                } disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    } disabled:opacity-50 disabled:cursor-not-allowed`}
                             >
                                 <CreditCard className="w-4 h-4" />
                                 {buying ? 'Lädt...' : 'Jetzt aufladen'}
@@ -176,7 +174,7 @@ export default function DashboardBilling() {
             </div>
 
             <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a', marginBottom: '16px' }}>Vergangene Rechnungen</h3>
-            <div style={{ background: '#fff', border: '1px solid #94a3b8', borderRadius: '12px', padding: '32px', textAlign: 'center', color: '#94a3b8', fontSize: '14px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+            <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '32px', textAlign: 'center', color: '#94a3b8', fontSize: '14px' }}>
                 Sie haben noch keine Rechnungen erhalten.
             </div>
         </div>

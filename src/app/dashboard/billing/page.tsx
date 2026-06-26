@@ -9,6 +9,7 @@ export default function DashboardBilling() {
     const [buying, setBuying] = useState(false);
     const [error, setError] = useState('');
     const [credits, setCredits] = useState<number | null>(null);
+    const [customAmount, setCustomAmount] = useState<number | ''>('');
     const router = useRouter();
     const supabase = createClient();
 
@@ -33,6 +34,11 @@ export default function DashboardBilling() {
         try {
             setBuying(true);
             setError('');
+            if (!amount || amount < 10) {
+                setError('Der Mindestbetrag beträgt 10 €');
+                setBuying(false);
+                return;
+            }
             const res = await fetch('/api/stripe/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -111,19 +117,42 @@ export default function DashboardBilling() {
                         Alternativ können Sie Guthaben aufladen, um Leads zum Festpreis (CPL) zu kaufen, anstatt Provision zu zahlen.
                     </p>
 
-                    <button
-                        onClick={() => handleBuy(50)}
-                        disabled={buying}
-                        className="bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center justify-center gap-2"
-                        style={{
-                            width: '100%', border: 'none', padding: '12px',
-                            borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: buying ? 'not-allowed' : 'pointer', fontFamily: 'inherit',
-                            transition: 'all 0.2s', opacity: buying ? 0.7 : 1
-                        }}
-                    >
-                        <CreditCard className="w-4 h-4" />
-                        {buying ? 'Lädt...' : 'Jetzt aufladen'}
-                    </button>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        <div style={{ position: 'relative', width: '120px' }}>
+                            <input 
+                                type="number" 
+                                min="10" 
+                                value={customAmount}
+                                onChange={(e) => setCustomAmount(e.target.value === '' ? '' : Number(e.target.value))}
+                                placeholder="Betrag" 
+                                disabled={buying}
+                                style={{ 
+                                    width: '100%', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '12px 28px 12px 12px', 
+                                    fontSize: '14px', outline: 'none', fontFamily: 'inherit', fontWeight: 600, color: '#0f172a'
+                                }} 
+                            />
+                            <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '14px', fontWeight: 600 }}>€</span>
+                        </div>
+                        <button
+                            onClick={() => {
+                                if (customAmount && customAmount >= 10) {
+                                    handleBuy(Number(customAmount));
+                                } else {
+                                    setError('Bitte geben Sie einen gültigen Betrag (min. 10 €) ein.');
+                                }
+                            }}
+                            disabled={buying || !customAmount || customAmount < 10}
+                            className="bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center justify-center gap-2"
+                            style={{
+                                flex: 1, border: 'none', padding: '12px',
+                                borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: (buying || !customAmount || customAmount < 10) ? 'not-allowed' : 'pointer', fontFamily: 'inherit',
+                                opacity: (buying || !customAmount || customAmount < 10) ? 0.7 : 1, transition: 'all 0.2s'
+                            }}
+                        >
+                            <CreditCard className="w-4 h-4" />
+                            {buying ? 'Lädt...' : 'Jetzt aufladen'}
+                        </button>
+                    </div>
                 </div>
             </div>
 

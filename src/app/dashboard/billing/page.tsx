@@ -142,13 +142,15 @@ export default function DashboardBilling() {
                                 }
                             }}
                             disabled={buying || !customAmount || customAmount < 10}
+                            className="bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center justify-center gap-2"
                             style={{
-                                flex: 1, background: '#0f172a', color: '#fff', border: 'none', padding: '12px',
+                                flex: 1, border: 'none', padding: '12px',
                                 borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: (buying || !customAmount || customAmount < 10) ? 'not-allowed' : 'pointer', fontFamily: 'inherit',
-                                opacity: (buying || !customAmount || customAmount < 10) ? 0.7 : 1, transition: 'opacity 0.2s'
+                                opacity: (buying || !customAmount || customAmount < 10) ? 0.7 : 1, transition: 'all 0.2s'
                             }}
                         >
-                            {buying ? 'Lädt...' : 'Guthaben aufladen'}
+                            <CreditCard className="w-4 h-4" />
+                            {buying ? 'Lädt...' : 'Jetzt aufladen'}
                         </button>
                     </div>
                 </div>

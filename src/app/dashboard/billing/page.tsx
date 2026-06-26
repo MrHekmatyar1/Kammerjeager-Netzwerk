@@ -149,8 +149,8 @@ export default function DashboardBilling() {
                     `}</style>
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.60)', zIndex: 99999, animation: 'am-backdrop-in 0.18s ease forwards', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }} onClick={() => setIsModalOpen(false)}>
                         <div style={{ position: 'relative', width: '100%', maxWidth: '400px', zIndex: 1 }}>
-                            {/* Peeking Roach - Right Side (like AuthModal) */}
-                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', top: '40%', right: '-45px', width: '100px', transform: 'rotate(70deg)', zIndex: -1 }} />
+                            {/* Peeking Roach - Right Side */}
+                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', top: '40%', right: '-35px', width: '75px', transform: 'rotate(70deg)', zIndex: -1 }} />
 
                             <div style={{ background: '#fff', width: '100%', position: 'relative', zIndex: 10, animation: 'am-card-in 0.22s ease forwards', borderRadius: '20px', border: '2px solid #f0f0f0', boxShadow: '0 12px 48px rgba(0,0,0,0.12)', padding: '32px' }} onClick={e => e.stopPropagation()}>
 
@@ -177,7 +177,7 @@ export default function DashboardBilling() {
 
                             <div style={{ position: 'relative', zIndex: 20 }}>
                                 {/* Peeking Roach - Under Confirm Button (Left Side) */}
-                                <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', bottom: '-15px', left: '-45px', width: '90px', transform: 'rotate(-120deg)', zIndex: -1 }} />
+                                <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', bottom: '-12px', left: '-35px', width: '70px', transform: 'rotate(-120deg)', zIndex: -1 }} />
                                 
                                 <button
                                     onClick={() => {
@@ -185,7 +185,7 @@ export default function DashboardBilling() {
                                         else setError('Bitte geben Sie einen gültigen Betrag (min. 10 €) ein.');
                                     }}
                                     disabled={buying || !customAmount || customAmount < 10}
-                                    style={{ position: 'relative', zIndex: 10, width: '100%', background: '#0f172a', color: '#fff', padding: '12px', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: (buying || !customAmount || customAmount < 10) ? 'not-allowed' : 'pointer', border: 'none', transition: 'all 0.2s', opacity: (buying || !customAmount || customAmount < 10) ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                                    style={{ position: 'relative', zIndex: 10, width: '100%', background: (buying || !customAmount || customAmount < 10) ? '#94a3b8' : '#0f172a', color: '#fff', padding: '12px', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: (buying || !customAmount || customAmount < 10) ? 'not-allowed' : 'pointer', border: 'none', transition: 'all 0.2s', opacity: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                                 >
                                     <CreditCard className="w-5 h-5" />
                                     {buying ? 'Lädt...' : 'Jetzt aufladen'}

@@ -105,7 +105,7 @@ export default function DashboardBilling() {
                 <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', minHeight: '320px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
                     <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', marginBottom: '16px' }}>Plattform-Guthaben</h3>
                     <div style={{ fontSize: '48px', fontWeight: 900, color: '#0f172a', marginBottom: '8px', lineHeight: 1 }}>
-                        {credits !== null ? credits.toFixed(2).replace('.', ',') : '...'} <span style={{ fontSize: '24px', color: '#94a3b8' }}>€</span>
+                        {credits !== null ? credits.toFixed(2).replace('.', ',') : '0,00'} <span style={{ fontSize: '24px', color: '#94a3b8' }}>€</span>
                     </div>
                     <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '24px', flex: 1 }}>
                         Alternativ können Sie Guthaben aufladen, um Leads zum Festpreis (CPL) zu kaufen, anstatt Provision zu zahlen.

@@ -10,6 +10,7 @@ export default function DashboardBilling() {
     const [error, setError] = useState('');
     const [credits, setCredits] = useState<number | null>(null);
     const [customAmount, setCustomAmount] = useState<number | ''>('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter();
     const supabase = createClient();
 
@@ -117,42 +118,19 @@ export default function DashboardBilling() {
                         Alternativ können Sie Guthaben aufladen, um Leads zum Festpreis (CPL) zu kaufen, anstatt Provision zu zahlen.
                     </p>
 
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                        <div style={{ position: 'relative', width: '120px' }}>
-                            <input 
-                                type="number" 
-                                min="10" 
-                                value={customAmount}
-                                onChange={(e) => setCustomAmount(e.target.value === '' ? '' : Number(e.target.value))}
-                                placeholder="Betrag" 
-                                disabled={buying}
-                                style={{ 
-                                    width: '100%', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '12px 28px 12px 12px', 
-                                    fontSize: '14px', outline: 'none', fontFamily: 'inherit', fontWeight: 600, color: '#0f172a'
-                                }} 
-                            />
-                            <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '14px', fontWeight: 600 }}>€</span>
-                        </div>
-                        <button
-                            onClick={() => {
-                                if (customAmount && customAmount >= 10) {
-                                    handleBuy(Number(customAmount));
-                                } else {
-                                    setError('Bitte geben Sie einen gültigen Betrag (min. 10 €) ein.');
-                                }
-                            }}
-                            disabled={buying || !customAmount || customAmount < 10}
-                            className="bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center justify-center gap-2"
-                            style={{
-                                flex: 1, border: 'none', padding: '12px',
-                                borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: (buying || !customAmount || customAmount < 10) ? 'not-allowed' : 'pointer', fontFamily: 'inherit',
-                                opacity: (buying || !customAmount || customAmount < 10) ? 0.7 : 1, transition: 'all 0.2s'
-                            }}
-                        >
-                            <CreditCard className="w-4 h-4" />
-                            {buying ? 'Lädt...' : 'Jetzt aufladen'}
-                        </button>
-                    </div>
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        style={{
+                            width: '100%', background: '#fff', color: '#0f172a', border: '1px solid #cbd5e1', padding: '12px',
+                            borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
+                        onMouseLeave={e => e.currentTarget.style.background = '#fff'}
+                    >
+                        <CreditCard className="w-4 h-4" />
+                        Jetzt aufladen
+                    </button>
                 </div>
             </div>
 
@@ -162,6 +140,54 @@ export default function DashboardBilling() {
             <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '32px', textAlign: 'center', color: '#94a3b8', fontSize: '14px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
                 Sie haben noch keine Rechnungen erhalten.
             </div>
+
+            {isModalOpen && (
+                <>
+                    <style>{`
+                        @keyframes am-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+                        @keyframes am-card-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+                    `}</style>
+                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.60)', zIndex: 99999, animation: 'am-backdrop-in 0.18s ease forwards', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }} onClick={() => setIsModalOpen(false)}>
+                        <div style={{ background: '#fff', width: '100%', maxWidth: '400px', position: 'relative', animation: 'am-card-in 0.22s ease forwards', borderRadius: '20px', border: '2px solid #f0f0f0', boxShadow: '0 12px 48px rgba(0,0,0,0.12)', padding: '32px' }} onClick={e => e.stopPropagation()}>
+                            
+                            {/* Peeking roaches in different corners! */}
+                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', top: '-20px', left: '-20px', width: '80px', transform: 'rotate(120deg)', zIndex: -1 }} />
+                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', bottom: '-20px', right: '-20px', width: '80px', transform: 'rotate(-45deg)', zIndex: -1 }} />
+
+                            <button onClick={() => setIsModalOpen(false)} style={{ position: 'absolute', top: '16px', right: '16px', width: '30px', height: '30px', border: '1px solid #edf0f4', background: '#fff', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12" /></svg>
+                            </button>
+
+                            <h2 style={{ fontSize: '24px', fontWeight: 900, color: '#0f172a', marginBottom: '8px', textAlign: 'center', fontFamily: "'Barlow Condensed', sans-serif", textTransform: 'uppercase' }}>Guthaben aufladen</h2>
+                            <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '24px', textAlign: 'center' }}>Geben Sie den gewünschten Betrag ein. Der Mindestbetrag ist 10 €.</p>
+                            
+                            <div style={{ position: 'relative', marginBottom: '24px' }}>
+                                <input 
+                                    type="number" min="10" 
+                                    value={customAmount} onChange={e => setCustomAmount(e.target.value === '' ? '' : Number(e.target.value))}
+                                    style={{ width: '100%', padding: '16px 40px 16px 16px', fontSize: '18px', fontWeight: 700, color: '#0f172a', border: '2px solid #cbd5e1', borderRadius: '12px', outline: 'none' }}
+                                    placeholder="Betrag eingeben"
+                                />
+                                <span style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '18px', fontWeight: 700, color: '#94a3b8' }}>€</span>
+                            </div>
+
+                            {error && <div style={{ color: '#ef4444', fontSize: '13px', marginBottom: '16px', textAlign: 'center' }}>{error}</div>}
+
+                            <button
+                                onClick={() => {
+                                    if (customAmount && customAmount >= 10) handleBuy(Number(customAmount));
+                                    else setError('Bitte geben Sie einen gültigen Betrag (min. 10 €) ein.');
+                                }}
+                                disabled={buying || !customAmount || customAmount < 10}
+                                style={{ width: '100%', background: '#0f172a', color: '#fff', padding: '16px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, cursor: (buying || !customAmount || customAmount < 10) ? 'not-allowed' : 'pointer', border: 'none', transition: 'all 0.2s', opacity: (buying || !customAmount || customAmount < 10) ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                            >
+                                <CreditCard className="w-5 h-5" />
+                                {buying ? 'Lädt...' : 'Jetzt aufladen'}
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 }

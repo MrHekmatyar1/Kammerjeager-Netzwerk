@@ -150,7 +150,7 @@ export default function DashboardBilling() {
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.60)', zIndex: 99999, animation: 'am-backdrop-in 0.18s ease forwards', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }} onClick={() => setIsModalOpen(false)}>
                         <div style={{ position: 'relative', width: '100%', maxWidth: '360px', animation: 'am-card-in 0.22s ease forwards' }} onClick={e => e.stopPropagation()}>
                             {/* Peeking Roach - Right Side */}
-                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', top: '40px', right: '-45px', width: '90px', height: 'auto', transform: 'rotate(70deg)', zIndex: 0 }} />
+                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', top: '40px', right: '-40px', width: '75px', height: 'auto', transform: 'rotate(70deg)', zIndex: 0 }} />
 
                             <div style={{ background: '#fff', width: '100%', position: 'relative', zIndex: 10, borderRadius: '16px', border: '2px solid #f0f0f0', boxShadow: '0 12px 48px rgba(0,0,0,0.12)', padding: '32px' }}>
 
@@ -176,8 +176,8 @@ export default function DashboardBilling() {
                             {error && <div style={{ color: '#ef4444', fontSize: '12px', marginBottom: '12px', textAlign: 'center' }}>{error}</div>}
 
                             <div style={{ position: 'relative', zIndex: 20 }}>
-                                {/* Peeking Roach - Under Confirm Button (Right Side) */}
-                                <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', bottom: '-25px', right: '-25px', width: '80px', height: 'auto', transform: 'rotate(60deg)', zIndex: 0 }} />
+                                {/* Peeking Roach - Under Confirm Button (Left Side) */}
+                                <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', bottom: '-15px', left: '-40px', width: '65px', height: 'auto', transform: 'rotate(-120deg)', zIndex: 0 }} />
                                 
                                 <button
                                     onClick={() => {

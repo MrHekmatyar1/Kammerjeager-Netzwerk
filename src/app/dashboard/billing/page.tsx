@@ -148,11 +148,11 @@ export default function DashboardBilling() {
                         @keyframes am-card-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
                     `}</style>
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.60)', zIndex: 99999, animation: 'am-backdrop-in 0.18s ease forwards', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }} onClick={() => setIsModalOpen(false)}>
-                        <div style={{ position: 'relative', width: '100%', maxWidth: '400px', animation: 'am-card-in 0.22s ease forwards' }} onClick={e => e.stopPropagation()}>
+                        <div style={{ position: 'relative', width: '100%', maxWidth: '340px', animation: 'am-card-in 0.22s ease forwards' }} onClick={e => e.stopPropagation()}>
                             {/* Peeking Roach - Right Side */}
-                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', top: '40px', right: '-30px', width: '80px', height: 'auto', transform: 'rotate(70deg)', zIndex: 0 }} />
+                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', top: '40px', right: '-45px', width: '90px', height: 'auto', transform: 'rotate(70deg)', zIndex: 0 }} />
 
-                            <div style={{ background: '#fff', width: '100%', position: 'relative', zIndex: 10, borderRadius: '16px', border: '2px solid #f0f0f0', boxShadow: '0 12px 48px rgba(0,0,0,0.12)', padding: '24px', paddingBottom: '40px' }}>
+                            <div style={{ background: '#fff', width: '100%', position: 'relative', zIndex: 10, borderRadius: '16px', border: '2px solid #f0f0f0', boxShadow: '0 12px 48px rgba(0,0,0,0.12)', padding: '24px', paddingBottom: '80px' }}>
 
                             <button onClick={() => setIsModalOpen(false)} style={{ position: 'absolute', top: '12px', right: '12px', width: '28px', height: '28px', border: '1px solid #edf0f4', background: '#fff', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12" /></svg>
@@ -177,7 +177,7 @@ export default function DashboardBilling() {
 
                             <div style={{ position: 'relative', zIndex: 20 }}>
                                 {/* Peeking Roach - Under Confirm Button (Left Side) */}
-                                <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', bottom: '-10px', left: '-35px', width: '70px', height: 'auto', transform: 'rotate(-120deg)', zIndex: 0 }} />
+                                <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', bottom: '-15px', left: '-45px', width: '80px', height: 'auto', transform: 'rotate(-120deg)', zIndex: 0 }} />
                                 
                                 <button
                                     onClick={() => {

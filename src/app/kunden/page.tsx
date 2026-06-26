@@ -110,7 +110,7 @@ export default function KundenDashboard() {
                 ) : (
                     <div style={{ display: 'grid', gap: '20px' }}>
                         {leads.map(lead => {
-                            const statusObj = STATUS_LABELS[lead.status] || STATUS_LABELS['neu'];
+                            const statusObj = STATUS_LABELS[lead.status] || { text: 'Suche nach Partner...', bg: '#f8fafc', color: '#64748b', border: '#e2e8f0' };
                             const partner = lead.masters;
 
                             return (

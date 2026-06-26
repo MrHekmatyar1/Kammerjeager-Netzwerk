@@ -9,6 +9,7 @@ export default function DashboardBilling() {
     const [buying, setBuying] = useState(false);
     const [error, setError] = useState('');
     const [credits, setCredits] = useState<number | null>(null);
+    const [customAmount, setCustomAmount] = useState<number | ''>('');
     const router = useRouter();
     const supabase = createClient();
 
@@ -33,6 +34,11 @@ export default function DashboardBilling() {
         try {
             setBuying(true);
             setError('');
+            if (!amount || amount < 10) {
+                setError('Der Mindestbetrag beträgt 10 €');
+                setBuying(false);
+                return;
+            }
             const res = await fetch('/api/stripe/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -111,67 +117,44 @@ export default function DashboardBilling() {
                         Alternativ können Sie Guthaben aufladen, um Leads zum Festpreis (CPL) zu kaufen, anstatt Provision zu zahlen.
                     </p>
 
-                    <button
-                        onClick={() => document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth' })}
-                        style={{
-                            width: '100%', background: '#fff', color: '#0f172a', border: '1px solid #cbd5e1', padding: '12px',
-                            borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit'
-                        }}
-                    >
-                        Guthaben aufladen
-                    </button>
-                </div>
-            </div>
-
-            <div id="packages">
-                <div className="grid md:grid-cols-3 gap-4">
-                    {[
-                        { amount: 50, bonus: 0, leads: 2, popular: false },
-                        { amount: 125, bonus: 0, leads: 5, popular: true },
-                        { amount: 250, bonus: 25, leads: 11, popular: false },
-                    ].map((pkg) => (
-                        <div
-                            key={pkg.amount}
-                            onClick={() => !buying && handleBuy(pkg.amount)}
-                            className={`bg-white rounded-2xl shadow-md border-2 p-6 flex flex-col relative transition-all cursor-pointer ${pkg.popular ? 'border-[#C8102E] hover:bg-red-50' : 'border-slate-300 hover:border-slate-400 hover:bg-slate-50'
-                                } ${buying ? 'opacity-50 pointer-events-none' : 'hover:-translate-y-1 hover:shadow-lg'}`}
-                        >
-                            {pkg.popular && (
-                                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#C8102E] text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
-                                    Am beliebtesten
-                                </span>
-                            )}
-                            <div className="text-3xl font-bold text-slate-800 mb-1">{pkg.amount} €</div>
-                            <div className="text-sm font-medium text-slate-500 mb-4">
-                                = {pkg.leads} Aufträge
-                            </div>
-
-                            {pkg.bonus > 0 ? (
-                                <div className="bg-emerald-50 text-emerald-700 text-xs font-bold px-2 py-1 rounded mb-6 text-center">
-                                    + {pkg.bonus}€ Bonus inklusive!
-                                </div>
-                            ) : (
-                                <div className="h-[28px] mb-6"></div> // Spacer
-                            )}
-
-                            <button
-                                onClick={() => handleBuy(pkg.amount)}
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        <div style={{ position: 'relative', width: '120px' }}>
+                            <input 
+                                type="number" 
+                                min="10" 
+                                value={customAmount}
+                                onChange={(e) => setCustomAmount(e.target.value === '' ? '' : Number(e.target.value))}
+                                placeholder="Betrag" 
                                 disabled={buying}
-                                className={`mt-auto w-full py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${pkg.popular
-                                        ? 'bg-[#C8102E] text-white hover:bg-red-700'
-                                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                                    } disabled:opacity-50 disabled:cursor-not-allowed`}
-                            >
-                                <CreditCard className="w-4 h-4" />
-                                {buying ? 'Lädt...' : 'Jetzt aufladen'}
-                            </button>
+                                style={{ 
+                                    width: '100%', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '12px 28px 12px 12px', 
+                                    fontSize: '14px', outline: 'none', fontFamily: 'inherit', fontWeight: 600, color: '#0f172a'
+                                }} 
+                            />
+                            <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '14px', fontWeight: 600 }}>€</span>
                         </div>
-                    ))}
-                </div>
-                <div className="mt-6 text-center text-xs text-slate-500 flex items-center justify-center gap-2 mb-12">
-                    Sichere Zahlung über Stripe
+                        <button
+                            onClick={() => {
+                                if (customAmount && customAmount >= 10) {
+                                    handleBuy(Number(customAmount));
+                                } else {
+                                    setError('Bitte geben Sie einen gültigen Betrag (min. 10 €) ein.');
+                                }
+                            }}
+                            disabled={buying || !customAmount || customAmount < 10}
+                            style={{
+                                flex: 1, background: '#0f172a', color: '#fff', border: 'none', padding: '12px',
+                                borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: (buying || !customAmount || customAmount < 10) ? 'not-allowed' : 'pointer', fontFamily: 'inherit',
+                                opacity: (buying || !customAmount || customAmount < 10) ? 0.7 : 1, transition: 'opacity 0.2s'
+                            }}
+                        >
+                            {buying ? 'Lädt...' : 'Guthaben aufladen'}
+                        </button>
+                    </div>
                 </div>
             </div>
+
+
 
             <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a', marginBottom: '16px' }}>Vergangene Rechnungen</h3>
             <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '32px', textAlign: 'center', color: '#94a3b8', fontSize: '14px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>

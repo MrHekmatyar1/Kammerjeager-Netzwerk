@@ -148,10 +148,11 @@ export default function DashboardBilling() {
                         @keyframes am-card-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
                     `}</style>
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.60)', zIndex: 99999, animation: 'am-backdrop-in 0.18s ease forwards', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }} onClick={() => setIsModalOpen(false)}>
-                        <div style={{ background: '#fff', width: '100%', maxWidth: '400px', position: 'relative', animation: 'am-card-in 0.22s ease forwards', borderRadius: '20px', border: '2px solid #f0f0f0', boxShadow: '0 12px 48px rgba(0,0,0,0.12)', padding: '32px' }} onClick={e => e.stopPropagation()}>
-                            
+                        <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
                             {/* Peeking Roach - Right Side (like AuthModal) */}
-                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', top: '40px', right: '-35px', width: '100px', transform: 'rotate(70deg)', zIndex: -1 }} />
+                            <img src="/pests/roach_runner.png" alt="Roach" style={{ position: 'absolute', top: '40%', right: '-45px', width: '100px', transform: 'rotate(70deg)', zIndex: -1 }} />
+
+                            <div style={{ background: '#fff', width: '100%', position: 'relative', animation: 'am-card-in 0.22s ease forwards', borderRadius: '20px', border: '2px solid #f0f0f0', boxShadow: '0 12px 48px rgba(0,0,0,0.12)', padding: '32px' }} onClick={e => e.stopPropagation()}>
 
                             <button onClick={() => setIsModalOpen(false)} style={{ position: 'absolute', top: '16px', right: '16px', width: '30px', height: '30px', border: '1px solid #edf0f4', background: '#fff', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12" /></svg>

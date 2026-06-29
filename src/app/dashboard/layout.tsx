@@ -62,7 +62,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         fontWeight: active ? 700 : 500,
                         textDecoration: 'none',
                         fontSize: '15px',
-                        background: active ? 'rgba(200,16,46,0.15)' : 'transparent',
+                        background: active ? 'rgba(200,16,46,0.08)' : 'transparent',
                         borderBottom: '1px solid #cbd5e1',
                     }}>
                         {item.name}
@@ -84,7 +84,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     );
 
     return (
-        <div style={{ minHeight: 'calc(100vh - 70px)', background: '#e2e8f0' }}>
+        <div style={{ minHeight: 'calc(100vh - 70px)', background: '#f1f5f9' }}>
 
             {/* ══════════════════════════════════════
                 MOBILE ONLY

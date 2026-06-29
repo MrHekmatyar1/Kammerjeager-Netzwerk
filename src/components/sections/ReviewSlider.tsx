@@ -229,7 +229,7 @@ export default function ReviewSlider() {
     // Responsive: 2 cards on mobile, 3 on desktop
     useEffect(() => {
         const update = () => {
-            const v = window.innerWidth < 640 ? 1.3 : (window.innerWidth < 1024 ? 2 : 3);
+            const v = window.innerWidth < 640 ? 1.5 : (window.innerWidth < 1024 ? 2 : 3);
             setVisibleCards(v);
             document.documentElement.style.setProperty('--slide-width', `${100 / v}%`);
         };

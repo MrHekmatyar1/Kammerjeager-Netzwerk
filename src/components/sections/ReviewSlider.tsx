@@ -147,7 +147,7 @@ function ReviewCard({ review, authorIdx, isThird }: {
             gap: '12px',
             width: 'calc(var(--slide-width, 33.333%) - 11px)',
             minWidth: 'calc(var(--slide-width, 33.333%) - 11px)',
-            height: '220px',
+            height: '250px',
             position: 'relative',
             overflow: 'hidden',
             boxShadow: '0 2px 12px rgba(0,0,0,0.10)',
@@ -229,7 +229,7 @@ export default function ReviewSlider() {
     // Responsive: 2 cards on mobile, 3 on desktop
     useEffect(() => {
         const update = () => {
-            const v = window.innerWidth < 640 ? 1 : (window.innerWidth < 1024 ? 2 : 3);
+            const v = window.innerWidth < 640 ? 2 : 3;
             setVisibleCards(v);
             document.documentElement.style.setProperty('--slide-width', `${100 / v}%`);
         };

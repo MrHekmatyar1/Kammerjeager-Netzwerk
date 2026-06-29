@@ -323,7 +323,7 @@ export default function ReviewSlider() {
                                 style={{
                                     display: 'flex',
                                     gap: '16px',
-                                    transform: `translateX(calc(-${currentIndex * (100 / visibleCards)}% + ${dragOffset}px))`,
+                                    transform: `translateX(calc(-${currentIndex * (100 / visibleCards)}% + ${visibleCards < 2 ? (100 - (100 / visibleCards)) / 2 : 0}% + ${dragOffset}px))`,
                                     transition: isDragging ? 'none' : 'transform 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                                 }}
                             >

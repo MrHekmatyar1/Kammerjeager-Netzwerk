@@ -229,7 +229,7 @@ export default function ReviewSlider() {
     // Responsive: 2 cards on mobile, 3 on desktop
     useEffect(() => {
         const update = () => {
-            const v = window.innerWidth < 640 ? 2 : 3;
+            const v = window.innerWidth < 640 ? 1.3 : (window.innerWidth < 1024 ? 2 : 3);
             setVisibleCards(v);
             document.documentElement.style.setProperty('--slide-width', `${100 / v}%`);
         };
@@ -300,7 +300,7 @@ export default function ReviewSlider() {
     return (
         <div className="w-full">
             <div className="w-full bg-white py-20 relative flex justify-center border-b border-gray-100">
-                <div className="max-w-[1200px] w-full relative px-10">
+                <div className="max-w-[1200px] w-full relative px-4 sm:px-10">
 
                     {/* Только рейтинг — без заголовка */}
                     <div style={{ textAlign: 'center', marginBottom: '36px' }}>
@@ -342,13 +342,13 @@ export default function ReviewSlider() {
                         {/* Стрелка влево */}
                         <button
                             onClick={prevSlide}
+                            className="hidden sm:flex items-center justify-center"
                             style={{
                                 position: 'absolute', left: '-25px', top: '50%',
                                 transform: 'translateY(-50%)',
                                 width: '40px', height: '40px',
                                 background: '#fff', border: '1px solid #e8eaed',
                                 borderRadius: '50%', cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                                 zIndex: 20,
                             }}
@@ -361,13 +361,13 @@ export default function ReviewSlider() {
                         {/* Стрелка вправо */}
                         <button
                             onClick={nextSlide}
+                            className="hidden sm:flex items-center justify-center"
                             style={{
                                 position: 'absolute', right: '-25px', top: '50%',
                                 transform: 'translateY(-50%)',
                                 width: '40px', height: '40px',
                                 background: '#fff', border: '1px solid #e8eaed',
                                 borderRadius: '50%', cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                                 zIndex: 20,
                             }}

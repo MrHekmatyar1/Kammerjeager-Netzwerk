@@ -342,9 +342,9 @@ export default function ReviewSlider() {
                         {/* Стрелка влево */}
                         <button
                             onClick={prevSlide}
-                            className="hidden sm:flex items-center justify-center"
+                            className="flex items-center justify-center"
                             style={{
-                                position: 'absolute', left: '-25px', top: '50%',
+                                position: 'absolute', left: '-12px', top: '50%',
                                 transform: 'translateY(-50%)',
                                 width: '40px', height: '40px',
                                 background: '#fff', border: '1px solid #e8eaed',
@@ -361,9 +361,9 @@ export default function ReviewSlider() {
                         {/* Стрелка вправо */}
                         <button
                             onClick={nextSlide}
-                            className="hidden sm:flex items-center justify-center"
+                            className="flex items-center justify-center"
                             style={{
-                                position: 'absolute', right: '-25px', top: '50%',
+                                position: 'absolute', right: '-12px', top: '50%',
                                 transform: 'translateY(-50%)',
                                 width: '40px', height: '40px',
                                 background: '#fff', border: '1px solid #e8eaed',

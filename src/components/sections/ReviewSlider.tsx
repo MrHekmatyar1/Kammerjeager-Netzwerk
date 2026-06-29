@@ -147,7 +147,7 @@ function ReviewCard({ review, authorIdx, isThird }: {
             gap: '12px',
             width: 'calc(var(--slide-width, 33.333%) - 11px)',
             minWidth: 'calc(var(--slide-width, 33.333%) - 11px)',
-            height: '250px',
+            height: '235px',
             position: 'relative',
             overflow: 'hidden',
             boxShadow: '0 2px 12px rgba(0,0,0,0.10)',
@@ -342,7 +342,7 @@ export default function ReviewSlider() {
                         {/* Стрелка влево */}
                         <button
                             onClick={prevSlide}
-                            className="flex items-center justify-center"
+                            className="hidden sm:flex items-center justify-center"
                             style={{
                                 position: 'absolute', left: '-12px', top: '50%',
                                 transform: 'translateY(-50%)',
@@ -361,7 +361,7 @@ export default function ReviewSlider() {
                         {/* Стрелка вправо */}
                         <button
                             onClick={nextSlide}
-                            className="flex items-center justify-center"
+                            className="hidden sm:flex items-center justify-center"
                             style={{
                                 position: 'absolute', right: '-12px', top: '50%',
                                 transform: 'translateY(-50%)',

@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-const STORAGE_KEY = 'ks_cookie_consent';
+const STORAGE_KEY = 'ks_cookie_v2';
 
 export default function CookieBanner() {
     const [visible, setVisible] = useState(false);

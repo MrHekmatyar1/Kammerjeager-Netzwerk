@@ -8,6 +8,8 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         '/dashboard/', // Закрываем от поисковиков внутренний кабинет
         '/api/',       // Закрываем системные API
+        '/admin/',     // Закрываем админку
+        '/kunden/',    // Закрываем клиентский кабинет
       ],
     },
     sitemap: 'https://kammerjaeger-structon.de/sitemap.xml',

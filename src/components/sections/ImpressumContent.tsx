@@ -13,7 +13,7 @@ export default function ImpressumContent() {
             <div className="space-y-8 text-[15px] leading-relaxed">
                 {/* Intro Line */}
                 <p>
-                    Kammerjeager-Structon ist eine Marke der Kammerjeager-Structon.
+                    Kammerjäger Structon ist eine Marke des Einzelunternehmens Kammerjäger Structon.
                 </p>
 
                 {/* Company Details */}
@@ -30,7 +30,7 @@ export default function ImpressumContent() {
                 <div>
                     <p>
                         Telefon: 0160 92376320<br />
-                        E-Mail: <br />
+                        E-Mail: kontakt@kammerjaeger-structon.de<br />
                         Umsatzsteuer-ID: 
                     </p>
                 </div>
@@ -46,7 +46,7 @@ export default function ImpressumContent() {
                 {/* Cooperation text */}
                 <div>
                     <p>
-                        Für Anfragen zu Aufträgen oder Kooperationen, senden Sie uns gern eine E-Mail an [].
+                        Für Anfragen zu Aufträgen oder Kooperationen, senden Sie uns gern eine E-Mail an kontakt@kammerjaeger-structon.de.
                     </p>
                 </div>
 

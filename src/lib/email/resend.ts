@@ -19,7 +19,7 @@ export async function sendPartnerLeadNotification(partnerEmail: string, partnerN
 
             <!-- Header -->
             <div style="background: #0f172a; padding: 28px 32px; text-align: center;">
-                <div style="font-size: 13px; color: #94a3b8; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px;">Kammerjaeger-Zentrale</div>
+                <div style="font-size: 13px; color: #94a3b8; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px;">Kammerjäger Structon</div>
                 <div style="font-size: 22px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px;">Neuer Auftrag für Sie!</div>
             </div>
 
@@ -81,7 +81,7 @@ export async function sendPartnerLeadNotification(partnerEmail: string, partnerN
 
             <!-- Footer -->
             <div style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 32px; text-align: center;">
-                <p style="font-size: 12px; color: #94a3b8; margin: 0;">Kammerjaeger-Zentrale.de · Automatische Benachrichtigung · Bitte nicht antworten</p>
+                <p style="font-size: 12px; color: #94a3b8; margin: 0;">kammerjaeger-structon.de · Automatische Benachrichtigung · Bitte nicht antworten</p>
             </div>
         </div>
     `;
@@ -112,12 +112,12 @@ export async function sendPartnerLeadNotification(partnerEmail: string, partnerN
 export async function sendClientStatusUpdate(lead: any, partnerName?: string, delayMinutes: number = 0) {
     if (!lead.email) return { success: false, error: 'No customer email' };
 
-    const subject = 'Ihr Experte ist gefunden! – Kammerjaeger-Zentrale';
+    const subject = 'Ihr Experte ist gefunden! – Kammerjäger Structon';
 
     const html = `
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 580px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
             <div style="background: #0f172a; padding: 28px 32px; text-align: center;">
-                <div style="font-size: 13px; color: #94a3b8; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px;">Kammerjaeger-Zentrale</div>
+                <div style="font-size: 13px; color: #94a3b8; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px;">Kammerjäger Structon</div>
                 <div style="font-size: 22px; font-weight: 900; color: #ffffff;">✅ Ihr Experte ist unterwegs!</div>
             </div>
             <div style="padding: 32px;">
@@ -133,11 +133,11 @@ export async function sendClientStatusUpdate(lead: any, partnerName?: string, de
                 </div>
                 <p style="font-size: 13px; color: #64748b; line-height: 1.7; margin: 0;">
                     Bei Fragen oder Änderungswünschen wenden Sie sich bitte an unser Team.<br>
-                    <strong>Kammerjaeger-Zentrale</strong> – Ihr Partner für schnelle Schädlingsbekämpfung.
+                    <strong>Kammerjäger Structon</strong> – Ihr Partner für schnelle Schädlingsbekämpfung.
                 </p>
             </div>
             <div style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 16px 32px; text-align: center;">
-                <p style="font-size: 12px; color: #94a3b8; margin: 0;">Kammerjaeger-Zentrale.de · Automatische Benachrichtigung</p>
+                <p style="font-size: 12px; color: #94a3b8; margin: 0;">kammerjaeger-structon.de · Automatische Benachrichtigung</p>
             </div>
         </div>
     `;
@@ -194,7 +194,7 @@ export async function sendAdminNotification(lead: any) {
         <p><strong>Zugang:</strong> ${lead.zugang || '-'}</p>
         <p><strong>Beschreibung:</strong> ${lead.zugang_beschreibung || '-'}</p>
         <br />
-        <p style="font-size: 10px; color: #aaaaaa;">Kammerjaeger-Zentrale.de</p>
+        <p style="font-size: 10px; color: #aaaaaa;">kammerjaeger-structon.de</p>
     `;
 
     if (!resend) {
@@ -229,7 +229,7 @@ export async function sendAdminNotification(lead: any) {
 export async function sendCustomerConfirmation(lead: any) {
     if (!lead.email) return { success: false, error: 'No customer email' };
 
-    const subject = 'Ihre Anfrage bei Kammerjaeger-Zentrale';
+    const subject = 'Ihre Anfrage bei Kammerjäger Structon';
     
     const html = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
@@ -239,7 +239,7 @@ export async function sendCustomerConfirmation(lead: any) {
             <p>Sollten Sie sofortige Hilfe benötigen, sind wir 24/7 für Sie da.</p>
             <br />
             <p>Mit freundlichen Grüßen,</p>
-            <p><strong>Ihr Kammerjaeger-Zentrale Team</strong></p>
+            <p><strong>Ihr Kammerjäger Structon Team</strong></p>
         </div>
     `;
 

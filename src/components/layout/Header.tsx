@@ -14,13 +14,30 @@ import { useRouter } from 'next/navigation';
 
 // Configuration: navigation menus and pest list
 // Конфигурация: меню навигации и список вредителей
-const PESTS = [
-    'Wespen', 'Bettwanzen', 'Ratten', 'Mäuse',
-    'Schaben', 'Ameisen', 'Motten', 'Flöhe',
-    'Tauben', 'Fliegen', 'Käfer', 'Andere',
+// Pest menu items — all scroll to the LeadWizard section on the home page
+// Список вредителей — все ведут на LeadWizard главной страницы
+const PESTS: { label: string; href: string }[] = [
+    { label: 'Wespen',     href: '/#anfrage' },
+    { label: 'Bettwanzen', href: '/#anfrage' },
+    { label: 'Ratten',     href: '/#anfrage' },
+    { label: 'Mäuse',      href: '/#anfrage' },
+    { label: 'Schaben',    href: '/#anfrage' },
+    { label: 'Ameisen',    href: '/#anfrage' },
+    { label: 'Motten',     href: '/#anfrage' },
+    { label: 'Flöhe',      href: '/#anfrage' },
+    { label: 'Tauben',     href: '/#anfrage' },
+    { label: 'Fliegen',    href: '/#anfrage' },
+    { label: 'Käfer',      href: '/#anfrage' },
+    { label: 'Andere',     href: '/#anfrage' },
 ];
 
-const MENUS: Record<string, { title: string; description: string; links: string[]; cta: string; href: string }> = {
+const MENUS: Record<string, {
+    title: string;
+    description: string;
+    links: { label: string; href: string }[];
+    cta: string;
+    href: string;
+}> = {
     Privatkunden: {
         title: 'Für Privatkunden',
         description: 'Professionelle Schädlingsbekämpfung für Ihr Zuhause.',
@@ -31,14 +48,26 @@ const MENUS: Record<string, { title: string; description: string; links: string[
     Geschäftskunden: {
         title: 'Für Geschäftskunden',
         description: 'Maßgeschneiderte Lösungen für Unternehmen, Gastronomie und Industrie.',
-        links: ['Gastronomie & Hotels', 'Büros & Gebäude', 'Lager & Industrie', 'Einzelhandel', 'Öffentliche Einrichtungen'],
+        links: [
+            { label: 'Gastronomie & Hotels',      href: '/geschaeftskunden#kontakt' },
+            { label: 'Büros & Gebäude',           href: '/geschaeftskunden#kontakt' },
+            { label: 'Lager & Industrie',         href: '/geschaeftskunden#kontakt' },
+            { label: 'Einzelhandel',              href: '/geschaeftskunden#kontakt' },
+            { label: 'Öffentliche Einrichtungen', href: '/geschaeftskunden#kontakt' },
+        ],
         cta: 'Mehr erfahren',
         href: '/geschaeftskunden',
     },
     'Über uns': {
         title: 'Über uns',
         description: 'Wir vermitteln geprüfte Kammerjäger in ganz Deutschland.',
-        links: ['Unser Team', 'Unsere Mission', 'Qualitätsstandards', 'Für Schädlingsbekämpfer', 'Kontakt'],
+        links: [
+            { label: 'Unser Team',               href: '/ueber-uns' },
+            { label: 'Unsere Mission',            href: '/ueber-uns' },
+            { label: 'Qualitätsstandards',        href: '/ueber-uns' },
+            { label: 'Für Schädlingsbekämpfer',  href: '/fuer-schaedlingsbekaempfer' },
+            { label: 'Kontakt',                  href: '/ueber-uns' },
+        ],
         cta: 'Kontakt aufnehmen',
         href: '/ueber-uns',
     },
@@ -311,11 +340,12 @@ export default function Header() {
                                 <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-y-2 gap-x-6">
                                     {MENUS[activeMenu].links.map((link) => (
                                         <Link
-                                            key={link}
-                                            href="#"
+                                            key={link.label}
+                                            href={link.href}
                                             className="text-[14px] text-slate-700 font-medium py-1 transition-colors hover:text-[#C8102E]"
+                                            onClick={() => setActiveMenu(null)}
                                         >
-                                            {link}
+                                            {link.label}
                                         </Link>
                                     ))}
                                 </div>

@@ -8,7 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Footer() {
-    const feedbackEmail = "ideen@kammerjaeger.berlin";
+    const feedbackEmail = "ideen@kammerjaeger-structon.de";
     const feedbackSubject = encodeURIComponent("Ideen zur Website-Verbesserung");
 
     return (

@@ -16,7 +16,7 @@ export default function DatenschutzContent() {
                 </h1>
                 <button
                     onClick={() => router.back()}
-                    className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700 transition-colors cursor-pointer border-none flex-shrink-0"
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-transparent border border-slate-300 text-slate-500 hover:border-slate-400 hover:text-slate-700 transition-colors cursor-pointer flex-shrink-0 translate-x-2 md:translate-x-4"
                     aria-label="Zurück"
                     title="Zurück"
                 >

@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-const STORAGE_KEY = 'ks_cookie_v4';
+const STORAGE_KEY = 'ks_cookie_v5';
 
 export default function CookieBanner() {
     const [visible, setVisible] = useState(false);
@@ -42,15 +42,16 @@ export default function CookieBanner() {
                     right: '24px',
                     zIndex: 99999,
                     width: '300px',
-                    // White frosted glass — same vibe as the site header
-                    background: 'rgba(255, 255, 255, 0.85)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
+                    // Glassmorphism: lower opacity, high blur
+                    background: 'rgba(255, 255, 255, 0.5)',
+                    backdropFilter: 'blur(24px)',
+                    WebkitBackdropFilter: 'blur(24px)',
                     // Sharp corners matching brand style
                     borderRadius: '0',
-                    // Subtle border, no red line
-                    border: '1px solid rgba(0, 0, 0, 0.08)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+                    // Border to separate from white background
+                    border: '1px solid rgba(0, 0, 0, 0.1)',
+                    // Stronger shadow to lift it off the white page
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.2)',
                     padding: '18px 20px 16px',
                     animation: 'ks-slide-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both',
                 }}

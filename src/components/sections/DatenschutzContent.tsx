@@ -1,14 +1,30 @@
+'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function DatenschutzContent() {
+    const router = useRouter();
+
     return (
-        <div className="w-full max-w-[800px] text-[#374151]">
-            <h1 
-                className="text-4xl md:text-5xl font-black mb-10 text-[#1E293B] uppercase tracking-tight"
-                style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
-            >
-                Datenschutzerklärung
-            </h1>
+        <div className="w-full max-w-[800px] text-[#374151] relative">
+            <div className="flex items-center justify-between gap-4 mb-10 border-b border-slate-100 pb-4">
+                <h1 
+                    className="text-4xl md:text-5xl font-black text-[#1E293B] uppercase tracking-tight m-0"
+                    style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+                >
+                    Datenschutzerklärung
+                </h1>
+                <button
+                    onClick={() => router.back()}
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700 transition-colors cursor-pointer border-none flex-shrink-0"
+                    aria-label="Zurück"
+                    title="Zurück"
+                >
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
 
             <div className="space-y-8 text-[15px] leading-relaxed">
                 <div>

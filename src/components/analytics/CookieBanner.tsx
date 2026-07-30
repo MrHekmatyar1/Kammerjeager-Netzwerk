@@ -1,7 +1,7 @@
 'use client';
 
 // CookieBanner — DSGVO / GDPR consent
-// Single floating card, bottom-right corner, sharp angular corners matching brand style
+// White frosted-glass card, bottom-right, sharp corners matching brand header style
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -32,39 +32,36 @@ export default function CookieBanner() {
 
     return (
         <>
-            {/* Single unified banner — bottom-right on desktop, full-width bottom on mobile */}
             <div
                 role="dialog"
                 aria-label="Cookie-Einstellungen"
+                className="cookie-banner-root"
                 style={{
                     position: 'fixed',
-                    bottom: '20px',
-                    right: '20px',
-                    left: 'auto',
+                    bottom: '24px',
+                    right: '24px',
                     zIndex: 99999,
-                    width: '320px',
-                    backgroundColor: '#1E293B',
-                    borderRadius: '0',                          // острые углы как у бренда
-                    padding: '20px 22px 18px',
-                    boxShadow: '0 8px 40px rgba(0,0,0,0.35)',
-                    borderLeft: '3px solid #C8102E',            // акцентная полоса бренда
-                    animation: 'ks-slide-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both',
+                    width: '300px',
+                    // White frosted glass — same vibe as the site header
+                    background: 'rgba(255, 255, 255, 0.88)',
+                    backdropFilter: 'blur(14px)',
+                    WebkitBackdropFilter: 'blur(14px)',
+                    // Sharp corners matching brand style
+                    borderRadius: '0',
+                    // Thin border + strong red top accent like header bottom line
+                    border: '1px solid rgba(200, 16, 46, 0.15)',
+                    borderTop: '2px solid #C8102E',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+                    padding: '18px 20px 16px',
+                    animation: 'ks-slide-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both',
                 }}
-                // Mobile: stretch full-width at bottom
-                className="cookie-banner-root"
             >
                 {/* Header */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                    <div style={{
-                        width: '6px',
-                        height: '6px',
-                        backgroundColor: '#C8102E',
-                        flexShrink: 0,
-                    }} />
                     <span style={{
                         fontSize: '11px',
                         fontWeight: 800,
-                        color: '#f1f5f9',
+                        color: '#1E293B',
                         textTransform: 'uppercase',
                         letterSpacing: '0.12em',
                         fontFamily: 'inherit',
@@ -73,26 +70,26 @@ export default function CookieBanner() {
                     </span>
                 </div>
 
-                {/* Body text */}
+                {/* Body */}
                 <p style={{
                     fontSize: '12px',
-                    color: '#94a3b8',
+                    color: '#64748b',
                     lineHeight: 1.65,
-                    margin: '0 0 16px',
+                    margin: '0 0 14px',
                     fontFamily: 'inherit',
                 }}>
                     Wir verwenden Cookies zur Analyse und zur
                     Verbesserung Ihrer Erfahrung.{' '}
                     <Link
                         href="/datenschutz"
-                        style={{ color: '#f97171', textDecoration: 'underline', fontWeight: 600 }}
+                        style={{ color: '#C8102E', textDecoration: 'underline', fontWeight: 600 }}
                         onClick={decline}
                     >
                         Datenschutzerklärung
                     </Link>
                 </p>
 
-                {/* Buttons — sharp corners, brand style */}
+                {/* Buttons */}
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <button
                         onClick={accept}
@@ -121,8 +118,8 @@ export default function CookieBanner() {
                         style={{
                             flex: 1,
                             backgroundColor: 'transparent',
-                            color: '#64748b',
-                            border: '1px solid #334155',
+                            color: '#94a3b8',
+                            border: '1px solid #cbd5e1',
                             borderRadius: '0',
                             padding: '9px 0',
                             fontSize: '12px',
@@ -134,12 +131,12 @@ export default function CookieBanner() {
                             fontFamily: 'inherit',
                         }}
                         onMouseEnter={e => {
-                            e.currentTarget.style.borderColor = '#64748b';
-                            e.currentTarget.style.color = '#cbd5e1';
+                            e.currentTarget.style.borderColor = '#94a3b8';
+                            e.currentTarget.style.color = '#475569';
                         }}
                         onMouseLeave={e => {
-                            e.currentTarget.style.borderColor = '#334155';
-                            e.currentTarget.style.color = '#64748b';
+                            e.currentTarget.style.borderColor = '#cbd5e1';
+                            e.currentTarget.style.color = '#94a3b8';
                         }}
                     >
                         Ablehnen
@@ -147,13 +144,11 @@ export default function CookieBanner() {
                 </div>
             </div>
 
-            {/* Responsive + animation styles */}
             <style>{`
                 @keyframes ks-slide-in {
-                    from { opacity: 0; transform: translateY(16px); }
+                    from { opacity: 0; transform: translateY(12px); }
                     to   { opacity: 1; transform: translateY(0); }
                 }
-                /* Mobile: full-width, no right offset */
                 @media (max-width: 640px) {
                     .cookie-banner-root {
                         left: 12px !important;

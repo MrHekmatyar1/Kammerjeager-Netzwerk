@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-const STORAGE_KEY = 'ks_cookie_v3';
+const STORAGE_KEY = 'ks_cookie_v4';
 
 export default function CookieBanner() {
     const [visible, setVisible] = useState(false);
@@ -43,14 +43,13 @@ export default function CookieBanner() {
                     zIndex: 99999,
                     width: '300px',
                     // White frosted glass — same vibe as the site header
-                    background: 'rgba(255, 255, 255, 0.65)',
-                    backdropFilter: 'blur(24px)',
-                    WebkitBackdropFilter: 'blur(24px)',
+                    background: 'rgba(255, 255, 255, 0.85)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
                     // Sharp corners matching brand style
                     borderRadius: '0',
-                    // Thin border + strong red top accent like header bottom line
-                    border: '1px solid rgba(200, 16, 46, 0.15)',
-                    borderTop: '2px solid #C8102E',
+                    // Subtle border, no red line
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
                     padding: '18px 20px 16px',
                     animation: 'ks-slide-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both',
@@ -95,7 +94,7 @@ export default function CookieBanner() {
                         onClick={accept}
                         style={{
                             flex: 1,
-                            backgroundColor: '#1E293B',
+                            backgroundColor: '#0a0a0a', // much darker black
                             color: '#fff',
                             border: 'none',
                             borderRadius: '0',
@@ -108,8 +107,8 @@ export default function CookieBanner() {
                             transition: 'background 0.15s',
                             fontFamily: 'inherit',
                         }}
-                        onMouseEnter={e => (e.currentTarget.style.background = '#0f172a')}
-                        onMouseLeave={e => (e.currentTarget.style.background = '#1E293B')}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#000000')}
+                        onMouseLeave={e => (e.currentTarget.style.background = '#0a0a0a')}
                     >
                         Akzeptieren
                     </button>
@@ -118,8 +117,8 @@ export default function CookieBanner() {
                         style={{
                             flex: 1,
                             backgroundColor: 'transparent',
-                            color: '#94a3b8',
-                            border: '1px solid #cbd5e1',
+                            color: '#334155', // darker text for contrast
+                            border: '1px solid #94a3b8', // darker border for contrast
                             borderRadius: '0',
                             padding: '9px 0',
                             fontSize: '12px',
@@ -131,12 +130,12 @@ export default function CookieBanner() {
                             fontFamily: 'inherit',
                         }}
                         onMouseEnter={e => {
-                            e.currentTarget.style.borderColor = '#94a3b8';
-                            e.currentTarget.style.color = '#475569';
+                            e.currentTarget.style.borderColor = '#475569';
+                            e.currentTarget.style.color = '#1e293b';
                         }}
                         onMouseLeave={e => {
-                            e.currentTarget.style.borderColor = '#cbd5e1';
-                            e.currentTarget.style.color = '#94a3b8';
+                            e.currentTarget.style.borderColor = '#94a3b8';
+                            e.currentTarget.style.color = '#334155';
                         }}
                     >
                         Ablehnen

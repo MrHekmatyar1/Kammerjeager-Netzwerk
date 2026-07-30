@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-const STORAGE_KEY = 'ks_cookie_v2';
+const STORAGE_KEY = 'ks_cookie_v3';
 
 export default function CookieBanner() {
     const [visible, setVisible] = useState(false);
@@ -43,9 +43,9 @@ export default function CookieBanner() {
                     zIndex: 99999,
                     width: '300px',
                     // White frosted glass — same vibe as the site header
-                    background: 'rgba(255, 255, 255, 0.88)',
-                    backdropFilter: 'blur(14px)',
-                    WebkitBackdropFilter: 'blur(14px)',
+                    background: 'rgba(255, 255, 255, 0.65)',
+                    backdropFilter: 'blur(24px)',
+                    WebkitBackdropFilter: 'blur(24px)',
                     // Sharp corners matching brand style
                     borderRadius: '0',
                     // Thin border + strong red top accent like header bottom line
@@ -95,7 +95,7 @@ export default function CookieBanner() {
                         onClick={accept}
                         style={{
                             flex: 1,
-                            backgroundColor: '#C8102E',
+                            backgroundColor: '#1E293B',
                             color: '#fff',
                             border: 'none',
                             borderRadius: '0',
@@ -108,8 +108,8 @@ export default function CookieBanner() {
                             transition: 'background 0.15s',
                             fontFamily: 'inherit',
                         }}
-                        onMouseEnter={e => (e.currentTarget.style.background = '#a50d25')}
-                        onMouseLeave={e => (e.currentTarget.style.background = '#C8102E')}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#0f172a')}
+                        onMouseLeave={e => (e.currentTarget.style.background = '#1E293B')}
                     >
                         Akzeptieren
                     </button>

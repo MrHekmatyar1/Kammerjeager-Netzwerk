@@ -1,9 +1,7 @@
 'use client';
 
-// CookieBanner — minimalist GDPR consent bar
-// Минималистичный баннер согласия GDPR / DSGVO
-// Mobile: full-width bottom pill bar
-// Desktop: compact bottom-right floating card
+// CookieBanner — DSGVO / GDPR consent
+// Single floating card, bottom-right corner, sharp angular corners matching brand style
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -14,11 +12,8 @@ export default function CookieBanner() {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        // Show only if user hasn't already decided
-        // Показываем только если пользователь ещё не дал ответ
         if (!localStorage.getItem(STORAGE_KEY)) {
-            // Small delay so banner doesn't flash on initial render
-            const t = setTimeout(() => setVisible(true), 800);
+            const t = setTimeout(() => setVisible(true), 900);
             return () => clearTimeout(t);
         }
     }, []);
@@ -37,138 +32,67 @@ export default function CookieBanner() {
 
     return (
         <>
-            {/* ─── MOBILE BANNER ─── */}
+            {/* Single unified banner — bottom-right on desktop, full-width bottom on mobile */}
             <div
                 role="dialog"
                 aria-label="Cookie-Einstellungen"
                 style={{
                     position: 'fixed',
-                    bottom: '12px',
-                    left: '12px',
-                    right: '12px',
+                    bottom: '20px',
+                    right: '20px',
+                    left: 'auto',
                     zIndex: 99999,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px',
+                    width: '320px',
                     backgroundColor: '#1E293B',
-                    borderRadius: '16px',
-                    padding: '16px 18px',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.28)',
-                    animation: 'ks-slide-up 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+                    borderRadius: '0',                          // острые углы как у бренда
+                    padding: '20px 22px 18px',
+                    boxShadow: '0 8px 40px rgba(0,0,0,0.35)',
+                    borderLeft: '3px solid #C8102E',            // акцентная полоса бренда
+                    animation: 'ks-slide-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both',
                 }}
-                className="block lg:hidden"
+                // Mobile: stretch full-width at bottom
+                className="cookie-banner-root"
             >
-                {/* Icon + text row */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                    <span style={{ fontSize: '20px', flexShrink: 0, marginTop: '1px' }}>🍪</span>
-                    <p style={{
-                        fontSize: '13px',
-                        color: '#cbd5e1',
-                        lineHeight: 1.55,
-                        margin: 0,
-                        fontFamily: 'inherit',
-                    }}>
-                        Wir nutzen Cookies für Analyse &amp; bessere UX.{' '}
-                        <Link
-                            href="/datenschutz"
-                            style={{ color: '#f97171', textDecoration: 'underline', fontWeight: 600 }}
-                            onClick={decline}
-                        >
-                            Datenschutz
-                        </Link>
-                    </p>
-                </div>
-
-                {/* Action buttons */}
-                <div style={{ display: 'flex', gap: '8px' }}>
-                    <button
-                        onClick={accept}
-                        style={{
-                            flex: 1,
-                            backgroundColor: '#C8102E',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '10px',
-                            padding: '10px 0',
-                            fontSize: '13px',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            letterSpacing: '0.03em',
-                        }}
-                    >
-                        Alle akzeptieren
-                    </button>
-                    <button
-                        onClick={decline}
-                        style={{
-                            flex: 1,
-                            backgroundColor: 'transparent',
-                            color: '#94a3b8',
-                            border: '1px solid #334155',
-                            borderRadius: '10px',
-                            padding: '10px 0',
-                            fontSize: '13px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                        }}
-                    >
-                        Ablehnen
-                    </button>
-                </div>
-            </div>
-
-            {/* ─── DESKTOP BANNER ─── */}
-            <div
-                role="dialog"
-                aria-label="Cookie-Einstellungen"
-                style={{
-                    position: 'fixed',
-                    bottom: '24px',
-                    right: '24px',
-                    zIndex: 99999,
-                    width: '340px',
-                    backgroundColor: '#1E293B',
-                    borderRadius: '16px',
-                    padding: '20px 22px',
-                    boxShadow: '0 12px 40px rgba(0,0,0,0.22)',
-                    animation: 'ks-slide-up 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                }}
-                className="hidden lg:block"
-            >
-                {/* Header row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                    <span style={{ fontSize: '18px' }}>🍪</span>
+                {/* Header */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <div style={{
+                        width: '6px',
+                        height: '6px',
+                        backgroundColor: '#C8102E',
+                        flexShrink: 0,
+                    }} />
                     <span style={{
-                        fontSize: '13px',
-                        fontWeight: 700,
+                        fontSize: '11px',
+                        fontWeight: 800,
                         color: '#f1f5f9',
                         textTransform: 'uppercase',
-                        letterSpacing: '0.08em',
+                        letterSpacing: '0.12em',
+                        fontFamily: 'inherit',
                     }}>
                         Cookie-Hinweis
                     </span>
                 </div>
 
-                {/* Text */}
+                {/* Body text */}
                 <p style={{
-                    fontSize: '13px',
+                    fontSize: '12px',
                     color: '#94a3b8',
-                    lineHeight: 1.6,
+                    lineHeight: 1.65,
                     margin: '0 0 16px',
                     fontFamily: 'inherit',
                 }}>
-                    Wir verwenden Cookies zur Analyse und zur Verbesserung Ihrer Erfahrung.{' '}
+                    Wir verwenden Cookies zur Analyse und zur
+                    Verbesserung Ihrer Erfahrung.{' '}
                     <Link
                         href="/datenschutz"
-                        style={{ color: '#f97171', textDecoration: 'underline' }}
+                        style={{ color: '#f97171', textDecoration: 'underline', fontWeight: 600 }}
                         onClick={decline}
                     >
                         Datenschutzerklärung
                     </Link>
                 </p>
 
-                {/* Buttons */}
+                {/* Buttons — sharp corners, brand style */}
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <button
                         onClick={accept}
@@ -177,13 +101,15 @@ export default function CookieBanner() {
                             backgroundColor: '#C8102E',
                             color: '#fff',
                             border: 'none',
-                            borderRadius: '10px',
-                            padding: '10px 0',
-                            fontSize: '13px',
+                            borderRadius: '0',
+                            padding: '9px 0',
+                            fontSize: '12px',
                             fontWeight: 700,
                             cursor: 'pointer',
+                            letterSpacing: '0.06em',
+                            textTransform: 'uppercase',
                             transition: 'background 0.15s',
-                            letterSpacing: '0.03em',
+                            fontFamily: 'inherit',
                         }}
                         onMouseEnter={e => (e.currentTarget.style.background = '#a50d25')}
                         onMouseLeave={e => (e.currentTarget.style.background = '#C8102E')}
@@ -195,14 +121,17 @@ export default function CookieBanner() {
                         style={{
                             flex: 1,
                             backgroundColor: 'transparent',
-                            color: '#94a3b8',
+                            color: '#64748b',
                             border: '1px solid #334155',
-                            borderRadius: '10px',
-                            padding: '10px 0',
-                            fontSize: '13px',
+                            borderRadius: '0',
+                            padding: '9px 0',
+                            fontSize: '12px',
                             fontWeight: 600,
                             cursor: 'pointer',
+                            letterSpacing: '0.04em',
+                            textTransform: 'uppercase',
                             transition: 'border-color 0.15s, color 0.15s',
+                            fontFamily: 'inherit',
                         }}
                         onMouseEnter={e => {
                             e.currentTarget.style.borderColor = '#64748b';
@@ -210,7 +139,7 @@ export default function CookieBanner() {
                         }}
                         onMouseLeave={e => {
                             e.currentTarget.style.borderColor = '#334155';
-                            e.currentTarget.style.color = '#94a3b8';
+                            e.currentTarget.style.color = '#64748b';
                         }}
                     >
                         Ablehnen
@@ -218,11 +147,20 @@ export default function CookieBanner() {
                 </div>
             </div>
 
-            {/* Animation keyframes — injected inline via style tag */}
+            {/* Responsive + animation styles */}
             <style>{`
-                @keyframes ks-slide-up {
-                    from { opacity: 0; transform: translateY(20px); }
+                @keyframes ks-slide-in {
+                    from { opacity: 0; transform: translateY(16px); }
                     to   { opacity: 1; transform: translateY(0); }
+                }
+                /* Mobile: full-width, no right offset */
+                @media (max-width: 640px) {
+                    .cookie-banner-root {
+                        left: 12px !important;
+                        right: 12px !important;
+                        bottom: 12px !important;
+                        width: auto !important;
+                    }
                 }
             `}</style>
         </>

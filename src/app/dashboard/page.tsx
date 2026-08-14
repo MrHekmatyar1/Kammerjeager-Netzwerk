@@ -95,7 +95,7 @@ export default function DashboardMarketplace() {
             setLeads(prev => prev.filter(l => l.id !== selectedLead.id));
             setSelectedLead(null);
             setAgreed(false);
-            alert('✅ Auftrag erfolgreich angenommen! Sie finden ihn unter "Meine Aufträge".');
+            alert('Auftrag erfolgreich angenommen! Sie finden ihn unter "Meine Aufträge".');
         } catch {
             alert('Netzwerkfehler. Bitte versuchen Sie es erneut.');
         } finally {

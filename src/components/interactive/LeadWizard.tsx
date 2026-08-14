@@ -54,12 +54,13 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
         <button type="button" onClick={onClick} style={{
             padding: '11px 8px',
             width: '100%',
+            height: '100%',
             border: active ? '1.5px solid #1a1a1a' : '1px solid #d0d0d0',
             background: active ? '#1a1a1a' : '#fff',
             color: active ? '#fff' : '#444',
             fontSize: '14px', fontWeight: active ? 600 : 400,
-            cursor: 'pointer', borderRadius: '0', fontFamily: 'inherit',
-            transition: 'all 0.15s', whiteSpace: 'nowrap',
+            cursor: 'pointer', borderRadius: '8px', fontFamily: 'inherit',
+            transition: 'all 0.15s',
             touchAction: 'manipulation',
             WebkitTapHighlightColor: 'transparent',
             userSelect: 'none',
@@ -532,6 +533,7 @@ export default function LeadWizard({ onSuccess }: { onSuccess?: () => void } = {
                         padding: '15px', fontWeight: 700, fontSize: '13px',
                         letterSpacing: '0.14em', textTransform: 'uppercase',
                         border: 'none', cursor: 'pointer', fontFamily: 'inherit',
+                        borderRadius: '8px'
                     }}>
                         Weiter zur Anmeldung
                     </button>

@@ -158,13 +158,13 @@ export default function DashboardMarketplace() {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     {leads.length > 0 && (
-                        <span style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#C8102E', fontSize: '13px', fontWeight: 700, padding: '4px 12px', borderRadius: '20px' }}>
+                        <span style={{ background: '#C8102E', border: 'none', color: '#fff', fontSize: '13px', fontWeight: 700, padding: '5px 13px', borderRadius: '20px' }}>
                             {leads.length} Neu
                         </span>
                     )}
                     <button
                         onClick={loadLeads}
-                        style={{ background: '#f1f5f9', border: '1px solid #e2e8f0', color: '#475569', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
+                        style={{ background: '#475569', border: 'none', color: '#fff', padding: '9px 17px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
                     >
                         ↻ Aktualisieren
                     </button>
@@ -203,12 +203,12 @@ export default function DashboardMarketplace() {
                     }}>
                         <div style={{ flex: 1, minWidth: '220px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
-                                <span style={{ background: 'rgba(200,16,46,0.08)', color: '#C8102E', fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Neu</span>
+                                <span style={{ background: '#C8102E', color: '#fff', fontSize: '11px', fontWeight: 700, padding: '3px 9px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Neu</span>
                                 <span style={{ color: getUrgencyColor(lead.created_at), fontSize: '12px', fontWeight: 600 }}>
                                     {timeAgo(lead.created_at)}
                                 </span>
                                 {lead.kunde_typ && (
-                                    <span style={{ background: '#f1f5f9', color: '#475569', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '4px' }}>
+                                    <span style={{ background: '#475569', color: '#fff', fontSize: '11px', fontWeight: 600, padding: '3px 9px', borderRadius: '4px' }}>
                                         {lead.kunde_typ}
                                     </span>
                                 )}

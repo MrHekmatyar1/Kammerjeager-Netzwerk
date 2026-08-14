@@ -282,24 +282,13 @@ export default function DashboardMarketplace() {
 
                         {/* Legal agreement */}
                         <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0' }}>
-                            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '14px', marginBottom: '16px' }}>
+                            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '14px' }}>
                                 <div style={{ fontSize: '12px', fontWeight: 700, color: '#b91c1c', marginBottom: '6px' }}>⚠️ Rechtliche Vereinbarung</div>
                                 <p style={{ fontSize: '12px', color: '#7f1d1d', lineHeight: 1.6, margin: 0 }}>
                                     Durch Annahme verpflichten Sie sich, den <strong>korrekten und vollständigen Rechnungsbetrag</strong> im Portal einzutragen.
                                     Bei Falschangaben wird eine <strong>Vertragsstrafe von 500 € + entgangene Provision</strong> fällig.
                                 </p>
                             </div>
-                            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer' }}>
-                                <input
-                                    type="checkbox"
-                                    checked={agreed}
-                                    onChange={e => setAgreed(e.target.checked)}
-                                    style={{ marginTop: '2px', width: '16px', height: '16px', accentColor: '#C8102E', flexShrink: 0 }}
-                                />
-                                <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: 500, lineHeight: 1.5 }}>
-                                    Ich akzeptiere die Bedingungen und bestätige, den korrekten Rechnungsbetrag einzutragen.
-                                </span>
-                            </label>
                         </div>
 
                         {/* Action buttons */}
@@ -307,21 +296,14 @@ export default function DashboardMarketplace() {
                             <button
                                 onClick={() => setShowRejectModal(true)}
                                 disabled={actionLoading}
-                                style={{ background: 'none', border: '1px solid #e2e8f0', padding: '10px 20px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', color: '#64748b', fontFamily: 'inherit' }}
+                                className="bg-white text-slate-500 border border-slate-200 hover:bg-slate-500 hover:text-white hover:border-slate-500 px-[20px] py-[10px] rounded-lg text-[14px] font-semibold transition-colors cursor-pointer"
                             >
                                 Ablehnen
                             </button>
                             <button
-                                disabled={!agreed || actionLoading}
+                                disabled={actionLoading}
                                 onClick={handleAccept}
-                                style={{
-                                    background: agreed && !actionLoading ? '#C8102E' : '#e2e8f0',
-                                    color: agreed && !actionLoading ? '#fff' : '#94a3b8',
-                                    border: 'none', padding: '10px 24px', borderRadius: '8px',
-                                    fontSize: '14px', fontWeight: 700,
-                                    cursor: agreed && !actionLoading ? 'pointer' : 'not-allowed',
-                                    fontFamily: 'inherit', transition: 'all 0.2s'
-                                }}
+                                className="bg-[#C8102E] text-white border border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] px-[24px] py-[10px] rounded-lg text-[14px] font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {actionLoading ? 'Wird verarbeitet...' : '✓ Auftrag annehmen'}
                             </button>
@@ -353,10 +335,18 @@ export default function DashboardMarketplace() {
                                 <option value="Urlaub / Krankheit">Urlaub / Krankheit</option>
                             </select>
                             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-                                <button onClick={() => setShowRejectModal(false)} style={{ background: 'none', border: '1px solid #e2e8f0', padding: '10px 18px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', color: '#64748b', fontFamily: 'inherit' }}>
+                                <button
+                                    onClick={() => setShowRejectModal(false)}
+                                    disabled={actionLoading}
+                                    className="bg-white text-slate-500 border border-slate-200 hover:bg-slate-500 hover:text-white hover:border-slate-500 px-[20px] py-[10px] rounded-lg text-[14px] font-semibold transition-colors cursor-pointer"
+                                >
                                     Zurück
                                 </button>
-                                <button onClick={handleReject} disabled={actionLoading} style={{ background: '#0f172a', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontSize: '14px', fontWeight: 700, cursor: actionLoading ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>
+                                <button
+                                    onClick={handleReject}
+                                    disabled={actionLoading}
+                                    className="bg-slate-900 text-white border border-transparent hover:bg-white hover:text-slate-900 hover:border-slate-900 px-[24px] py-[10px] rounded-lg text-[14px] font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
                                     {actionLoading ? 'Wird verarbeitet...' : 'Ablehnen bestätigen'}
                                 </button>
                             </div>

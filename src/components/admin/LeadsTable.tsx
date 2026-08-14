@@ -73,11 +73,11 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
     }
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-300 overflow-hidden">
             {/* Desktop View */}
             <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-sm text-left text-slate-600">
-                    <thead className="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-200">
+                    <thead className="text-xs text-slate-600 uppercase bg-slate-100 border-b border-slate-300">
                         <tr>
                             <th className="px-6 py-4 font-semibold">Datum</th>
                             <th className="px-6 py-4 font-semibold">Kunde</th>
@@ -87,7 +87,7 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                             <th className="px-6 py-4 font-semibold">Status</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-200">
                         {leads.map((lead) => (
                             <tr key={lead.id} className="hover:bg-slate-50/50 transition-colors">
                                 <td className="px-6 py-4 whitespace-nowrap">
@@ -145,7 +145,7 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
             </div>
 
             {/* Mobile View */}
-            <div className="block md:hidden divide-y divide-slate-100">
+            <div className="block md:hidden divide-y divide-slate-200">
                 {leads.map((lead) => (
                     <div key={`mob-${lead.id}`} className="p-4 sm:p-5 flex flex-col gap-4 hover:bg-slate-50/50 transition-colors">
                         <div className="flex justify-between items-start gap-2">
@@ -159,7 +159,7 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3 text-sm bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <div className="grid grid-cols-2 gap-3 text-sm bg-slate-50 p-3 rounded-lg border border-slate-200">
                             <div>
                                 <span className="text-slate-400 text-xs block mb-0.5">Kontakt</span>
                                 <span className="font-semibold text-slate-700">{lead.telefon}</span><br/>

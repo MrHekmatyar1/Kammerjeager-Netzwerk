@@ -73,11 +73,11 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
     }
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-300 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-400 overflow-hidden">
             {/* Desktop View */}
             <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-sm text-left text-slate-600">
-                    <thead className="text-xs text-slate-600 uppercase bg-slate-100 border-b border-slate-300">
+                    <thead className="text-xs text-slate-600 uppercase bg-slate-100 border-b border-slate-400">
                         <tr>
                             <th className="px-6 py-4 font-semibold">Datum</th>
                             <th className="px-6 py-4 font-semibold">Kunde</th>
@@ -87,7 +87,7 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                             <th className="px-6 py-4 font-semibold">Status</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-200">
+                    <tbody className="divide-y divide-slate-300">
                         {leads.map((lead) => (
                             <tr key={lead.id} className="hover:bg-slate-50/50 transition-colors">
                                 <td className="px-6 py-4 whitespace-nowrap">

@@ -246,7 +246,7 @@ export default function DashboardMarketplace() {
                         <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
                                 <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>Auftragsdetails</h2>
-                                <p style={{ color: '#64748b', fontSize: '13px', margin: '2px 0 0' }}>
+                                <p style={{ color: '#64748b', fontSize: '13px', margin: '6px 0 0' }}>
                                     {selectedLead.schaedling} · PLZ {selectedLead.plz} · {timeAgo(selectedLead.created_at)}
                                 </p>
                             </div>
@@ -266,14 +266,14 @@ export default function DashboardMarketplace() {
                                     { label: 'Fläche', value: selectedLead.flaeche },
                                     { label: 'Zugang', value: selectedLead.zugang },
                                 ].filter(f => f.value).map(f => (
-                                    <div key={f.label} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 14px' }}>
+                                    <div key={f.label} style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '10px 14px' }}>
                                         <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '3px' }}>{f.label}</div>
                                         <div style={{ fontSize: '14px', color: '#0f172a', fontWeight: 600 }}>{f.value}</div>
                                     </div>
                                 ))}
                             </div>
                             {selectedLead.zugang_beschreibung && (
-                                <div style={{ marginTop: '12px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 14px' }}>
+                                <div style={{ marginTop: '12px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '10px 14px' }}>
                                     <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', marginBottom: '3px' }}>Zugangsbeschreibung</div>
                                     <div style={{ fontSize: '14px', color: '#0f172a' }}>{selectedLead.zugang_beschreibung}</div>
                                 </div>

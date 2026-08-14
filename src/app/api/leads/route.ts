@@ -1,17 +1,19 @@
 // POST /api/leads — сохраняет лид, автоматически назначает партнёра
-// Smart matching: PLZ-фильтр + load balancing (минимум активных лидов)
+// Smart matching: 4km-Radius Haversine + load balancing (минимум активных лидов)
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendAdminNotification, sendCustomerConfirmation, sendPartnerLeadNotification } from '@/lib/email/resend';
+import { isWithinRadius } from '@/lib/plzDistance';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-// ─── Умный поиск лучшего партнёра ─────────────────────────────────────────
-// 1. Фильтр по PLZ + is_active
-// 2. Load balancing: выбираем партнёра с наименьшим числом активных лидов
-async function findBestPartner(supabase: any, plz: string) {
+// ─── Умный поиск лучшего партнёра (4km Radius) ─────────────────────────────
+// 1. Фильтр по is_active
+// 2. Проверяем, что первый PLZ мастера находится в 4km от PLZ лида
+// 3. Load balancing: выбираем партнёра с наименьшим числом активных лидов
+async function findBestPartner(supabase: any, leadPlz: string) {
     const { data: masters, error } = await supabase
         .from('masters')
         .select('*')
@@ -19,10 +21,12 @@ async function findBestPartner(supabase: any, plz: string) {
 
     if (error || !masters || masters.length === 0) return null;
 
-    // Фильтр по PLZ-зонам партнёра
+    // Фильтр по 4km радиусу от базовой PLZ мастера
+    // Базовая точка = первый элемент plz_bereiche
     const eligible = masters.filter((m: any) => {
         if (!m.plz_bereiche || m.plz_bereiche.length === 0) return false;
-        return m.plz_bereiche.some((prefix: string) => plz?.startsWith(prefix));
+        const masterHomePlz: string = m.plz_bereiche[0]; // первая PLZ = домашняя
+        return isWithinRadius(masterHomePlz, leadPlz, 4);
     });
 
     if (eligible.length === 0) return null;

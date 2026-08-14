@@ -31,15 +31,15 @@ export default function ImpressumContent() {
                     <p>
                         Telefon: 0160 92376320<br />
                         E-Mail: kontakt@kammerjaeger-structon.de<br />
-                        Umsatzsteuer-ID: 
+                        Umsatzsteuer-ID: Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.
                     </p>
                 </div>
 
                 {/* Additional Contacts */}
                 <div>
                     <p>
-                        Aufträge: <br />
-                        Presse-Anfragen: 
+                        Aufträge: kontakt@kammerjaeger-structon.de<br />
+                        Presse-Anfragen: kontakt@kammerjaeger-structon.de
                     </p>
                 </div>
 
@@ -52,11 +52,10 @@ export default function ImpressumContent() {
 
                 {/* Register Details */}
                 <div>
-                    <p>Registereintrag Kammerjeager-Structon:</p>
                     <p>
-                        Registergericht: <br />
-                        Registernummer: <br />
-                        Geschäftsführer: Yehor Kalchuk
+                        Verantwortlich für den Inhalt gemäß § 18 Abs. 2 MStV:<br />
+                        Yehor Kalchuk<br />
+                        Drakestr 30, 12205 Berlin
                     </p>
                 </div>
 

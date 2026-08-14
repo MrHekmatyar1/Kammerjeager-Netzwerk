@@ -47,7 +47,7 @@ export default function CookieBanner() {
                     background: 'rgba(255, 255, 255, 0.3)',
                     backdropFilter: 'blur(30px)',
                     WebkitBackdropFilter: 'blur(30px)',
-                    borderRadius: '0',
+                    borderRadius: '6px',
                     // Darker border to distinctly separate it from white background
                     border: '1px solid rgba(0, 0, 0, 0.15)',
                     // Much stronger shadow
@@ -82,7 +82,7 @@ export default function CookieBanner() {
                     Verbesserung Ihrer Erfahrung.{' '}
                     <Link
                         href="/datenschutz"
-                        style={{ color: '#C8102E', textDecoration: 'underline', fontWeight: 600 }}
+                        style={{ color: '#000', textDecoration: 'underline', fontWeight: 600 }}
                         onClick={decline}
                     >
                         Datenschutzerklärung
@@ -98,9 +98,9 @@ export default function CookieBanner() {
                             backgroundColor: '#0a0a0a', // much darker black
                             color: '#fff',
                             border: 'none',
-                            borderRadius: '0',
-                            padding: '9px 0',
-                            fontSize: '12px',
+                            borderRadius: '4px',
+                            padding: '6px 0',
+                            fontSize: '11px',
                             fontWeight: 700,
                             cursor: 'pointer',
                             letterSpacing: '0.06em',
@@ -120,9 +120,9 @@ export default function CookieBanner() {
                             backgroundColor: 'transparent',
                             color: '#334155', // darker text for contrast
                             border: '1px solid #94a3b8', // darker border for contrast
-                            borderRadius: '0',
-                            padding: '9px 0',
-                            fontSize: '12px',
+                            borderRadius: '4px',
+                            padding: '6px 0',
+                            fontSize: '11px',
                             fontWeight: 600,
                             cursor: 'pointer',
                             letterSpacing: '0.04em',

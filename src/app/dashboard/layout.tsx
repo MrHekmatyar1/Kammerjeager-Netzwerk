@@ -5,10 +5,158 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 
+// ─── PLZ Setup Modal ──────────────────────────────────────────────────────────
+// Shown after Google OAuth when a partner hasn't set their home PLZ yet.
+function PlzSetupModal({ onSaved }: { onSaved: () => void }) {
+    const [plz, setPlz] = useState('');
+    const [saving, setSaving] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const trimmed = plz.trim();
+        if (!/^\d{5}$/.test(trimmed)) {
+            setError('Bitte geben Sie eine gültige 5-stellige Postleitzahl ein.');
+            return;
+        }
+        setSaving(true);
+        setError('');
+        try {
+            const res = await fetch('/api/partner/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    service_plz: trimmed,
+                    billing_model: 'commission',
+                    is_active: true,
+                    pests_handled: [],
+                    firma: '',
+                    name: '',
+                    telefon: '',
+                    telegram_chat_id: '',
+                }),
+            });
+            if (res.ok) {
+                onSaved();
+            } else {
+                const d = await res.json();
+                setError(d.error || 'Fehler beim Speichern.');
+            }
+        } catch {
+            setError('Netzwerkfehler. Bitte versuchen Sie es erneut.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    return (
+        <div style={{
+            position: 'fixed', inset: 0, zIndex: 99999,
+            background: 'rgba(15,23,42,0.7)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '16px',
+            backdropFilter: 'blur(4px)',
+        }}>
+            <div style={{
+                background: '#fff',
+                borderRadius: '12px',
+                width: '100%',
+                maxWidth: '480px',
+                overflow: 'hidden',
+                boxShadow: '0 25px 60px rgba(0,0,0,0.35)',
+            }}>
+                {/* Header */}
+                <div style={{ background: '#0f172a', padding: '28px 32px' }}>
+                    <div style={{
+                        fontSize: '11px', color: '#94a3b8', fontWeight: 700,
+                        letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '8px',
+                    }}>
+                        Kammerjäger Structon · Partner-Portal
+                    </div>
+                    <div style={{
+                        fontFamily: "'Barlow Condensed', sans-serif",
+                        fontSize: '26px', fontWeight: 900,
+                        color: '#fff', lineHeight: 1.1, textTransform: 'uppercase',
+                    }}>
+                        Ihr Einsatzgebiet
+                    </div>
+                </div>
+
+                {/* Body */}
+                <form onSubmit={handleSubmit} style={{ padding: '28px 32px', display: 'grid', gap: '20px' }}>
+                    <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, margin: 0 }}>
+                        Um Ihnen passende Aufträge zuzuweisen, benötigen wir Ihre <strong style={{ color: '#0f172a' }}>Heimat-Postleitzahl</strong>.
+                        Sie erhalten dann Aufträge im Umkreis von <strong style={{ color: '#0f172a' }}>4 km</strong> davon.
+                    </p>
+
+                    <div style={{ display: 'grid', gap: '8px' }}>
+                        <label style={{ fontSize: '13px', fontWeight: 600, color: '#374151' }}>
+                            Ihre Postleitzahl (PLZ) <span style={{ color: '#C8102E' }}>*</span>
+                        </label>
+                        <input
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={5}
+                            placeholder="z.B. 10115"
+                            value={plz}
+                            onChange={e => { setPlz(e.target.value.replace(/\D/g, '')); setError(''); }}
+                            autoFocus
+                            style={{
+                                padding: '13px 16px',
+                                border: `1.5px solid ${error ? '#ef4444' : '#d1d5db'}`,
+                                borderRadius: '8px',
+                                fontSize: '18px',
+                                fontWeight: 700,
+                                letterSpacing: '0.15em',
+                                outline: 'none',
+                                fontFamily: 'inherit',
+                                color: '#0f172a',
+                                transition: 'border-color 0.15s',
+                            }}
+                        />
+                        {error && (
+                            <p style={{ fontSize: '13px', color: '#ef4444', margin: 0 }}>{error}</p>
+                        )}
+                    </div>
+
+                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '14px 16px' }}>
+                        <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.6 }}>
+                            💡 <strong style={{ color: '#0f172a' }}>Tipp:</strong> Sie können Ihr Einsatzgebiet später jederzeit in den Einstellungen anpassen.
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={saving || plz.length !== 5}
+                        style={{
+                            background: plz.length === 5 && !saving ? '#0f172a' : '#cbd5e1',
+                            color: '#fff',
+                            border: 'none',
+                            padding: '14px 28px',
+                            borderRadius: '8px',
+                            fontSize: '15px',
+                            fontWeight: 700,
+                            cursor: plz.length === 5 && !saving ? 'pointer' : 'not-allowed',
+                            fontFamily: "'Barlow Condensed', sans-serif",
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            transition: 'background 0.2s',
+                        }}
+                    >
+                        {saving ? 'Wird gespeichert...' : 'Einsatzgebiet speichern →'}
+                    </button>
+                </form>
+            </div>
+        </div>
+    );
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<any>(null);
     const [credits, setCredits] = useState(0);
+    const [showPlzModal, setShowPlzModal] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
@@ -24,10 +172,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 setUser(session.user);
                 const { data: master } = await supabase
                     .from('masters')
-                    .select('credits')
+                    .select('credits, plz_bereiche')
                     .or(`email.eq.${session.user.email},user_id.eq.${session.user.id}`)
-                    .single();
+                    .maybeSingle();
                 setCredits(master?.credits || 0);
+                // Show PLZ modal if no PLZ has been set yet
+                const hasPlz = master?.plz_bereiche && master.plz_bereiche.length > 0 && master.plz_bereiche[0]?.trim();
+                if (!hasPlz) setShowPlzModal(true);
             }
             setLoading(false);
         };
@@ -38,6 +189,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     if (loading) return <div style={{ padding: '100px', textAlign: 'center' }}>Lädt...</div>;
     if (!user) return null;
+
 
     const navItems = [
         { name: 'Neue Aufträge', href: '/dashboard' },
@@ -85,6 +237,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     return (
         <div style={{ minHeight: 'calc(100vh - 70px)', background: '#f1f5f9' }}>
+
+            {/* PLZ Setup Modal — shown when partner has no PLZ set */}
+            {showPlzModal && <PlzSetupModal onSaved={() => setShowPlzModal(false)} />}
 
             {/* ══════════════════════════════════════
                 MOBILE ONLY

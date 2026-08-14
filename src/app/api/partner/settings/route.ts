@@ -57,17 +57,38 @@ export async function POST(req: NextRequest) {
             .or(`email.eq.${user.email},user_id.eq.${user.id}`)
             .maybeSingle();
 
-        if (lookupError || !master) {
-            return NextResponse.json({ error: 'Partner-Profil nicht gefunden.' }, { status: 404 });
-        }
-
         // Convert UI fields to DB columns
-        let plzArray = [];
+        let plzArray: string[] = [];
         if (service_plz) {
             plzArray = service_plz.split(',').map((s: string) => s.trim()).filter(Boolean);
         }
 
-        // Update settings
+        if (!master) {
+            // Create new master profile if it doesn't exist (first Google login)
+            const { error: insertError } = await supabase
+                .from('masters')
+                .insert([{
+                    user_id: user.id,
+                    email: user.email,
+                    name: name || user.user_metadata?.full_name || '',
+                    firma: firma || null,
+                    phone: telefon || null,
+                    plz_bereiche: plzArray,
+                    billing_model: billing_model || 'commission',
+                    is_active: is_active !== false, // default true
+                    telegram_chat_id: telegram_chat_id || null,
+                    pests_handled: Array.isArray(pests_handled) ? pests_handled : []
+                }]);
+                
+            if (insertError) {
+                console.error('[partner/settings POST] Insert Error:', insertError);
+                return NextResponse.json({ error: 'Fehler beim Erstellen des Profils.' }, { status: 500 });
+            }
+            
+            return NextResponse.json({ success: true });
+        }
+
+        // Update existing settings
         const { error: updateError } = await supabase
             .from('masters')
             .update({

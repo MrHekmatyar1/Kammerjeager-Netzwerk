@@ -145,7 +145,7 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
             </div>
 
             {/* Mobile View */}
-            <div className="block md:hidden divide-y divide-slate-200">
+            <div className="block md:hidden divide-y divide-slate-100">
                 {leads.map((lead) => (
                     <div key={`mob-${lead.id}`} className="p-4 sm:p-5 flex flex-col gap-4 hover:bg-slate-50/50 transition-colors">
                         <div className="flex justify-between items-start gap-2">
@@ -159,7 +159,7 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3 text-sm bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <div className="grid grid-cols-2 gap-3 text-sm bg-slate-50 p-3 rounded-lg border border-slate-100">
                             <div>
                                 <span className="text-slate-400 text-xs block mb-0.5">Kontakt</span>
                                 <span className="font-semibold text-slate-700">{lead.telefon}</span><br/>

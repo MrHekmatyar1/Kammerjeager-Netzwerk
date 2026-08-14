@@ -307,14 +307,14 @@ export default function DashboardMarketplace() {
                             <button
                                 onClick={() => setShowRejectModal(true)}
                                 disabled={actionLoading}
-                                className="bg-white text-slate-500 border border-slate-200 hover:bg-slate-500 hover:text-white hover:border-slate-500 px-[20px] py-[10px] rounded-lg text-[14px] font-semibold transition-colors cursor-pointer"
+                                className="bg-white text-slate-500 border border-slate-200 hover:bg-slate-500 hover:text-white hover:border-slate-500 px-[20px] py-[10px] rounded-lg text-[14px] font-semibold transition-all duration-300 ease-in-out cursor-pointer"
                             >
                                 Ablehnen
                             </button>
                             <button
                                 disabled={!agreed || actionLoading}
                                 onClick={handleAccept}
-                                className="bg-[#C8102E] text-white border border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] px-[24px] py-[10px] rounded-lg text-[14px] font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="bg-[#C8102E] text-white border border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] px-[24px] py-[10px] rounded-lg text-[14px] font-bold transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {actionLoading ? 'Wird verarbeitet...' : 'Auftrag annehmen'}
                             </button>
@@ -349,14 +349,14 @@ export default function DashboardMarketplace() {
                                 <button
                                     onClick={() => setShowRejectModal(false)}
                                     disabled={actionLoading}
-                                    className="bg-white text-slate-500 border border-slate-200 hover:bg-slate-500 hover:text-white hover:border-slate-500 px-[20px] py-[10px] rounded-lg text-[14px] font-semibold transition-colors cursor-pointer"
+                                    className="bg-white text-slate-500 border border-slate-200 hover:bg-slate-500 hover:text-white hover:border-slate-500 px-[20px] py-[10px] rounded-lg text-[14px] font-semibold transition-all duration-300 ease-in-out cursor-pointer"
                                 >
                                     Zurück
                                 </button>
                                 <button
                                     onClick={handleReject}
                                     disabled={actionLoading}
-                                    className="bg-slate-900 text-white border border-transparent hover:bg-white hover:text-slate-900 hover:border-slate-900 px-[24px] py-[10px] rounded-lg text-[14px] font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="bg-slate-900 text-white border border-transparent hover:bg-white hover:text-slate-900 hover:border-slate-900 px-[24px] py-[10px] rounded-lg text-[14px] font-bold transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {actionLoading ? 'Wird verarbeitet...' : 'Ablehnen bestätigen'}
                                 </button>

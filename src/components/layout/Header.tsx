@@ -265,7 +265,7 @@ export default function Header() {
                         </div>
                         <button
                             onClick={() => window.dispatchEvent(new CustomEvent('open-quiz-modal'))}
-                            className="bg-[#C8102E] text-white px-[22px] py-[9px] text-[14px] font-bold whitespace-nowrap shadow-[0_4px_14px_rgba(200,16,46,0.25)] rounded-none cursor-pointer border border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] transition-colors"
+                            className="bg-[#C8102E] text-white px-[22px] py-[9px] text-[14px] font-bold whitespace-nowrap shadow-[0_4px_14px_rgba(200,16,46,0.25)] rounded-none cursor-pointer border border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] transition-all duration-300 ease-in-out"
                         >
                             Online Termin buchen
                         </button>

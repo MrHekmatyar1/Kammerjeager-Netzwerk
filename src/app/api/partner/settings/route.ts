@@ -71,18 +71,18 @@ export async function POST(req: NextRequest) {
                     user_id: user.id,
                     email: user.email,
                     name: name || user.user_metadata?.full_name || '',
-                    firma: firma || null,
-                    phone: telefon || null,
+                    firma: firma || '',
+                    phone: telefon || '',
                     plz_bereiche: plzArray,
                     billing_model: billing_model || 'commission',
                     is_active: is_active !== false, // default true
-                    telegram_chat_id: telegram_chat_id || null,
+                    telegram_chat_id: telegram_chat_id || '',
                     pests_handled: Array.isArray(pests_handled) ? pests_handled : []
                 }]);
                 
             if (insertError) {
                 console.error('[partner/settings POST] Insert Error:', insertError);
-                return NextResponse.json({ error: 'Fehler beim Erstellen des Profils.' }, { status: 500 });
+                return NextResponse.json({ error: 'Fehler beim Erstellen des Profils: ' + insertError.message }, { status: 500 });
             }
             
             return NextResponse.json({ success: true });

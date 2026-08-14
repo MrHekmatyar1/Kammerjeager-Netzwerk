@@ -282,11 +282,11 @@ export default function DashboardMarketplace() {
 
                         {/* Legal agreement */}
                         <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0' }}>
-                            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '14px', marginBottom: '16px' }}>
-                                <div style={{ fontSize: '12px', fontWeight: 700, color: '#b91c1c', marginBottom: '6px' }}>⚠️ Rechtliche Vereinbarung</div>
-                                <p style={{ fontSize: '12px', color: '#7f1d1d', lineHeight: 1.6, margin: 0 }}>
+                            <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '14px', marginBottom: '16px' }}>
+                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', marginBottom: '6px' }}>Rechtliche Vereinbarung</div>
+                                <p style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6, margin: 0 }}>
                                     Durch Annahme verpflichten Sie sich, den <strong>korrekten und vollständigen Rechnungsbetrag</strong> im Portal einzutragen.
-                                    Bei Falschangaben wird eine <strong>Vertragsstrafe von 500 € + entgangene Provision</strong> fällig.
+                                    Bei Falschangaben wird eine <strong style={{ color: '#b91c1c' }}>Vertragsstrafe von 500 € + entgangene Provision</strong> fällig.
                                 </p>
                             </div>
                             <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer' }}>

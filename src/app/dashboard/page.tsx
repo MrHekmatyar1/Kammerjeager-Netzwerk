@@ -282,13 +282,24 @@ export default function DashboardMarketplace() {
 
                         {/* Legal agreement */}
                         <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0' }}>
-                            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '14px' }}>
+                            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '14px', marginBottom: '16px' }}>
                                 <div style={{ fontSize: '12px', fontWeight: 700, color: '#b91c1c', marginBottom: '6px' }}>⚠️ Rechtliche Vereinbarung</div>
                                 <p style={{ fontSize: '12px', color: '#7f1d1d', lineHeight: 1.6, margin: 0 }}>
                                     Durch Annahme verpflichten Sie sich, den <strong>korrekten und vollständigen Rechnungsbetrag</strong> im Portal einzutragen.
                                     Bei Falschangaben wird eine <strong>Vertragsstrafe von 500 € + entgangene Provision</strong> fällig.
                                 </p>
                             </div>
+                            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={agreed}
+                                    onChange={e => setAgreed(e.target.checked)}
+                                    style={{ marginTop: '2px', width: '16px', height: '16px', accentColor: '#C8102E', flexShrink: 0 }}
+                                />
+                                <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: 500, lineHeight: 1.5 }}>
+                                    Ich akzeptiere die Bedingungen und bestätige, den korrekten Rechnungsbetrag einzutragen.
+                                </span>
+                            </label>
                         </div>
 
                         {/* Action buttons */}
@@ -301,7 +312,7 @@ export default function DashboardMarketplace() {
                                 Ablehnen
                             </button>
                             <button
-                                disabled={actionLoading}
+                                disabled={!agreed || actionLoading}
                                 onClick={handleAccept}
                                 className="bg-[#C8102E] text-white border border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] px-[24px] py-[10px] rounded-lg text-[14px] font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                             >

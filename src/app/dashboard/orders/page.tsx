@@ -159,19 +159,19 @@ export default function DashboardOrders() {
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     <button
                         onClick={() => setFilterStatus('active')}
-                        style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', background: filterStatus === 'active' ? '#0f172a' : '#fff', color: filterStatus === 'active' ? '#fff' : '#475569', borderColor: filterStatus === 'active' ? '#0f172a' : '#e2e8f0' }}
+                        className={`px-[16px] py-[8px] rounded-lg border text-[13px] font-semibold transition-all duration-300 ease-in-out cursor-pointer ${filterStatus === 'active' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-900 hover:text-white hover:border-slate-900'}`}
                     >
                         Aktiv
                     </button>
                     <button
                         onClick={() => setFilterStatus('all')}
-                        style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', background: filterStatus === 'all' ? '#0f172a' : '#fff', color: filterStatus === 'all' ? '#fff' : '#475569', borderColor: filterStatus === 'all' ? '#0f172a' : '#e2e8f0' }}
+                        className={`px-[16px] py-[8px] rounded-lg border text-[13px] font-semibold transition-all duration-300 ease-in-out cursor-pointer ${filterStatus === 'all' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-900 hover:text-white hover:border-slate-900'}`}
                     >
                         Alle
                     </button>
                     <button
                         onClick={loadOrders}
-                        style={{ padding: '8px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', background: '#f8fafc', color: '#475569' }}
+                        className="px-[14px] py-[8px] rounded-lg border border-slate-200 text-[13px] font-semibold bg-slate-50 text-slate-600 hover:bg-slate-200 transition-all duration-300 ease-in-out cursor-pointer"
                     >
                         ↻
                     </button>
@@ -302,7 +302,7 @@ export default function DashboardOrders() {
                                                     <button
                                                         onClick={() => handleComplete(order.id)}
                                                         disabled={actionLoading === order.id}
-                                                        style={{ background: '#C8102E', color: '#fff', border: 'none', padding: '0 14px', borderRadius: '6px', fontSize: '13px', fontWeight: 700, cursor: actionLoading === order.id ? 'not-allowed' : 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }}
+                                                        className="bg-[#C8102E] text-white border border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] px-[14px] py-0 rounded-lg text-[13px] font-bold transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                                                     >
                                                         {actionLoading === order.id ? '...' : 'Abschließen'}
                                                     </button>
@@ -325,7 +325,7 @@ export default function DashboardOrders() {
                                             </p>
                                             <button
                                                 onClick={() => setClosingId(order.id)}
-                                                style={{ background: '#0f172a', color: '#fff', border: 'none', padding: '9px 20px', borderRadius: '8px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}
+                                                className="bg-slate-900 text-white border border-transparent hover:bg-white hover:text-slate-900 hover:border-slate-900 px-[20px] py-[9px] rounded-lg text-[13px] font-bold transition-all duration-300 ease-in-out cursor-pointer"
                                             >
                                                 Auftrag abschließen
                                             </button>

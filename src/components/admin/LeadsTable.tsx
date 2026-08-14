@@ -87,7 +87,7 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                             <th className="px-6 py-4 font-semibold">Status</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-300">
+                    <tbody className="divide-y divide-slate-400">
                         {leads.map((lead) => (
                             <tr key={lead.id} className="hover:bg-slate-50/50 transition-colors">
                                 <td className="px-6 py-4 whitespace-nowrap">

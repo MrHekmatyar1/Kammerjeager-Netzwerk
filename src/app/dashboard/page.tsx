@@ -305,7 +305,7 @@ export default function DashboardMarketplace() {
                                 onClick={handleAccept}
                                 className="bg-[#C8102E] text-white border border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] px-[24px] py-[10px] rounded-lg text-[14px] font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {actionLoading ? 'Wird verarbeitet...' : '✓ Auftrag annehmen'}
+                                {actionLoading ? 'Wird verarbeitet...' : 'Auftrag annehmen'}
                             </button>
                         </div>
                     </div>

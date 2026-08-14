@@ -61,21 +61,21 @@ function PlzSetupModal({ onSaved }: { onSaved: () => void }) {
                 background: '#fff',
                 borderRadius: '12px',
                 width: '100%',
-                maxWidth: '480px',
+                maxWidth: '400px',
                 overflow: 'hidden',
                 boxShadow: '0 25px 60px rgba(0,0,0,0.35)',
             }}>
                 {/* Header */}
-                <div style={{ background: '#0f172a', padding: '28px 32px' }}>
+                <div style={{ background: '#0f172a', padding: '20px 24px' }}>
                     <div style={{
-                        fontSize: '11px', color: '#94a3b8', fontWeight: 700,
-                        letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '8px',
+                        fontSize: '10px', color: '#94a3b8', fontWeight: 700,
+                        letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '6px',
                     }}>
                         Kammerjäger Structon · Partner-Portal
                     </div>
                     <div style={{
                         fontFamily: "'Barlow Condensed', sans-serif",
-                        fontSize: '26px', fontWeight: 900,
+                        fontSize: '22px', fontWeight: 900,
                         color: '#fff', lineHeight: 1.1, textTransform: 'uppercase',
                     }}>
                         Ihr Einsatzgebiet
@@ -83,15 +83,15 @@ function PlzSetupModal({ onSaved }: { onSaved: () => void }) {
                 </div>
 
                 {/* Body */}
-                <form onSubmit={handleSubmit} style={{ padding: '28px 32px', display: 'grid', gap: '20px' }}>
-                    <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, margin: 0 }}>
+                <form onSubmit={handleSubmit} style={{ padding: '24px', display: 'grid', gap: '16px' }}>
+                    <p style={{ fontSize: '13px', color: '#475569', lineHeight: 1.5, margin: 0 }}>
                         Um Ihnen passende Aufträge zuzuweisen, benötigen wir Ihre <strong style={{ color: '#0f172a' }}>Heimat-Postleitzahl</strong>.
                         Sie erhalten dann Aufträge im Umkreis von <strong style={{ color: '#0f172a' }}>4 km</strong> davon.
                     </p>
 
-                    <div style={{ display: 'grid', gap: '8px' }}>
-                        <label style={{ fontSize: '13px', fontWeight: 600, color: '#374151' }}>
-                            Ihre Postleitzahl (PLZ) <span style={{ color: '#C8102E' }}>*</span>
+                    <div style={{ display: 'grid', gap: '6px' }}>
+                        <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151' }}>
+                            Ihre Postleitzahl (PLZ) <span style={{ color: '#0f172a' }}>*</span>
                         </label>
                         <input
                             type="text"
@@ -102,12 +102,12 @@ function PlzSetupModal({ onSaved }: { onSaved: () => void }) {
                             onChange={e => { setPlz(e.target.value.replace(/\D/g, '')); setError(''); }}
                             autoFocus
                             style={{
-                                padding: '13px 16px',
-                                border: `1.5px solid ${error ? '#ef4444' : '#d1d5db'}`,
-                                borderRadius: '8px',
-                                fontSize: '18px',
-                                fontWeight: 700,
-                                letterSpacing: '0.15em',
+                                padding: '10px 14px',
+                                border: `1.5px solid ${error ? '#0f172a' : '#d1d5db'}`,
+                                borderRadius: '6px',
+                                fontSize: '16px',
+                                fontWeight: 600,
+                                letterSpacing: '0.1em',
                                 outline: 'none',
                                 fontFamily: 'inherit',
                                 color: '#0f172a',
@@ -115,13 +115,13 @@ function PlzSetupModal({ onSaved }: { onSaved: () => void }) {
                             }}
                         />
                         {error && (
-                            <p style={{ fontSize: '13px', color: '#ef4444', margin: 0 }}>{error}</p>
+                            <p style={{ fontSize: '12px', color: '#0f172a', margin: 0, fontWeight: 500 }}>{error}</p>
                         )}
                     </div>
 
-                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '14px 16px' }}>
-                        <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.6 }}>
-                            💡 <strong style={{ color: '#0f172a' }}>Tipp:</strong> Sie können Ihr Einsatzgebiet später jederzeit in den Einstellungen anpassen.
+                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px', padding: '10px 14px' }}>
+                        <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>
+                            <strong style={{ color: '#0f172a' }}>Info:</strong> Sie können Ihr Einsatzgebiet später in den Einstellungen anpassen.
                         </div>
                     </div>
 
@@ -132,9 +132,9 @@ function PlzSetupModal({ onSaved }: { onSaved: () => void }) {
                             background: plz.length === 5 && !saving ? '#0f172a' : '#cbd5e1',
                             color: '#fff',
                             border: 'none',
-                            padding: '14px 28px',
-                            borderRadius: '8px',
-                            fontSize: '15px',
+                            padding: '12px 20px',
+                            borderRadius: '6px',
+                            fontSize: '14px',
                             fontWeight: 700,
                             cursor: plz.length === 5 && !saving ? 'pointer' : 'not-allowed',
                             fontFamily: "'Barlow Condensed', sans-serif",

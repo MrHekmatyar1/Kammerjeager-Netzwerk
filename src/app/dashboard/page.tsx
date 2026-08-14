@@ -216,10 +216,12 @@ export default function DashboardMarketplace() {
                             <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>
                                 {lead.schaedling || 'Schädling unbekannt'} · {lead.plz}
                             </h3>
-                            <div style={{ color: '#64748b', fontSize: '13px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                                {lead.objekt_typ && <span>🏠 {lead.objekt_typ}</span>}
-                                {lead.raeume && <span>🚪 {lead.raeume} Räume</span>}
-                                {lead.befall && <span>⚠️ {lead.befall}</span>}
+                            <div style={{ color: '#64748b', fontSize: '13px', display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+                                {lead.objekt_typ && <span>{lead.objekt_typ}</span>}
+                                {lead.objekt_typ && lead.raeume && <span>·</span>}
+                                {lead.raeume && <span>{lead.raeume} Räume</span>}
+                                {(lead.objekt_typ || lead.raeume) && lead.befall && <span>·</span>}
+                                {lead.befall && <span>{lead.befall}</span>}
                             </div>
                         </div>
                         <div style={{ textAlign: 'right', flexShrink: 0 }}>

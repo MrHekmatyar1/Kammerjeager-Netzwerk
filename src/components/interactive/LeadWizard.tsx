@@ -60,7 +60,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
             color: active ? '#fff' : '#444',
             fontSize: '14px', fontWeight: active ? 600 : 400,
             cursor: 'pointer', borderRadius: '8px', fontFamily: 'inherit',
-            transition: 'all 0.15s',
+            transition: 'all 0.15s', whiteSpace: 'nowrap',
             touchAction: 'manipulation',
             WebkitTapHighlightColor: 'transparent',
             userSelect: 'none',

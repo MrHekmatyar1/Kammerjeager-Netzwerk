@@ -32,8 +32,11 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
  * Returns Infinity if either PLZ is not found in the dataset.
  */
 export function distanceBetweenPlz(plz1: string, plz2: string): number {
-    const coord1 = PLZ_COORDS[plz1.trim()];
-    const coord2 = PLZ_COORDS[plz2.trim()];
+    // Extract first 5 digits in case it's a comma/space separated list
+    const p1 = (plz1 || '').trim().slice(0, 5);
+    const p2 = (plz2 || '').trim().slice(0, 5);
+    const coord1 = PLZ_COORDS[p1];
+    const coord2 = PLZ_COORDS[p2];
     if (!coord1 || !coord2) return Infinity;
     return haversineKm(coord1[0], coord1[1], coord2[0], coord2[1]);
 }

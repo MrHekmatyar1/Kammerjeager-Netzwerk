@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendAdminNotification, sendCustomerConfirmation, sendPartnerLeadNotification } from '@/lib/email/resend';
-import { isWithinRadius } from '@/lib/plzDistance';
+import { isWithinRadius, distanceBetweenPlz } from '@/lib/plzDistance';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -46,8 +46,17 @@ async function findBestPartner(supabase: any, leadPlz: string) {
         if (l.master_id) loadMap[l.master_id] = (loadMap[l.master_id] || 0) + 1;
     });
 
-    // Возвращаем партнёра с наименьшей нагрузкой
-    return eligible.sort((a: any, b: any) => (loadMap[a.id] || 0) - (loadMap[b.id] || 0))[0];
+    // Возвращаем партнёра с наименьшей нагрузкой. При равной нагрузке — того, кто ближе.
+    return eligible.sort((a: any, b: any) => {
+        const loadA = loadMap[a.id] || 0;
+        const loadB = loadMap[b.id] || 0;
+        if (loadA !== loadB) return loadA - loadB;
+
+        // Если нагрузка равна, смотрим кто ближе
+        const dA = distanceBetweenPlz(a.plz_bereiche[0], leadPlz);
+        const dB = distanceBetweenPlz(b.plz_bereiche[0], leadPlz);
+        return dA - dB;
+    })[0];
 }
 
 export async function POST(req: NextRequest) {

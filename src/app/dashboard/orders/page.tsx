@@ -207,7 +207,7 @@ export default function DashboardOrders() {
                     const canEdit = UPDATABLE_STATUSES.includes(order.status);
 
                     return (
-                        <div key={order.id} style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+                        <div key={order.id} style={{ background: '#fff', border: '1px solid #94a3b8', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
 
                             {/* Card header */}
                             <div style={{ padding: '16px 20px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', flexWrap: 'wrap', gap: '12px' }}>

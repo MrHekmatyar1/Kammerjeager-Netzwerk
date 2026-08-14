@@ -195,7 +195,7 @@ export default function DashboardMarketplace() {
             <div style={{ display: 'grid', gap: '16px' }}>
                 {leads.map(lead => (
                     <div key={lead.id} style={{
-                        background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '20px',
+                        background: '#fff', border: '1px solid #94a3b8', borderRadius: '12px', padding: '20px',
                         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                         boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
                         transition: 'box-shadow 0.2s',

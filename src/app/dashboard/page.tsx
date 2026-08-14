@@ -164,7 +164,7 @@ export default function DashboardMarketplace() {
                     )}
                     <button
                         onClick={loadLeads}
-                        style={{ background: '#475569', border: 'none', color: '#fff', padding: '9px 17px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
+                        className="bg-slate-600 text-white border border-transparent hover:bg-white hover:text-slate-600 hover:border-slate-600 px-[17px] py-[9px] rounded-lg text-[13px] font-semibold transition-colors"
                     >
                         ↻ Aktualisieren
                     </button>
@@ -228,11 +228,7 @@ export default function DashboardMarketplace() {
                             <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '10px' }}>Provision: <strong>20%</strong></div>
                             <button
                                 onClick={() => { setSelectedLead(lead); setAgreed(false); setShowRejectModal(false); }}
-                                style={{
-                                    background: '#0f172a', color: '#fff', border: 'none', padding: '10px 22px',
-                                    borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
-                                    fontFamily: 'inherit', whiteSpace: 'nowrap'
-                                }}
+                                className="bg-slate-900 text-white border border-transparent hover:bg-white hover:text-slate-900 hover:border-slate-900 px-[22px] py-[10px] rounded-lg text-[14px] font-semibold transition-colors whitespace-nowrap"
                             >
                                 Auftrag ansehen →
                             </button>

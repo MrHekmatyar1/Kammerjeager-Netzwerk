@@ -226,18 +226,16 @@ export default function DashboardOrders() {
                                         disabled={actionLoading === order.id}
                                         onChange={e => handleStatusChange(order.id, e.target.value)}
                                         style={{
-                                            '--cfg-bg': cfg.bg,
-                                            color: cfg.color,
-                                            borderColor: cfg.border
+                                            '--cfg-color': cfg.color,
                                         } as React.CSSProperties}
-                                        className="bg-[var(--cfg-bg)] hover:bg-white focus:bg-white border px-[12px] py-[6px] rounded-full text-[12px] font-bold cursor-pointer transition-colors duration-300 outline-none"
+                                        className="bg-[var(--cfg-color)] text-white border border-transparent hover:bg-white focus:bg-white hover:text-[var(--cfg-color)] focus:text-[var(--cfg-color)] hover:border-[var(--cfg-color)] focus:border-[var(--cfg-color)] px-[12px] py-[6px] rounded-full text-[12px] font-bold cursor-pointer transition-colors duration-300 outline-none"
                                     >
                                         {UPDATABLE_STATUSES.map(s => (
-                                            <option key={s} value={s}>{STATUS_CONFIG[s]?.label || s}</option>
+                                            <option key={s} value={s} className="bg-white text-slate-900">{STATUS_CONFIG[s]?.label || s}</option>
                                         ))}
                                     </select>
                                 ) : (
-                                    <span style={{ padding: '6px 14px', borderRadius: '20px', border: `1px solid ${cfg.border}`, background: cfg.bg, color: cfg.color, fontWeight: 700, fontSize: '12px' }}>
+                                    <span style={{ padding: '6px 14px', borderRadius: '20px', border: '1px solid transparent', background: cfg.color, color: '#fff', fontWeight: 700, fontSize: '12px' }}>
                                         {cfg.label}
                                     </span>
                                 )}

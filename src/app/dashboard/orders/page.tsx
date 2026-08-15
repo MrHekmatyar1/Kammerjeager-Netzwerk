@@ -35,7 +35,7 @@ interface Lead {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; color: string; border: string }> = {
-    angenommen:        { label: 'Angenommen',         bg: '#eff6ff', color: '#1d4ed8', border: '#bfdbfe' },
+    angenommen:        { label: 'Angenommen',         bg: '#eff6ff', color: '#3b82f6', border: '#bfdbfe' },
     kontaktiert:       { label: 'Kontaktiert',         bg: '#fefce8', color: '#854d0e', border: '#fde68a' },
     termin_vereinbart: { label: 'Termin vereinbart',   bg: '#f0fdf4', color: '#166534', border: '#bbf7d0' },
     in_arbeit:         { label: 'In Arbeit',           bg: '#fff7ed', color: '#9a3412', border: '#fed7aa' },
@@ -221,19 +221,24 @@ export default function DashboardOrders() {
                                 </div>
                                 {/* Status */}
                                 {canEdit ? (
-                                    <select
-                                        value={order.status}
-                                        disabled={actionLoading === order.id}
-                                        onChange={e => handleStatusChange(order.id, e.target.value)}
-                                        style={{
-                                            '--cfg-color': cfg.color,
-                                        } as React.CSSProperties}
-                                        className="bg-[var(--cfg-color)] text-white border border-transparent hover:bg-white focus:bg-white hover:text-[var(--cfg-color)] focus:text-[var(--cfg-color)] hover:border-[var(--cfg-color)] focus:border-[var(--cfg-color)] px-[12px] py-[6px] rounded-full text-[12px] font-bold cursor-pointer transition-colors duration-300 outline-none"
-                                    >
-                                        {UPDATABLE_STATUSES.map(s => (
-                                            <option key={s} value={s} className="bg-white text-slate-900">{STATUS_CONFIG[s]?.label || s}</option>
-                                        ))}
-                                    </select>
+                                    <div className="relative flex items-center" style={{ '--cfg-color': cfg.color } as React.CSSProperties}>
+                                        <select
+                                            value={order.status}
+                                            disabled={actionLoading === order.id}
+                                            onChange={e => handleStatusChange(order.id, e.target.value)}
+                                            className="peer bg-[var(--cfg-color)] text-white border border-transparent hover:bg-white focus:bg-white hover:text-[var(--cfg-color)] focus:text-[var(--cfg-color)] hover:border-[var(--cfg-color)] focus:border-[var(--cfg-color)] pl-[14px] pr-[30px] py-[6px] rounded-full text-[12px] font-bold cursor-pointer transition-colors duration-300 outline-none appearance-none"
+                                        >
+                                            {UPDATABLE_STATUSES.map(s => (
+                                                <option key={s} value={s} className="bg-white text-slate-900">{STATUS_CONFIG[s]?.label || s}</option>
+                                            ))}
+                                        </select>
+                                        <svg 
+                                            className="absolute right-[12px] top-1/2 -translate-y-1/2 w-[14px] h-[14px] pointer-events-none text-white peer-hover:text-[var(--cfg-color)] peer-focus:text-[var(--cfg-color)] transition-colors duration-300" 
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                                        >
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </div>
                                 ) : (
                                     <span style={{ padding: '6px 14px', borderRadius: '20px', border: '1px solid transparent', background: cfg.color, color: '#fff', fontWeight: 700, fontSize: '12px' }}>
                                         {cfg.label}

@@ -236,18 +236,11 @@ export default function SettingsPage() {
                                         key={pest}
                                         type="button"
                                         onClick={() => togglePest(pest)}
-                                        style={{
-                                            background: isSelected ? '#C8102E' : '#f1f5f9',
-                                            color: isSelected ? '#fff' : '#475569',
-                                            border: `1px solid ${isSelected ? '#C8102E' : '#cbd5e1'}`,
-                                            padding: '8px 16px',
-                                            borderRadius: '20px',
-                                            fontSize: '13px',
-                                            fontWeight: 600,
-                                            cursor: 'pointer',
-                                            transition: 'all 0.2s',
-                                            fontFamily: 'inherit'
-                                        }}
+                                        className={`px-[16px] py-[8px] rounded-[20px] text-[13px] font-semibold cursor-pointer transition-all duration-300 ease-in-out border ${
+                                            isSelected
+                                                ? 'bg-[#C8102E] text-white border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E]'
+                                                : 'bg-[#f1f5f9] text-[#475569] border-[#cbd5e1] hover:bg-white hover:border-[#94a3b8]'
+                                        }`}
                                     >
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                                 {isSelected && (
@@ -350,11 +343,11 @@ export default function SettingsPage() {
                     <button 
                         type="submit" 
                         disabled={saving}
-                        style={{
-                            background: '#C8102E', color: '#fff', border: 'none', padding: '12px 32px',
-                            borderRadius: '8px', fontSize: '15px', fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer',
-                            opacity: saving ? 0.7 : 1, transition: 'all 0.2s'
-                        }}
+                        className={`px-[32px] py-[12px] rounded-lg text-[15px] font-bold transition-all duration-300 ease-in-out border ${
+                            saving 
+                                ? 'opacity-70 cursor-not-allowed bg-[#C8102E] text-white border-transparent' 
+                                : 'bg-[#C8102E] text-white border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] cursor-pointer shadow-sm hover:shadow-md'
+                        }`}
                     >
                         {saving ? 'Speichert...' : 'Einstellungen speichern'}
                     </button>

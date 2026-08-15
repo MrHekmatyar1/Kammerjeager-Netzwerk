@@ -187,7 +187,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     useEffect(() => { setDrawerOpen(false); }, [pathname]);
 
-    if (loading) return <div style={{ padding: '100px', textAlign: 'center' }}>Lädt...</div>;
+    if (loading) return <div style={{ padding: '100px', textAlign: 'center' }}>Lädt<span className="loading-dots"><span></span><span></span><span></span></span></div>;
     if (!user) return null;
 
 

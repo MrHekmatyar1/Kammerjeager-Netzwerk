@@ -132,12 +132,12 @@ export default function DashboardMarketplace() {
             <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '8px', color: '#0f172a', lineHeight: 1 }}>
                 Neue Aufträge
             </h1>
-            <p style={{ color: '#64748b', fontSize: '15px', marginBottom: '32px' }}>Verfügbare Aufträge in Ihrem Einsatzgebiet.</p>
+            <p style={{ color: '#64748b', fontSize: '15px', marginBottom: '32px' }}>Lädt Aufträge<span className="loading-dots"><span></span><span></span><span></span></span></p>
             <div style={{ display: 'grid', gap: '16px' }}>
                 {[1, 2].map(i => (
-                    <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', height: '100px', animation: 'pulse 2s infinite' }}>
-                        <div style={{ background: '#f1f5f9', height: '16px', width: '60%', borderRadius: '4px', marginBottom: '12px' }} />
-                        <div style={{ background: '#f1f5f9', height: '12px', width: '40%', borderRadius: '4px' }} />
+                    <div key={i} className="animate-pulse" style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '24px', height: '100px' }}>
+                        <div style={{ background: '#e2e8f0', height: '16px', width: '60%', borderRadius: '4px', marginBottom: '12px' }} />
+                        <div style={{ background: '#e2e8f0', height: '12px', width: '40%', borderRadius: '4px' }} />
                     </div>
                 ))}
             </div>

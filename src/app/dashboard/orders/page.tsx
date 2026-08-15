@@ -134,12 +134,12 @@ export default function DashboardOrders() {
             <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '8px', color: '#0f172a', lineHeight: 1 }}>
                 Meine Aufträge
             </h1>
-            <p style={{ color: '#64748b', fontSize: '15px', marginBottom: '32px' }}>Lädt Aufträge...</p>
+            <p style={{ color: '#64748b', fontSize: '15px', marginBottom: '32px' }}>Lädt Aufträge<span className="loading-dots"><span></span><span></span><span></span></span></p>
             <div style={{ display: 'grid', gap: '20px' }}>
                 {[1, 2].map(i => (
-                    <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', height: '120px' }}>
-                        <div style={{ background: '#f1f5f9', height: '16px', width: '50%', borderRadius: '4px', marginBottom: '12px' }} />
-                        <div style={{ background: '#f1f5f9', height: '12px', width: '35%', borderRadius: '4px' }} />
+                    <div key={i} className="animate-pulse" style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '24px', height: '120px' }}>
+                        <div style={{ background: '#e2e8f0', height: '16px', width: '50%', borderRadius: '4px', marginBottom: '12px' }} />
+                        <div style={{ background: '#e2e8f0', height: '12px', width: '35%', borderRadius: '4px' }} />
                     </div>
                 ))}
             </div>

@@ -39,7 +39,7 @@ const STATUS_CONFIG: Record<string, { label: string; bg: string; color: string; 
     kontaktiert:       { label: 'Kontaktiert',         bg: '#fefce8', color: '#854d0e', border: '#fde68a' },
     termin_vereinbart: { label: 'Termin vereinbart',   bg: '#f0fdf4', color: '#166534', border: '#bbf7d0' },
     in_arbeit:         { label: 'In Arbeit',           bg: '#fff7ed', color: '#9a3412', border: '#fed7aa' },
-    abgeschlossen:     { label: 'Abgeschlossen ✓',     bg: '#f0fdf4', color: '#166534', border: '#bbf7d0' },
+    abgeschlossen:     { label: 'Abgeschlossen',       bg: '#f0fdf4', color: '#166534', border: '#bbf7d0' },
     storniert:         { label: 'Storniert',           bg: '#f8fafc', color: '#64748b', border: '#e2e8f0' },
 };
 
@@ -272,7 +272,7 @@ export default function DashboardOrders() {
 
                                     {isCompleted ? (
                                         <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '16px' }}>
-                                            <div style={{ color: '#166534', fontWeight: 700, marginBottom: '6px' }}>✅ Auftrag abgeschlossen</div>
+                                            <div style={{ color: '#166534', fontWeight: 700, marginBottom: '6px' }}>Auftrag abgeschlossen</div>
                                             <div style={{ color: '#15803d', fontSize: '14px', marginBottom: '4px' }}>
                                                 Rechnung: <strong>{order.invoice_amount?.toFixed(2)} €</strong>
                                             </div>

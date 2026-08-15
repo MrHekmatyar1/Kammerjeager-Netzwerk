@@ -226,10 +226,11 @@ export default function DashboardOrders() {
                                         disabled={actionLoading === order.id}
                                         onChange={e => handleStatusChange(order.id, e.target.value)}
                                         style={{
-                                            padding: '6px 12px', borderRadius: '20px', border: `1px solid ${cfg.border}`,
-                                            background: cfg.bg, color: cfg.color, fontWeight: 700, fontSize: '12px',
-                                            cursor: 'pointer', fontFamily: 'inherit', outline: 'none'
-                                        }}
+                                            '--cfg-bg': cfg.bg,
+                                            color: cfg.color,
+                                            borderColor: cfg.border
+                                        } as React.CSSProperties}
+                                        className="bg-[var(--cfg-bg)] hover:bg-white focus:bg-white border px-[12px] py-[6px] rounded-full text-[12px] font-bold cursor-pointer transition-colors duration-300 outline-none"
                                     >
                                         {UPDATABLE_STATUSES.map(s => (
                                             <option key={s} value={s}>{STATUS_CONFIG[s]?.label || s}</option>

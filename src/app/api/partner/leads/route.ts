@@ -76,7 +76,7 @@ export async function PATCH(req: NextRequest) {
         }
 
         const { leadId, status } = await req.json();
-        const ALLOWED_STATUSES = ['in_arbeit', 'kontaktiert', 'termin_vereinbart'];
+        const ALLOWED_STATUSES = ['angenommen', 'in_arbeit', 'kontaktiert', 'termin_vereinbart'];
         if (!leadId || !status || !ALLOWED_STATUSES.includes(status)) {
             return NextResponse.json({ error: 'Ungültige Parameter.' }, { status: 400 });
         }

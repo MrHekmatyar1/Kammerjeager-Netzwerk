@@ -84,6 +84,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
                 {/* Retry button */}
                 <button
                     onClick={reset}
+                    className="btn-color-hover"
                     style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -97,16 +98,14 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
                         padding: '14px 32px',
                         border: 'none',
                         cursor: 'pointer',
-                        transition: 'background 0.15s',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.background = '#a50d25')}
-                    onMouseLeave={e => (e.currentTarget.style.background = '#C8102E')}
                 >
                     ↻ Erneut versuchen
                 </button>
 
                 <Link
                     href="/"
+                    className="btn-color-hover"
                     style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -119,15 +118,6 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
                         letterSpacing: '0.06em',
                         padding: '12px 28px',
                         textDecoration: 'none',
-                        transition: 'background 0.15s, color 0.15s',
-                    }}
-                    onMouseEnter={e => {
-                        e.currentTarget.style.background = '#C8102E';
-                        e.currentTarget.style.color = '#fff';
-                    }}
-                    onMouseLeave={e => {
-                        e.currentTarget.style.background = 'transparent';
-                        e.currentTarget.style.color = '#C8102E';
                     }}
                 >
                     ← Zur Startseite

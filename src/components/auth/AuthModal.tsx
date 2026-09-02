@@ -321,7 +321,7 @@ export default function AuthModal() {
                                             </div>
                                         </div>
 
-                                        <button type="submit" disabled={loading} style={{
+                                        <button type="submit" disabled={loading} className="btn-color-hover" style={{
                                             width: '100%', background: '#C8102E', color: '#fff', padding: '14px', borderRadius: '8px',
                                             fontSize: '15px', fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
                                             opacity: loading ? 0.7 : 1, fontFamily: 'inherit'

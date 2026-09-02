@@ -306,7 +306,7 @@ export default function DashboardOrders() {
                                                     <button
                                                         onClick={() => handleComplete(order.id)}
                                                         disabled={actionLoading === order.id}
-                                                        className="bg-[#C8102E] text-white border border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] px-[14px] py-0 rounded-lg text-[13px] font-bold transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                                                        className="btn-color-hover bg-[#C8102E] text-white border border-transparent px-[14px] py-0 rounded-lg text-[13px] font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                                                     >
                                                         {actionLoading === order.id ? '...' : 'Abschließen'}
                                                     </button>

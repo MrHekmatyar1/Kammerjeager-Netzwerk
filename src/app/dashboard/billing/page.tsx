@@ -99,11 +99,10 @@ export default function DashboardBilling() {
                         Es fallen nur Gebühren an, wenn Sie einen Auftrag erfolgreich abschließen.
                     </p>
 
-                    <button style={{
+                    <button className="btn-color-hover" style={{
                         width: '100%', background: '#635BFF', color: '#fff', border: 'none', padding: '12px',
                         borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
-                        transition: 'opacity 0.2s'
-                    }} onMouseEnter={e => e.currentTarget.style.opacity = '0.9'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+                    }}>
                         Mit Stripe verbinden
                     </button>
                 </div>

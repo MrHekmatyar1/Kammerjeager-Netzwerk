@@ -528,7 +528,7 @@ export default function LeadWizard({ onSuccess }: { onSuccess?: () => void } = {
                         )}
                     </div>
 
-                    <button type="button" onClick={() => setStep('contact')} style={{
+                    <button type="button" onClick={() => setStep('contact')} className="btn-color-hover" style={{
                         width: '100%', backgroundColor: '#C8102E', color: '#fff',
                         padding: '15px', fontWeight: 700, fontSize: '13px',
                         letterSpacing: '0.14em', textTransform: 'uppercase',
@@ -635,7 +635,7 @@ export default function LeadWizard({ onSuccess }: { onSuccess?: () => void } = {
                                 Mit dem Klick auf „Absenden" stimme ich zu, dass Kammerjäger-Zentrale mich unter der angegebenen Nummer per Telefon oder E-Mail kontaktieren darf.{' '}
                                 Ich habe die <a href="/datenschutz" target="_blank" style={{ color: '#C8102E', textDecoration: 'underline' }}>Datenschutzerklärung</a> gelesen.
                             </p>
-                            <button type="submit" disabled={loading} style={{
+                            <button type="submit" disabled={loading} className="btn-color-hover" style={{
                                 width: '100%', backgroundColor: loading ? '#c0c0c0' : '#C8102E',
                                 color: '#fff', padding: '15px', fontWeight: 700, fontSize: '13px',
                                 letterSpacing: '0.14em', textTransform: 'uppercase', border: 'none',

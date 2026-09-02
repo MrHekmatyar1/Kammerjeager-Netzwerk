@@ -236,10 +236,10 @@ export default function SettingsPage() {
                                         key={pest}
                                         type="button"
                                         onClick={() => togglePest(pest)}
-                                        className={`px-[16px] py-[8px] rounded-[20px] text-[13px] font-semibold cursor-pointer transition-all duration-300 ease-in-out border ${
+                                        className={`px-[16px] py-[8px] rounded-[20px] text-[13px] font-semibold cursor-pointer border ${
                                             isSelected
-                                                ? 'bg-[#C8102E] text-white border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E]'
-                                                : 'bg-[#f1f5f9] text-[#475569] border-[#cbd5e1] hover:bg-white hover:border-[#94a3b8]'
+                                                ? 'btn-color-hover bg-[#C8102E] text-white border-transparent'
+                                                : 'bg-[#f1f5f9] text-[#475569] border-[#cbd5e1] hover:bg-white hover:border-[#94a3b8] transition-colors'
                                         }`}
                                     >
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -343,11 +343,7 @@ export default function SettingsPage() {
                     <button 
                         type="submit" 
                         disabled={saving}
-                        className={`px-[32px] py-[12px] rounded-lg text-[15px] font-bold transition-all duration-300 ease-in-out border ${
-                            saving 
-                                ? 'opacity-70 cursor-not-allowed bg-[#C8102E] text-white border-transparent' 
-                                : 'bg-[#C8102E] text-white border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] cursor-pointer shadow-sm hover:shadow-md'
-                        }`}
+                        className={`btn-color-hover px-[32px] py-[12px] rounded-lg text-[15px] font-bold border bg-[#C8102E] text-white border-transparent ${saving ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer shadow-sm'}`}
                     >
                         {saving ? 'Speichert...' : 'Einstellungen speichern'}
                     </button>

@@ -102,6 +102,7 @@ export default function KundenDashboard() {
                         </p>
                         <button
                             onClick={() => window.dispatchEvent(new CustomEvent('open-quiz-modal'))}
+                            className="btn-color-hover"
                             style={{ background: '#C8102E', color: '#fff', border: 'none', padding: '12px 24px', borderRadius: '8px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}
                         >
                             Neuen Auftrag anlegen

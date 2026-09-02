@@ -132,7 +132,7 @@ export default function Hero({ cityName }: { cityName?: string }) {
                     <div className="flex flex-row items-center gap-4 flex-wrap">
                         <button
                             onClick={() => setCalcOpen(true)}
-                            className="bg-[#C8102E] text-white rounded-none font-black shadow-xl shadow-red-100 uppercase whitespace-nowrap inline-flex items-center justify-center text-[14px] px-[42px] py-[16px] leading-none cursor-pointer border-none"
+                            className="btn-color-hover bg-[#C8102E] text-white rounded-none font-black shadow-xl shadow-red-100 uppercase whitespace-nowrap inline-flex items-center justify-center text-[14px] px-[42px] py-[16px] leading-none cursor-pointer border-none"
                         >
                             Preis berechnen
                         </button>

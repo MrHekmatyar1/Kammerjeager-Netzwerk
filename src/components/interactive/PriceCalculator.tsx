@@ -503,6 +503,7 @@ function PriceWizard({ onClose }: { onClose: () => void }) {
                     <button
                         type="button"
                         onClick={() => { onClose(); window.dispatchEvent(new Event('open-quiz-modal')); }}
+                        className="btn-color-hover"
                         style={{ width: '100%', backgroundColor: '#C8102E', color: '#fff', padding: '16px', fontWeight: 700, fontSize: '13px', letterSpacing: '0.14em', textTransform: 'uppercase', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
                     >
                         Jetzt kostenloses Angebot anfordern

@@ -93,9 +93,10 @@ export default function CookieBanner() {
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <button
                         onClick={accept}
+                        className="btn-color-hover"
                         style={{
                             flex: 1,
-                            backgroundColor: '#0a0a0a', // much darker black
+                            backgroundColor: '#0a0a0a',
                             color: '#fff',
                             border: 'none',
                             borderRadius: '4px',
@@ -105,11 +106,8 @@ export default function CookieBanner() {
                             cursor: 'pointer',
                             letterSpacing: '0.06em',
                             textTransform: 'uppercase',
-                            transition: 'background 0.15s',
                             fontFamily: 'inherit',
                         }}
-                        onMouseEnter={e => (e.currentTarget.style.background = '#000000')}
-                        onMouseLeave={e => (e.currentTarget.style.background = '#0a0a0a')}
                     >
                         Akzeptieren
                     </button>

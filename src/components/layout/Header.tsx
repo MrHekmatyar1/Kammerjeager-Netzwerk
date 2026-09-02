@@ -265,7 +265,7 @@ export default function Header() {
                         </div>
                         <button
                             onClick={() => window.dispatchEvent(new CustomEvent('open-quiz-modal'))}
-                            className="bg-[#C8102E] text-white px-[22px] py-[9px] text-[14px] font-bold whitespace-nowrap shadow-[0_4px_14px_rgba(200,16,46,0.25)] rounded-none cursor-pointer border border-transparent hover:bg-white hover:text-[#C8102E] hover:border-[#C8102E] transition-all duration-300 ease-in-out"
+                            className="btn-color-hover bg-[#C8102E] text-white px-[22px] py-[9px] text-[14px] font-bold whitespace-nowrap shadow-[0_4px_14px_rgba(200,16,46,0.25)] rounded-none cursor-pointer border border-transparent"
                         >
                             Online Termin buchen
                         </button>
@@ -429,7 +429,7 @@ export default function Header() {
                     {/* CTA Button / Кнопка записи */}
                     <button
                         onClick={() => { setMobileOpen(false); window.dispatchEvent(new CustomEvent('open-quiz-modal')); }}
-                        className="mt-5 w-full bg-[#C8102E] text-white py-[15px] text-[15px] font-bold uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_14px_rgba(200,16,46,0.25)] border-none cursor-pointer"
+                        className="btn-color-hover mt-5 w-full bg-[#C8102E] text-white py-[15px] text-[15px] font-bold uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_14px_rgba(200,16,46,0.25)] border-none cursor-pointer"
                     >
                         Online Termin buchen
                     </button>

@@ -123,13 +123,11 @@ function KontaktForm() {
                     />
                 </div>
                 <div style={{ paddingTop: '6px' }}>
-                    <button type="submit" disabled={loading} style={{
+                    <button type="submit" disabled={loading} className="btn-color-hover" style={{
                         padding: '12px 28px', background: loading ? '#9ca3af' : '#C8102E', color: '#fff',
                         border: 'none', borderRadius: '6px', fontSize: '14px',
-                        fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.15s',
+                        fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer',
                     }}
-                        onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#a50d25'; }}
-                        onMouseLeave={e => { if (!loading) e.currentTarget.style.background = '#C8102E'; }}
                     >
                         {loading ? 'Wird gesendet...' : 'Anfrage senden'}
                     </button>
@@ -170,13 +168,13 @@ export default function GeschaeftskundenPage() {
                         </p>
 
                         <div className="flex items-center gap-6">
-                            <button
-                                className="bg-[#C8102E] text-white rounded-none font-black shadow-xl shadow-red-100 uppercase whitespace-nowrap inline-flex items-center justify-center hover:bg-red-800 transition-colors"
-                                style={{ fontSize: '14px', padding: '16px 42px', lineHeight: '1', border: 'none', cursor: 'pointer' }}
-                                onClick={() => document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' })}
-                            >
-                                Jetzt anfragen
-                            </button>
+                    <button
+                        className="bg-[#C8102E] btn-color-hover text-white rounded-none font-black shadow-xl shadow-red-100 uppercase whitespace-nowrap inline-flex items-center justify-center"
+                        style={{ fontSize: '14px', padding: '16px 42px', lineHeight: '1', border: 'none', cursor: 'pointer' }}
+                        onClick={() => document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' })}
+                    >
+                        Jetzt anfragen
+                    </button>
                             <a href="tel:016092376320" className="text-[#C8102E] font-bold flex items-center gap-2 hover:text-red-800 transition-colors"
                                 style={{ fontSize: '15px', textDecoration: 'none' }}>
                                 📞 0160 92376320

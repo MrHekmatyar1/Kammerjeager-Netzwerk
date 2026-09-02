@@ -106,7 +106,7 @@ function PartnerForm() {
             {error && <div style={{ padding: '11px 14px', background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', fontSize: '14px' }}>{error}</div>}
 
             {form.typ && (
-                <button type="submit" disabled={loading} style={{ backgroundColor: loading ? '#94a3b8' : '#C8102E', color: '#fff', padding: '13px', fontWeight: 700, fontSize: '14px', letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', width: '100%' }}>
+                <button type="submit" disabled={loading} className="btn-color-hover" style={{ backgroundColor: loading ? '#94a3b8' : '#C8102E', color: '#fff', padding: '13px', fontWeight: 700, fontSize: '14px', letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', width: '100%' }}>
                     {loading ? 'Wird gesendet …' : 'Jetzt Partner werden'}
                 </button>
             )}

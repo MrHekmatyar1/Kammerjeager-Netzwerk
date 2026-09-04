@@ -340,3 +340,9 @@ p {
         opacity: 0.88 !important;
     }
 }
+
+/* Скрываем кнопку-стрелку навигации когда открыта модалка */
+body[data-modal-open] .dashboard-drawer-toggle {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}

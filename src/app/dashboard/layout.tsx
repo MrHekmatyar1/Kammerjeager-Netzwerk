@@ -249,6 +249,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <button
                     onClick={() => setDrawerOpen(o => !o)}
                     aria-label="Menü"
+                    className="dashboard-drawer-toggle"
                     style={{
                         position: 'fixed',
                         top: '68px',

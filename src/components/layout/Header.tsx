@@ -10,7 +10,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 // Configuration: navigation menus and pest list
 // Конфигурация: меню навигации и список вредителей
@@ -92,8 +92,10 @@ export default function Header() {
     // Auth state
     const [user, setUser] = useState<User | null>(null);
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+    const [profileSheetOpen, setProfileSheetOpen] = useState(false);
     const supabase = createClient();
     const router = useRouter();
+    const pathname = usePathname();
 
     const isAdmin = user?.email?.toLowerCase() === 'edorkalchuk@gmail.com';
     const isKunde = user?.user_metadata?.role === 'kunden';
@@ -110,6 +112,7 @@ export default function Header() {
     const handleLogout = async () => {
         await supabase.auth.signOut();
         setProfileMenuOpen(false);
+        setProfileSheetOpen(false);
         router.push('/');
     };
 
@@ -132,8 +135,9 @@ export default function Header() {
 
     useEffect(() => {
         setMobileOpen(false);
+        setProfileSheetOpen(false);
         setActiveMenu(null);
-    }, []);
+    }, [pathname]);
 
     const handleEnter = (key: string) => {
         if (isTouch) return;
@@ -275,7 +279,10 @@ export default function Header() {
                     <div className="flex lg:hidden items-center gap-2">
                         {user ? (
                             <button
-                                onClick={() => setProfileMenuOpen(prev => !prev)}
+                                onClick={() => {
+                                    setMobileOpen(false);
+                                    setProfileSheetOpen(prev => !prev);
+                                }}
                                 className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-white shadow-sm overflow-hidden bg-slate-100 cursor-pointer p-0"
                             >
                                 {user.user_metadata?.avatar_url ? (
@@ -302,7 +309,10 @@ export default function Header() {
                         </a>
                         {/* Round hamburger button / Круглая кнопка-гамбургер */}
                         <button
-                            onClick={() => setMobileOpen(o => !o)}
+                            onClick={() => {
+                                setProfileSheetOpen(false);
+                                setMobileOpen(o => !o);
+                            }}
                             className="flex flex-col justify-center items-center gap-[5px] w-10 h-10 bg-white rounded-full border border-slate-300 cursor-pointer shrink-0 shadow-sm"
                             aria-label="Menü öffnen"
                         >
@@ -429,6 +439,70 @@ export default function Header() {
                     {/* CTA Button / Кнопка записи */}
                     <button
                         onClick={() => { setMobileOpen(false); window.dispatchEvent(new CustomEvent('open-quiz-modal')); }}
+                        className="btn-color-hover mt-5 w-full bg-[#C8102E] text-white py-[15px] text-[15px] font-bold uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_14px_rgba(200,16,46,0.25)] border-none cursor-pointer"
+                    >
+                        Online Termin buchen
+                    </button>
+
+                    <a
+                        href="tel:016092376320"
+                        className="mt-3 flex items-center justify-center gap-2 text-[16px] font-bold text-[#C8102E] py-2 no-underline"
+                    >
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        0160 92376320
+                    </a>
+                </div>
+            </div>
+
+            {/* ── MOBILE PROFILE BOTTOM SHEET ── / Мобильный боттом-шит профиля */}
+            {/* Dark overlay / Тёмная подложка */}
+            <div
+                className={`lg:hidden fixed inset-0 z-[10000] transition-all duration-300 ${
+                    profileSheetOpen ? 'bg-black/50 pointer-events-auto' : 'bg-transparent pointer-events-none'
+                }`}
+                onClick={() => setProfileSheetOpen(false)}
+            />
+
+            {/* Bottom sheet panel / Панель боттом-шита профиля */}
+            <div
+                className={`lg:hidden fixed left-0 right-0 bottom-0 z-[10001] bg-white rounded-t-[28px] shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out ${
+                    profileSheetOpen ? 'translate-y-0' : 'translate-y-full'
+                }`}
+            >
+                {/* Drag handle / Ручка */}
+                <div className="flex justify-center pt-3 pb-1">
+                    <div className="w-10 h-1 bg-slate-200 rounded-full" />
+                </div>
+
+                <div className="px-5 pt-2 pb-8">
+                    {/* Mein Konto */}
+                    <Link
+                        href={accountLink}
+                        onClick={() => setProfileSheetOpen(false)}
+                        className="flex items-center justify-between py-[15px] text-[17px] font-semibold text-[#1E293B] border-b border-slate-100 no-underline"
+                    >
+                        Mein Konto
+                        <svg width="16" height="16" fill="none" stroke="#94a3b8" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                        </svg>
+                    </Link>
+
+                    {/* Abmelden */}
+                    <button
+                        onClick={() => { setProfileSheetOpen(false); handleLogout(); }}
+                        className="flex items-center justify-between w-full py-[15px] text-[17px] font-semibold text-[#C8102E] border-b border-slate-100 bg-transparent border-none cursor-pointer px-0"
+                    >
+                        Abmelden
+                        <svg width="16" height="16" fill="none" stroke="#C8102E" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+
+                    {/* CTA Button / Кнопка записи */}
+                    <button
+                        onClick={() => { setProfileSheetOpen(false); window.dispatchEvent(new CustomEvent('open-quiz-modal')); }}
                         className="btn-color-hover mt-5 w-full bg-[#C8102E] text-white py-[15px] text-[15px] font-bold uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_14px_rgba(200,16,46,0.25)] border-none cursor-pointer"
                     >
                         Online Termin buchen

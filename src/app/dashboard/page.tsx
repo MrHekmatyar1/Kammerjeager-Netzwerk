@@ -249,8 +249,8 @@ export default function DashboardMarketplace() {
 
             {/* ── Modal: Lead Detail / Accept ──────────────────────────────── */}
             {selectedLead && !showRejectModal && (
-                <div style={{ position: 'fixed', top: '106px', left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '16px' }}>
-                    <div style={{ background: '#fff', width: '100%', maxWidth: '540px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.25)', maxHeight: 'calc(100vh - 106px - 32px)', overflowY: 'auto' }}>
+                <div style={{ position: 'fixed', top: '68px', left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.28)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000, padding: '20px 16px 16px' }}>
+                    <div style={{ background: '#fff', width: '100%', maxWidth: '540px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.25)', maxHeight: 'calc(100vh - 68px - 40px)', overflowY: 'auto' }}>
 
                         {/* Modal Header */}
                         <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -335,7 +335,7 @@ export default function DashboardMarketplace() {
 
             {/* ── Modal: Reject Reason ─────────────────────────────────────── */}
             {selectedLead && showRejectModal && (
-                <div style={{ position: 'fixed', top: '106px', left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1001, padding: '16px' }}>
+                <div style={{ position: 'fixed', top: '68px', left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.28)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 1001, padding: '20px 16px 16px' }}>
                     <div style={{ background: '#fff', width: '100%', maxWidth: '420px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.25)' }}>
                         <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0' }}>
                             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>Auftrag ablehnen</h2>

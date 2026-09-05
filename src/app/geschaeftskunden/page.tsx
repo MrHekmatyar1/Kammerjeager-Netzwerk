@@ -576,6 +576,57 @@ export default function GeschaeftskundenPage() {
                     </div>
                 </section>
 
+                {/* ── Qualitätsstandards (Trust Block) ── */}
+                <section className="w-full bg-white py-20 px-6 flex justify-center border-b border-gray-100">
+                    <div className="w-full max-w-[1200px]">
+                        <div className="text-center mb-14">
+                            <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, color: '#1a1a1a', textTransform: 'uppercase', letterSpacing: '-0.02em', lineHeight: 1.05 }}>
+                                Unsere Qualitätsstandards im Netzwerk
+                            </h2>
+                            <p className="text-gray-500 mt-4 max-w-2xl mx-auto text-[16px] font-medium" style={{ lineHeight: 1.6 }}>
+                                Wir vermitteln Ihre Anfrage ausschließlich an geprüfte Fachbetriebe, die höchste Ansprüche an Sicherheit, Diskretion und Dokumentation erfüllen.
+                            </p>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[
+                                {
+                                    icon: <svg className="w-8 h-8 text-[#C8102E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.956 11.956 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>,
+                                    title: 'Geprüfte Betriebe',
+                                    desc: 'Zusammenarbeit ausschließlich mit zertifizierten Kammerjägern (z.B. IHK-geprüft).'
+                                },
+                                {
+                                    icon: <svg className="w-8 h-8 text-[#C8102E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>,
+                                    title: 'HACCP-Konform',
+                                    desc: 'Unsere Partner arbeiten nach strengen Lebensmittel- und Hygienestandards.'
+                                },
+                                {
+                                    icon: <svg className="w-8 h-8 text-[#C8102E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>,
+                                    title: '100% Diskretion',
+                                    desc: 'Einsatz in neutralen Fahrzeugen ohne Werbeaufdruck zum Schutz Ihres Rufs.'
+                                },
+                                {
+                                    icon: <svg className="w-8 h-8 text-[#C8102E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
+                                    title: 'Schnelle Hilfe',
+                                    desc: 'Direkte Weiterleitung an lokale Experten für sofortige Hilfe vor Ort.'
+                                }
+                            ].map((item, idx) => (
+                                <div key={idx} className="flex flex-col items-center text-center p-8 bg-[#f8f8f8] rounded-2xl transition-transform hover:-translate-y-1">
+                                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+                                        {item.icon}
+                                    </div>
+                                    <h3 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '24px', fontWeight: 800, textTransform: 'uppercase', color: '#1a1a1a', marginBottom: '10px' }}>
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-[#666] text-[15px] leading-relaxed font-medium">
+                                        {item.desc}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
                 {/* ── Branchenlösungen (Отрасли - Orkin Style) ── */}
                 <section className="w-full bg-[#f8f8f8] py-24 px-6 flex justify-center">
                     <div className="w-full max-w-[1200px]">

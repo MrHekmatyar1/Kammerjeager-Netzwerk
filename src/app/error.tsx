@@ -2,11 +2,29 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import React from 'react';
 
 interface ErrorPageProps {
     error: Error & { digest?: string };
     reset: () => void;
 }
+
+const btnStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    width: '210px',
+    height: '42px',
+    boxSizing: 'border-box',
+    fontWeight: 700,
+    fontSize: '13px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+};
 
 export default function ErrorPage({ error, reset }: ErrorPageProps) {
     useEffect(() => {
@@ -37,13 +55,13 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
             <h1
                 style={{
                     fontFamily: "'Barlow Condensed', sans-serif",
-                    fontSize: 'clamp(1.8rem, 5vw, 3rem)',
+                    fontSize: 'clamp(1.4rem, 4vw, 2.2rem)',
                     fontWeight: 900,
                     color: '#1E293B',
                     textTransform: 'uppercase',
                     letterSpacing: '-0.02em',
                     textAlign: 'center',
-                    marginBottom: '14px',
+                    marginBottom: '10px',
                 }}
             >
                 Etwas ist schiefgelaufen
@@ -51,34 +69,26 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
 
             <p
                 style={{
-                    fontSize: '16px',
+                    fontSize: '14px',
                     color: '#64748b',
                     textAlign: 'center',
-                    maxWidth: '440px',
-                    lineHeight: 1.6,
-                    marginBottom: '32px',
+                    maxWidth: '380px',
+                    lineHeight: 1.55,
+                    marginBottom: '26px',
                 }}
             >
                 Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.
             </p>
 
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                 <button
                     onClick={reset}
                     className="btn-color-hover"
                     style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '8px',
+                        ...btnStyle,
                         backgroundColor: '#C8102E',
                         color: '#fff',
-                        fontWeight: 700,
-                        fontSize: '14px',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.06em',
-                        padding: '14px 28px',
-                        border: 'none',
-                        cursor: 'pointer',
+                        border: '2px solid #C8102E',
                     }}
                 >
                     Erneut versuchen
@@ -88,17 +98,10 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
                     href="/"
                     className="btn-color-hover"
                     style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        border: '2px solid #C8102E',
+                        ...btnStyle,
+                        backgroundColor: '#fff',
                         color: '#C8102E',
-                        fontWeight: 700,
-                        fontSize: '14px',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.06em',
-                        padding: '12px 24px',
-                        textDecoration: 'none',
+                        border: '2px solid #C8102E',
                     }}
                 >
                     &larr; Zur Startseite

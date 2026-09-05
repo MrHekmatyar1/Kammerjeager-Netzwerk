@@ -6,10 +6,10 @@ import Footer from '@/components/layout/Footer';
 
 const inp: React.CSSProperties = {
     width: '100%',
-    padding: '13px 0 10px',
+    padding: '9px 0 7px',
     border: 'none',
     borderBottom: '1px solid #c8c8c8',
-    fontSize: '15px',
+    fontSize: '14px',
     color: '#1a1a1a',
     background: 'transparent',
     outline: 'none',
@@ -20,10 +20,10 @@ const inp: React.CSSProperties = {
 
 const sel: React.CSSProperties = {
     width: '100%',
-    padding: '13px 24px 10px 0',
+    padding: '9px 20px 7px 0',
     border: 'none',
     borderBottom: '1px solid #c8c8c8',
-    fontSize: '15px',
+    fontSize: '14px',
     color: '#1a1a1a',
     background: 'transparent',
     outline: 'none',
@@ -35,16 +35,16 @@ const sel: React.CSSProperties = {
     WebkitAppearance: 'none',
     backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'right 4px center',
-    backgroundSize: '14px',
+    backgroundPosition: 'right 2px center',
+    backgroundSize: '13px',
 };
 
 const txtArea: React.CSSProperties = {
     width: '100%',
-    padding: '13px 0 10px',
+    padding: '9px 0 7px',
     border: 'none',
     borderBottom: '1px solid #c8c8c8',
-    fontSize: '15px',
+    fontSize: '14px',
     color: '#1a1a1a',
     background: 'transparent',
     outline: 'none',
@@ -52,13 +52,13 @@ const txtArea: React.CSSProperties = {
     borderRadius: '0',
     boxSizing: 'border-box',
     resize: 'vertical',
-    minHeight: '68px',
+    minHeight: '52px',
 };
 
 const fieldLbl: React.CSSProperties = {
-    fontSize: '11px',
+    fontSize: '10.5px',
     fontWeight: 700,
-    letterSpacing: '0.13em',
+    letterSpacing: '0.12em',
     textTransform: 'uppercase',
     color: '#888',
     display: 'block',
@@ -138,20 +138,20 @@ function KontaktForm() {
                 border: '1.5px solid #c8cdd5',
                 boxShadow: '0 8px 30px rgba(0,0,0,0.04)',
                 width: '100%',
-                padding: '60px 24px',
+                padding: '48px 24px',
                 textAlign: 'center',
             }}>
                 <h3 style={{
                     fontFamily: "'Barlow Condensed', sans-serif",
-                    fontSize: '32px',
+                    fontSize: '28px',
                     fontWeight: 900,
                     textTransform: 'uppercase',
                     color: '#1E293B',
-                    margin: '0 0 12px',
+                    margin: '0 0 10px',
                 }}>
                     Vielen Dank für Ihre Anfrage!
                 </h3>
-                <p style={{ color: '#64748b', fontSize: '15px', lineHeight: 1.6, maxWidth: '440px', margin: '0 auto' }}>
+                <p style={{ color: '#64748b', fontSize: '14px', lineHeight: 1.6, maxWidth: '420px', margin: '0 auto' }}>
                     Ihre Anfrage für <strong>{form.unternehmen}</strong> wurde erfolgreich übermittelt.<br />
                     Unser B2B-Team wird sich schnellstmöglich mit Ihnen in Verbindung setzen.
                 </p>
@@ -167,26 +167,26 @@ function KontaktForm() {
             boxShadow: '0 8px 30px rgba(0,0,0,0.04)',
             width: '100%',
             overflow: 'hidden',
-            padding: '40px 36px 44px',
+            padding: '32px 28px 36px',
             boxSizing: 'border-box',
         }}>
-            <div style={{ marginBottom: '32px' }}>
-                <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#C8102E', marginBottom: '8px' }}>
+            <div style={{ marginBottom: '24px' }}>
+                <p style={{ fontSize: '10.5px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C8102E', marginBottom: '6px' }}>
                     Gewerbekunden &amp; B2B
                 </p>
                 <h2 style={{
                     fontFamily: "'Barlow Condensed', sans-serif",
-                    fontSize: 'clamp(2rem, 3.5vw, 2.6rem)',
+                    fontSize: 'clamp(1.75rem, 3vw, 2.25rem)',
                     fontWeight: 900,
                     color: '#1a1a1a',
                     textTransform: 'uppercase',
                     letterSpacing: '-0.02em',
                     lineHeight: 1.1,
-                    margin: '0 0 10px',
+                    margin: '0 0 8px',
                 }}>
                     Interesse? Kontaktieren Sie uns!
                 </h2>
-                <p style={{ fontSize: '14px', color: '#666', lineHeight: 1.6, margin: 0 }}>
+                <p style={{ fontSize: '13px', color: '#666', lineHeight: 1.5, margin: 0 }}>
                     Füllen Sie das folgende Formular aus und wir rufen Sie zeitnah für eine diskrete Beratung zurück.<br />
                     Oder rufen Sie uns direkt an unter:{' '}
                     <a href="tel:016092376320" style={{ color: '#C8102E', fontWeight: 700, textDecoration: 'none' }}>
@@ -196,8 +196,8 @@ function KontaktForm() {
                 </p>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <Field label="Name des Betriebs / Firma" required>
                         <input
                             type="text"
@@ -222,7 +222,7 @@ function KontaktForm() {
                     </Field>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <Field label="Art des Betriebs / Branche">
                         <select name="branche" value={form.branche} onChange={set('branche')} style={sel}>
                             <option value="Gastronomie & Café">Gastronomie &amp; Café</option>
@@ -249,7 +249,7 @@ function KontaktForm() {
                     </Field>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <Field label="Telefonnummer für Rückruf" required>
                         <input
                             type="tel"
@@ -302,8 +302,8 @@ function KontaktForm() {
                     </div>
                 )}
 
-                <div>
-                    <p style={{ fontSize: '12px', color: '#999', lineHeight: 1.7, marginBottom: '20px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '4px' }}>
+                    <p style={{ fontSize: '11.5px', color: '#999', lineHeight: 1.6, marginBottom: '16px', textAlign: 'center', maxWidth: '480px' }}>
                         Mit dem Klick auf „Anfrage absenden" stimme ich zu, dass Kammerjäger-Zentrale mich unter der angegebenen Nummer per Telefon oder E-Mail kontaktieren darf.{' '}
                         Ich habe die <a href="/datenschutz" target="_blank" style={{ color: '#C8102E', textDecoration: 'underline' }}>Datenschutzerklärung</a> gelesen.
                     </p>
@@ -312,13 +312,14 @@ function KontaktForm() {
                         disabled={loading}
                         className="btn-color-hover"
                         style={{
-                            width: '100%',
+                            width: 'auto',
+                            minWidth: '220px',
                             backgroundColor: loading ? '#c0c0c0' : '#C8102E',
                             color: '#fff',
-                            padding: '16px',
+                            padding: '13px 36px',
                             fontWeight: 700,
-                            fontSize: '13px',
-                            letterSpacing: '0.14em',
+                            fontSize: '12px',
+                            letterSpacing: '0.12em',
                             textTransform: 'uppercase',
                             border: 'none',
                             cursor: loading ? 'not-allowed' : 'pointer',
@@ -454,8 +455,8 @@ export default function GeschaeftskundenPage() {
                 </section>
 
                 {/* ── Контактная форма ── */}
-                <section id="kontakt" className="w-full flex flex-col items-center px-6 pt-[80px] pb-[140px]" style={{ background: '#f1f4f8' }}>
-                    <div className="w-full max-w-[850px]">
+                <section id="kontakt" className="w-full flex flex-col items-center px-6 pt-[60px] pb-[110px]" style={{ background: '#f1f4f8' }}>
+                    <div className="w-full max-w-[720px]">
                         <KontaktForm />
                     </div>
                 </section>

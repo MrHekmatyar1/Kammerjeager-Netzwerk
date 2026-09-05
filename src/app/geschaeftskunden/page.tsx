@@ -647,36 +647,14 @@ export default function GeschaeftskundenPage() {
                 <section className="w-full bg-[#f4f4f4] py-20 px-6 flex justify-center border-t border-b border-gray-200">
                     <div className="w-full max-w-[900px] flex flex-col md:flex-row items-center justify-center gap-10 md:gap-14">
                         
-                        {/* Badge / Seal SVG */}
-                        <div className="shrink-0 flex items-center justify-center">
-                            <svg width="180" height="180" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                {/* Outer dashed ring */}
-                                <circle cx="100" cy="100" r="92" stroke="#1a1a1a" strokeWidth="2.5" strokeDasharray="6 6" />
-                                {/* Inner solid rings */}
-                                <circle cx="100" cy="100" r="76" stroke="#1a1a1a" strokeWidth="3" />
-                                <circle cx="100" cy="100" r="72" fill="#e6f2f2" />
-                                <circle cx="100" cy="100" r="48" fill="white" stroke="#1a1a1a" strokeWidth="2.5" />
-                                
-                                {/* Central Icon (Shield) */}
-                                <path d="M100 66L120 74V94C120 113.5 111.5 130.5 100 138C88.5 130.5 80 113.5 80 94V74L100 66Z" fill="#C8102E" stroke="#1a1a1a" strokeWidth="2.5" strokeLinejoin="round" />
-                                <path d="M91 101L98 108L111 90" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-                                
-                                {/* Top Text */}
-                                <path id="curveUp" d="M 32,100 A 68,68 0 0,1 168,100" fill="transparent" />
-                                <text width="200" style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '18px', fontWeight: 900, letterSpacing: '0.08em' }} fill="#1a1a1a">
-                                    <textPath href="#curveUp" startOffset="50%" textAnchor="middle">100% ZUFRIEDENHEIT</textPath>
-                                </text>
-                                
-                                {/* Bottom Text */}
-                                <path id="curveDown" d="M 32,100 A 68,68 0 0,0 168,100" fill="transparent" />
-                                <text width="200" style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '18px', fontWeight: 900, letterSpacing: '0.08em' }} fill="#1a1a1a">
-                                    <textPath href="#curveDown" startOffset="50%" textAnchor="middle">NETZWERK GARANTIE</textPath>
-                                </text>
-                                
-                                {/* Decorative Diamonds */}
-                                <rect x="18" y="96" width="8" height="8" transform="rotate(45 18 96)" fill="#4db8b8" />
-                                <rect x="182" y="96" width="8" height="8" transform="rotate(45 182 96)" fill="#4db8b8" />
-                            </svg>
+                        {/* Minimalist Badge with Logo */}
+                        <div className="shrink-0 relative flex items-center justify-center w-36 h-36 md:w-44 md:h-44 rounded-full border-4 border-[#1a1a1a] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.08)] p-8">
+                            <img src="/logo_k.png" alt="Netzwerk Garantie" className="w-full h-full object-contain [clip-path:circle(45%_at_50%_50%)]" />
+                            <div className="absolute -bottom-1 -right-1 bg-[#C8102E] text-white rounded-full p-2.5 border-4 border-white shadow-md">
+                                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                         </div>
 
                         {/* Content */}

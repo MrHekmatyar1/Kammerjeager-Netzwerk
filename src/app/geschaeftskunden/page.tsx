@@ -692,6 +692,57 @@ export default function GeschaeftskundenPage() {
                     </div>
                 </section>
 
+                {/* ── Unsere Garantie (Orkin Style) ── */}
+                <section className="w-full bg-[#f4f4f4] py-20 px-6 flex justify-center border-t border-b border-gray-200">
+                    <div className="w-full max-w-[900px] flex flex-col md:flex-row items-center justify-center gap-10 md:gap-14">
+                        
+                        {/* Badge / Seal SVG */}
+                        <div className="shrink-0 flex items-center justify-center">
+                            <svg width="180" height="180" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                {/* Outer dashed ring */}
+                                <circle cx="100" cy="100" r="92" stroke="#1a1a1a" strokeWidth="2.5" strokeDasharray="6 6" />
+                                {/* Inner solid rings */}
+                                <circle cx="100" cy="100" r="76" stroke="#1a1a1a" strokeWidth="3" />
+                                <circle cx="100" cy="100" r="72" fill="#e6f2f2" />
+                                <circle cx="100" cy="100" r="48" fill="white" stroke="#1a1a1a" strokeWidth="2.5" />
+                                
+                                {/* Central Icon (Shield) */}
+                                <path d="M100 66L120 74V94C120 113.5 111.5 130.5 100 138C88.5 130.5 80 113.5 80 94V74L100 66Z" fill="#C8102E" stroke="#1a1a1a" strokeWidth="2.5" strokeLinejoin="round" />
+                                <path d="M91 101L98 108L111 90" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+                                
+                                {/* Top Text */}
+                                <path id="curveUp" d="M 32,100 A 68,68 0 0,1 168,100" fill="transparent" />
+                                <text width="200" style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '18px', fontWeight: 900, letterSpacing: '0.08em' }} fill="#1a1a1a">
+                                    <textPath href="#curveUp" startOffset="50%" textAnchor="middle">100% ZUFRIEDENHEIT</textPath>
+                                </text>
+                                
+                                {/* Bottom Text */}
+                                <path id="curveDown" d="M 32,100 A 68,68 0 0,0 168,100" fill="transparent" />
+                                <text width="200" style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '18px', fontWeight: 900, letterSpacing: '0.08em' }} fill="#1a1a1a">
+                                    <textPath href="#curveDown" startOffset="50%" textAnchor="middle">NETZWERK GARANTIE</textPath>
+                                </text>
+                                
+                                {/* Decorative Diamonds */}
+                                <rect x="18" y="96" width="8" height="8" transform="rotate(45 18 96)" fill="#4db8b8" />
+                                <rect x="182" y="96" width="8" height="8" transform="rotate(45 182 96)" fill="#4db8b8" />
+                            </svg>
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 border-l-[5px] border-[#4db8b8] pl-6 md:pl-10">
+                            <p style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#C8102E', marginBottom: '12px' }}>
+                                Die Kammerjäger-Zentrale Garantie
+                            </p>
+                            <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 900, color: '#1a1a1a', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '18px' }}>
+                                Wir sind erst zufrieden, wenn Sie es sind.
+                            </h2>
+                            <p className="text-gray-600 text-[16px] leading-relaxed font-medium">
+                                Mit strengen Qualitätskontrollen unserer Partner und einer <strong className="text-black">30-Tage-Nachbesserungsgarantie</strong> sorgen wir dafür, dass Ihr Betrieb schädlingsfrei bleibt. Ihre Zufriedenheit und der Schutz Ihres guten Rufs sind unser oberstes Ziel.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
                 {/* ── Контактная форма ── */}
                 <section id="kontakt" className="w-full flex flex-col items-center px-6 pt-[60px] pb-[110px]" style={{ background: '#f1f4f8' }}>
                     <div className="w-full max-w-[720px]">

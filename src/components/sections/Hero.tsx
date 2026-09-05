@@ -14,7 +14,7 @@ const ROTATING_WORDS = [
     'Ameisen', 'Flöhe', 'Bettwanzen', 'Tauben',
 ];
 
-export default function Hero({ cityName }: { cityName?: string }) {
+export default function Hero({ cityName, serviceName }: { cityName?: string; serviceName?: string }) {
     const [wordIndex, setWordIndex] = useState(0);
     const [animKey, setAnimKey] = useState(0);
     const [isExiting, setIsExiting] = useState(false);
@@ -119,9 +119,13 @@ export default function Hero({ cityName }: { cityName?: string }) {
                         <span className="block">Der Beste Experte</span>
                         <span className="block">gegen</span>
                         <span className="block text-[#C8102E] overflow-hidden leading-[1.05]">
-                            <span key={animKey} className={`inline-block ${isExiting ? 'hero-word-exit' : 'hero-word-enter'}`}>
-                                {ROTATING_WORDS[wordIndex]}.
-                            </span>
+                            {serviceName ? (
+                                <span>{serviceName}.</span>
+                            ) : (
+                                <span key={animKey} className={`inline-block ${isExiting ? 'hero-word-exit' : 'hero-word-enter'}`}>
+                                    {ROTATING_WORDS[wordIndex]}.
+                                </span>
+                            )}
                         </span>
                     </h1>
 

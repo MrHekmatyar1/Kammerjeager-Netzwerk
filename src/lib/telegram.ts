@@ -14,7 +14,9 @@ export async function sendTelegramMessage(chatId: string, message: string) {
             body: JSON.stringify({
                 chat_id: chatId,
                 text: message,
-                parse_mode: 'HTML'
+                parse_mode: 'HTML',
+                disable_web_page_preview: true,
+                link_preview_options: { is_disabled: true },
             })
         });
 

@@ -53,6 +53,7 @@ const txtArea: React.CSSProperties = {
     boxSizing: 'border-box',
     resize: 'vertical',
     minHeight: '52px',
+    maxHeight: '140px',
 };
 
 const fieldLbl: React.CSSProperties = {
@@ -291,6 +292,7 @@ function KontaktForm() {
                         value={form.nachricht}
                         onChange={set('nachricht')}
                         rows={3}
+                        maxLength={1000}
                         placeholder="Zusätzliche Angaben, z. B. betroffene Bereiche (Küche, Gastraum, Lager), gewünschte Uhrzeiten für diskreten Einsatz..."
                         style={txtArea}
                     />

@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
         // Найти мастера по email или user_id
         const { data: master, error: masterError } = await supabase
             .from('masters')
-            .select('id, name, email')
+            .select('id, name, email, billing_model')
             .or(`email.eq.${user.email},user_id.eq.${user.id}`)
             .maybeSingle();
 

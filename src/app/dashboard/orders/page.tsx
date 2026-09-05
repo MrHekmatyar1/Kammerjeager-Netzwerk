@@ -46,10 +46,43 @@ const STATUS_CONFIG: Record<string, { label: string; bg: string; color: string; 
 const UPDATABLE_STATUSES = ['angenommen', 'kontaktiert', 'termin_vereinbart', 'in_arbeit'];
 const ALL_STATUSES = ['angenommen', 'kontaktiert', 'termin_vereinbart', 'in_arbeit', 'abgeschlossen', 'storniert'];
 
+function getLeadPricing(schaedling: string | null, billingModel: string): { label: string, value: string, isFixed: boolean, numericValue: number } {
+    const defaultPricing = { label: 'Provision', value: '20%', isFixed: false, numericValue: 0 };
+    if (billingModel !== 'pay_per_lead') return defaultPricing;
+    if (!schaedling) return defaultPricing;
+    
+    const s = schaedling.toLowerCase();
+    if (s.includes('beratung') || s.includes('sonstige')) return defaultPricing;
+
+    const fixedPrices: Record<string, number> = {
+        'wespen': 35,
+        'ameisen': 40,
+        'flöhe': 50,
+        'floh': 50,
+        'mäuse': 60,
+        'ratten': 60,
+        'schaben': 60,
+        'kakerlaken': 60,
+        'marder': 70,
+        'tauben': 70,
+        'bettwanzen': 90,
+    };
+
+    for (const key of Object.keys(fixedPrices)) {
+        if (s.includes(key)) {
+            const price = fixedPrices[key] as number;
+            return { label: 'Fixpreis', value: `${price} €`, isFixed: true, numericValue: price };
+        }
+    }
+
+    return defaultPricing;
+}
+
 export default function DashboardOrders() {
     const [orders, setOrders] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [billingModel, setBillingModel] = useState<string>('commission');
     const [filterStatus, setFilterStatus] = useState<string>('active'); // 'active' | 'all'
     const [closingId, setClosingId] = useState<number | null>(null);
     const [invoiceInput, setInvoiceInput] = useState<Record<number, string>>({});
@@ -68,8 +101,9 @@ export default function DashboardOrders() {
                 setError(d.error || 'Fehler beim Laden.');
                 return;
             }
-            const { leads } = await res.json();
+            const { leads, master } = await res.json();
             setOrders(leads || []);
+            if (master?.billing_model) setBillingModel(master.billing_model);
         } catch {
             setError('Netzwerkfehler.');
         } finally {
@@ -97,13 +131,20 @@ export default function DashboardOrders() {
     };
 
     const handleComplete = async (leadId: number) => {
-        const amount = invoiceInput[leadId];
-        if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
-            alert('Bitte geben Sie einen gültigen Rechnungsbetrag ein.');
-            return;
+        const pricing = getLeadPricing(orders.find(o => o.id === leadId)?.schaedling || null, billingModel);
+        
+        let amount = '0';
+        if (!pricing.isFixed) {
+            amount = invoiceInput[leadId] || '0';
+            if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
+                alert('Bitte geben Sie einen gültigen Rechnungsbetrag ein.');
+                return;
+            }
+            const commission = (Number(amount) * 0.2).toFixed(2);
+            if (!confirm(`Rechnungsbetrag: ${Number(amount).toFixed(2)} €\nProvision (20%): ${commission} €\n\nMöchten Sie den Auftrag jetzt abschließen?`)) return;
+        } else {
+            if (!confirm(`Möchten Sie diesen Auftrag jetzt abschließen?\n(Leadgebühr: ${pricing.value})`)) return;
         }
-        const commission = (Number(amount) * 0.2).toFixed(2);
-        if (!confirm(`Rechnungsbetrag: ${Number(amount).toFixed(2)} €\nProvision (20%): ${commission} €\n\nMöchten Sie den Auftrag jetzt abschließen?`)) return;
 
         setActionLoading(leadId);
         try {
@@ -273,12 +314,20 @@ export default function DashboardOrders() {
                                     {isCompleted ? (
                                         <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '16px' }}>
                                             <div style={{ color: '#166534', fontWeight: 700, marginBottom: '6px' }}>Auftrag abgeschlossen</div>
-                                            <div style={{ color: '#15803d', fontSize: '14px', marginBottom: '4px' }}>
-                                                Rechnung: <strong>{order.invoice_amount?.toFixed(2)} €</strong>
-                                            </div>
-                                            <div style={{ color: '#15803d', fontSize: '13px' }}>
-                                                Provision (20%): <strong>{order.commission_amount?.toFixed(2)} €</strong>
-                                            </div>
+                                            {getLeadPricing(order.schaedling, billingModel).isFixed ? (
+                                                <div style={{ color: '#15803d', fontSize: '14px', marginBottom: '4px' }}>
+                                                    Leadgebühr (Fixpreis): <strong>{getLeadPricing(order.schaedling, billingModel).value}</strong>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <div style={{ color: '#15803d', fontSize: '14px', marginBottom: '4px' }}>
+                                                        Rechnung: <strong>{order.invoice_amount?.toFixed(2)} €</strong>
+                                                    </div>
+                                                    <div style={{ color: '#15803d', fontSize: '13px' }}>
+                                                        Provision (20%): <strong>{order.commission_amount?.toFixed(2)} €</strong>
+                                                    </div>
+                                                </>
+                                            )}
                                             {order.completed_at && (
                                                 <div style={{ color: '#4ade80', fontSize: '12px', marginTop: '6px' }}>
                                                     {new Date(order.completed_at).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
@@ -291,32 +340,47 @@ export default function DashboardOrders() {
                                         </div>
                                     ) : isClosing ? (
                                         <div>
-                                            <div style={{ marginBottom: '10px' }}>
-                                                <label style={{ display: 'block', fontSize: '12px', color: '#475569', fontWeight: 600, marginBottom: '6px' }}>Finaler Rechnungsbetrag (€)</label>
-                                                <div style={{ display: 'flex', gap: '8px' }}>
-                                                    <input
-                                                        type="number"
-                                                        min="0"
-                                                        step="0.01"
-                                                        placeholder="z.B. 350"
-                                                        value={invoiceInput[order.id] || ''}
-                                                        onChange={e => setInvoiceInput(prev => ({ ...prev, [order.id]: e.target.value }))}
-                                                        style={{ flex: 1, padding: '8px 12px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '15px', outline: 'none', fontFamily: 'inherit' }}
-                                                    />
+                                            {!getLeadPricing(order.schaedling, billingModel).isFixed ? (
+                                                <div style={{ marginBottom: '10px' }}>
+                                                    <label style={{ display: 'block', fontSize: '12px', color: '#475569', fontWeight: 600, marginBottom: '6px' }}>Finaler Rechnungsbetrag (€)</label>
+                                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                                        <input
+                                                            type="number"
+                                                            min="0"
+                                                            step="0.01"
+                                                            placeholder="z.B. 350"
+                                                            value={invoiceInput[order.id] || ''}
+                                                            onChange={e => setInvoiceInput(prev => ({ ...prev, [order.id]: e.target.value }))}
+                                                            style={{ flex: 1, padding: '8px 12px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '15px', outline: 'none', fontFamily: 'inherit' }}
+                                                        />
+                                                        <button
+                                                            onClick={() => handleComplete(order.id)}
+                                                            disabled={actionLoading === order.id}
+                                                            className="btn-color-hover bg-[#C8102E] text-white border border-transparent px-[14px] py-0 rounded-lg text-[13px] font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                                                        >
+                                                            {actionLoading === order.id ? '...' : 'Abschließen'}
+                                                        </button>
+                                                    </div>
+                                                    {invoiceInput[order.id] && !isNaN(Number(invoiceInput[order.id])) && Number(invoiceInput[order.id]) > 0 && (
+                                                        <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px' }}>
+                                                            Provision: <strong>{(Number(invoiceInput[order.id]) * 0.2).toFixed(2)} €</strong>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <div style={{ marginBottom: '10px' }}>
+                                                    <div style={{ fontSize: '13px', color: '#475569', marginBottom: '8px' }}>
+                                                        Dieser Auftrag läuft über den Fixpreis ({getLeadPricing(order.schaedling, billingModel).value}). Bitte schließen Sie den Auftrag ab.
+                                                    </div>
                                                     <button
                                                         onClick={() => handleComplete(order.id)}
                                                         disabled={actionLoading === order.id}
-                                                        className="btn-color-hover bg-[#C8102E] text-white border border-transparent px-[14px] py-0 rounded-lg text-[13px] font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                                                        className="btn-color-hover w-full bg-[#C8102E] text-white border border-transparent px-[14px] py-[10px] rounded-lg text-[13px] font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                                                     >
-                                                        {actionLoading === order.id ? '...' : 'Abschließen'}
+                                                        {actionLoading === order.id ? '...' : 'Auftrag endgültig abschließen'}
                                                     </button>
                                                 </div>
-                                                {invoiceInput[order.id] && !isNaN(Number(invoiceInput[order.id])) && Number(invoiceInput[order.id]) > 0 && (
-                                                    <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px' }}>
-                                                        Provision: <strong>{(Number(invoiceInput[order.id]) * 0.2).toFixed(2)} €</strong>
-                                                    </div>
-                                                )}
-                                            </div>
+                                            )}
                                             <button onClick={() => setClosingId(null)} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '13px', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}>
                                                 Abbrechen
                                             </button>
@@ -324,8 +388,10 @@ export default function DashboardOrders() {
                                     ) : (
                                         <div>
                                             <p style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '12px', lineHeight: 1.5 }}>
-                                                Nach Abschluss der Arbeiten tragen Sie den Rechnungsbetrag ein.<br />
-                                                Provision: <strong>20%</strong> des Endpreises.
+                                                {getLeadPricing(order.schaedling, billingModel).isFixed 
+                                                    ? `Kosten: ${getLeadPricing(order.schaedling, billingModel).value} Fixpreis pro Lead.`
+                                                    : `Nach Abschluss der Arbeiten tragen Sie den Rechnungsbetrag ein.\nProvision: 20% des Endpreises.`
+                                                }
                                             </p>
                                             <button
                                                 onClick={() => setClosingId(order.id)}

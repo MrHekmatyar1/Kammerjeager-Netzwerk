@@ -44,10 +44,43 @@ function getUrgencyColor(dateStr: string): string {
     return '#64748b';
 }
 
+function getLeadPricing(schaedling: string | null, billingModel: string): { label: string, value: string } {
+    const defaultPricing = { label: 'Provision', value: '20%' };
+    if (billingModel !== 'pay_per_lead') return defaultPricing;
+    if (!schaedling) return defaultPricing;
+    
+    const s = schaedling.toLowerCase();
+    if (s.includes('beratung') || s.includes('sonstige')) return defaultPricing;
+
+    const fixedPrices: Record<string, string> = {
+        'wespen': '35 €',
+        'ameisen': '40 €',
+        'flöhe': '50 €',
+        'floh': '50 €',
+        'mäuse': '60 €',
+        'ratten': '60 €',
+        'schaben': '60 €',
+        'kakerlaken': '60 €',
+        'marder': '70 €',
+        'tauben': '70 €',
+        'bettwanzen': '90 €',
+    };
+
+    for (const key of Object.keys(fixedPrices)) {
+        if (s.includes(key)) {
+            const price = fixedPrices[key] as string;
+            return { label: 'Fixpreis', value: price };
+        }
+    }
+
+    return defaultPricing;
+}
+
 export default function DashboardMarketplace() {
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [billingModel, setBillingModel] = useState<string>('commission');
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
     const [actionLoading, setActionLoading] = useState(false);
     const [rejectReason, setRejectReason] = useState('');
@@ -68,8 +101,11 @@ export default function DashboardMarketplace() {
                 setError(d.error || 'Fehler beim Laden.');
                 return;
             }
-            const { leads: data } = await res.json();
+            const { leads: data, master } = await res.json();
             setLeads(data || []);
+            if (master?.billing_model) {
+                setBillingModel(master.billing_model);
+            }
         } catch {
             setError('Netzwerkfehler. Bitte Seite neu laden.');
         } finally {
@@ -240,7 +276,9 @@ export default function DashboardMarketplace() {
                             </div>
                         </div>
                         <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                            <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '10px' }}>Provision: <strong>20%</strong></div>
+                            <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '10px' }}>
+                                {getLeadPricing(lead.schaedling, billingModel).label}: <strong>{getLeadPricing(lead.schaedling, billingModel).value}</strong>
+                            </div>
                             <button
                                 onClick={() => { setSelectedLead(lead); setAgreed(false); setShowRejectModal(false); }}
                                 className="bg-slate-900 text-white border border-transparent hover:bg-white hover:text-slate-900 hover:border-slate-900 px-[22px] py-[10px] rounded-lg text-[14px] font-semibold transition-colors whitespace-nowrap"

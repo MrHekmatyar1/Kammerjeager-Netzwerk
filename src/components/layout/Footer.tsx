@@ -31,6 +31,7 @@ export default function Footer() {
                     <Link href="/fuer-schaedlingsbekaempfer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Für Schädlingsbekämpfer</Link>
                     <Link href="/impressum" style={{ color: '#9ca3af', textDecoration: 'none' }}>Impressum</Link>
                     <Link href="/agb" style={{ color: '#9ca3af', textDecoration: 'none' }}>AGB</Link>
+                    <Link href="/agb-partner" style={{ color: '#9ca3af', textDecoration: 'none' }}>AGB für Partner</Link>
                     <Link href="/datenschutz" style={{ color: '#9ca3af', textDecoration: 'none' }}>Datenschutz</Link>
                     <a href={`mailto:${feedbackEmail}?subject=${feedbackSubject}`} style={{ color: '#9ca3af', textDecoration: 'none' }}>Ideen & Verbesserungen</a>
                 </div>

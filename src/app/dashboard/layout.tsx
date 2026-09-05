@@ -209,11 +209,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 return (
                     <Link key={item.name} href={item.href} style={{
                         display: 'block',
-                        padding: '13px 20px',
+                        padding: '13px 18px',
                         color: active ? '#C8102E' : '#475569',
                         fontWeight: active ? 700 : 500,
                         textDecoration: 'none',
                         fontSize: '15px',
+                        whiteSpace: 'nowrap',
                         background: active ? 'rgba(200,16,46,0.08)' : 'transparent',
                         borderBottom: '1px solid #cbd5e1',
                     }}>
@@ -224,10 +225,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <button
                 onClick={async () => { await supabase.auth.signOut(); router.push('/'); }}
                 style={{
-                    display: 'block', textAlign: 'left', padding: '13px 20px',
+                    display: 'block', textAlign: 'left', padding: '13px 18px',
                     background: 'none', border: 'none',
                     color: '#94a3b8', fontWeight: 500, fontSize: '14px',
                     cursor: 'pointer', fontFamily: 'inherit', marginTop: '4px',
+                    whiteSpace: 'nowrap',
                 }}
             >
                 Abmelden
@@ -294,7 +296,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     position: 'fixed',
                     top: '68px',
                     left: 0,
-                    width: '240px',
+                    width: 'fit-content',
+                    minWidth: '205px',
+                    maxWidth: 'calc(100vw - 32px)',
                     zIndex: 9997,
                     background: '#fff',
                     borderRight: '1px solid #e2e8f0',
@@ -304,9 +308,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     transform: drawerOpen ? 'translateY(0)' : 'translateY(-120%)',
                     transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                 }}>
-                    <div style={{ padding: '20px 20px 12px', borderBottom: '1px solid #f1f5f9' }}>
+                    <div style={{ padding: '18px 18px 12px', borderBottom: '1px solid #f1f5f9' }}>
                         <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>Partner-Portal</div>
-                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a', wordBreak: 'break-all' }}>{user.email}</div>
+                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap' }}>{user.email}</div>
                     </div>
                     <div style={{ paddingBottom: '12px' }}>
                         <NavLinks />

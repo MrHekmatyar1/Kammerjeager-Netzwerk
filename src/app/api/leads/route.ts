@@ -102,14 +102,19 @@ export async function POST(req: NextRequest) {
         if (supabaseUrl && supabaseKey) {
             const supabase = createClient(supabaseUrl, supabaseKey);
 
-            // 1. Умный выбор партнёра
-            const assignedMaster = await findBestPartner(supabase, entry.plz as string);
+            const isB2B = entry.kunde_typ === 'B2B' || entry.kunde_typ === 'Firmenkunde' || entry.kunde_typ === 'Öffentlicher Sektor';
+
+            // 1. Умный выбор партнёра: B2B-запросы от кафе и фирм не отдаем автоматически, они идут напрямую в админку
+            let assignedMaster = null;
+            if (!isB2B) {
+                assignedMaster = await findBestPartner(supabase, entry.plz as string);
+            }
 
             if (assignedMaster) {
                 entry.master_id = assignedMaster.id;
                 entry.status = 'neu'; // назначен, ожидает принятия
             } else {
-                entry.status = 'unassigned'; // никого нет в этой зоне
+                entry.status = isB2B ? 'neu' : 'unassigned'; // B2B заявки сразу готовы к обработке админом
             }
 
             // 2. Сохраняем лид
@@ -119,7 +124,7 @@ export async function POST(req: NextRequest) {
                 console.error('[leads] Supabase error:', dbError);
                 await saveFallback(entry);
             } else {
-                // 3. Уведомляем партнёра (Telegram + Email)
+                // 3. Уведомляем партнёра (только для обычных Privatkunde лидов)
                 if (assignedMaster) {
                     // Telegram
                     if (assignedMaster.telegram_chat_id) {
@@ -140,7 +145,7 @@ export async function POST(req: NextRequest) {
                         sendPartnerLeadNotification(assignedMaster.email, assignedMaster.name || '', entry)
                             .catch(e => console.error('[Email Partner] Error:', e));
                     }
-                } else {
+                } else if (!isB2B) {
                     // Нет партнёра — уведомляем Admin
                     console.warn(`[leads] No partner found for PLZ ${entry.plz} — lead is UNASSIGNED`);
                 }
@@ -159,16 +164,41 @@ export async function POST(req: NextRequest) {
         
         if (adminTgId) {
             const { sendTelegramMessage } = await import('@/lib/telegram');
-            const masterName = entry.master_id ? 'Ein Partner' : 'UNASSIGNED'; // simplification for fallback
-            const tgMessage = 
-                `<b>Neuer Lead eingegangen!</b>\n\n` +
-                `<b>Name:</b> ${entry.name}\n` +
-                `<b>Telefon:</b> <a href="tel:${entry.telefon}">${entry.telefon}</a>\n` +
-                `<b>PLZ:</b> ${entry.plz}\n` +
-                `<b>Schädling:</b> ${entry.schaedling || 'Nicht angegeben'}\n` +
-                `<b>Kundentyp:</b> ${entry.kunde_typ || '-'}\n` +
-                `<b>Status:</b> ${masterName}\n\n` +
-                `<a href="https://kammerjaeger-structon.de/admin">Admin Dashboard öffnen</a>`;
+            const isB2B = entry.kunde_typ === 'B2B' || entry.kunde_typ === 'Firmenkunde' || entry.kunde_typ === 'Öffentlicher Sektor';
+            const masterName = isB2B
+                ? 'Direkt Admin (B2B)'
+                : (entry.master_id ? 'Zugewiesen an Partner' : 'UNASSIGNED');
+
+            let tgMessage = '';
+            if (isB2B) {
+                tgMessage =
+                    `<b>Neue B2B-Anfrage (Gewerbe / Café / Firma)!</b>\n\n` +
+                    `<b>Unternehmen:</b> ${entry.firma || 'Nicht angegeben'}\n` +
+                    `<b>Ansprechpartner:</b> ${entry.name}\n` +
+                    `<b>Telefon:</b> <a href="tel:${entry.telefon}">${entry.telefon}</a>\n` +
+                    `<b>E-Mail:</b> ${entry.email}\n` +
+                    `<b>PLZ:</b> ${entry.plz}\n` +
+                    (entry.objekt_typ ? `<b>Branche:</b> ${entry.objekt_typ}\n` : '') +
+                    `<b>Schädling / Bedarf:</b> ${entry.schaedling || 'Gewerblicher Schädlingsschutz'}\n` +
+                    (entry.zugang_beschreibung ? `<b>Nachricht:</b>\n${entry.zugang_beschreibung}\n\n` : '\n') +
+                    `<b>Status:</b> ${masterName}\n\n` +
+                    `<a href="https://kammerjaeger-structon.de/admin">Admin Dashboard öffnen</a>`;
+            } else {
+                tgMessage =
+                    `<b>Neuer Lead eingegangen!</b>\n\n` +
+                    `<b>Name:</b> ${entry.name}\n` +
+                    (entry.firma ? `<b>Firma:</b> ${entry.firma}\n` : '') +
+                    `<b>Telefon:</b> <a href="tel:${entry.telefon}">${entry.telefon}</a>\n` +
+                    `<b>E-Mail:</b> ${entry.email}\n` +
+                    `<b>PLZ:</b> ${entry.plz}\n` +
+                    `<b>Schädling:</b> ${entry.schaedling || 'Nicht angegeben'}\n` +
+                    `<b>Kundentyp:</b> ${entry.kunde_typ || '-'}\n` +
+                    (entry.objekt_typ ? `<b>Objekt:</b> ${entry.objekt_typ}\n` : '') +
+                    (entry.zugang_beschreibung ? `<b>Details:</b> ${entry.zugang_beschreibung}\n` : '') +
+                    `<b>Status:</b> ${masterName}\n\n` +
+                    `<a href="https://kammerjaeger-structon.de/admin">Admin Dashboard öffnen</a>`;
+            }
+
             try {
                 await sendTelegramMessage(adminTgId, tgMessage);
             } catch (e) {

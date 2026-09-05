@@ -26,20 +26,33 @@ const labelStyle: React.CSSProperties = {
     marginBottom: '6px',
 };
 
+const selectStyle: React.CSSProperties = {
+    ...inputStyle,
+    cursor: 'pointer',
+    backgroundColor: '#fff',
+};
+
 function KontaktForm() {
     const [form, setForm] = useState({
-        name: '', unternehmen: '', telefon: '', email: '', plz: '', nachricht: '',
+        name: '',
+        unternehmen: '',
+        branche: 'Gastronomie & Café',
+        schaedling: 'Schaben / Kakerlaken',
+        telefon: '',
+        email: '',
+        plz: '',
+        nachricht: '',
     });
     const [sent, setSent] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const set = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    const set = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
         setForm(p => ({ ...p, [e.target.name]: e.target.value }));
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!form.name || !form.telefon || !form.email || !form.plz) {
-            alert('Bitte füllen Sie alle Pflichtfelder aus.');
+        if (!form.name || !form.unternehmen || !form.telefon || !form.email || !form.plz) {
+            alert('Bitte füllen Sie alle Pflichtfelder aus (Name, Firma, Telefon, E-Mail, PLZ).');
             return;
         }
         setLoading(true);
@@ -54,6 +67,8 @@ function KontaktForm() {
                     email: form.email,
                     plz: form.plz,
                     kundeTyp: 'B2B',
+                    objektTyp: form.branche,
+                    schaedling: form.schaedling,
                     zugangInfo: form.nachricht
                 })
             });
@@ -73,8 +88,11 @@ function KontaktForm() {
                     fontFamily: "'Barlow Condensed', sans-serif",
                     fontSize: '28px', fontWeight: 900,
                     textTransform: 'uppercase', color: '#1E293B', margin: '0 0 8px',
-                }}>Vielen Dank!</h3>
-                <p style={{ color: '#64748b' }}>Wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
+                }}>Vielen Dank für Ihre Anfrage!</h3>
+                <p style={{ color: '#64748b', fontSize: '15px', lineHeight: 1.6 }}>
+                    Ihre Anfrage für <strong>{form.unternehmen}</strong> wurde erfolgreich übermittelt.<br />
+                    Unser B2B-Team wird sich schnellstmöglich mit Ihnen in Verbindung setzen.
+                </p>
             </div>
         );
     }
@@ -82,7 +100,7 @@ function KontaktForm() {
     return (
         <div>
             <p style={{ fontSize: '14px', color: '#374151', marginBottom: '6px' }}>
-                Füllen Sie das folgende Formular aus und wir rufen Sie innerhalb von 24 Stunden zurück.
+                Füllen Sie das folgende Formular aus und wir rufen Sie zeitnah für eine diskrete Beratung zurück.
             </p>
             <p style={{ fontSize: '14px', color: '#374151', marginBottom: '24px' }}>
                 Oder rufen Sie uns direkt an unter:{' '}
@@ -92,44 +110,131 @@ function KontaktForm() {
                 (Mo – Fr, 9–18 Uhr)
             </p>
 
-            <form onSubmit={handleSubmit}
-                style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
-            >
-                <div>
-                    <label style={labelStyle}>Vor- und Nachname</label>
-                    <input name="name" value={form.name} onChange={set} style={inputStyle} />
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label style={labelStyle}>Name des Betriebs / Firma *</label>
+                        <input
+                            name="unternehmen"
+                            value={form.unternehmen}
+                            onChange={set}
+                            style={inputStyle}
+                            placeholder="z. B. Café Müller / Bistro Sun"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label style={labelStyle}>Ansprechpartner (Vor- und Nachname) *</label>
+                        <input
+                            name="name"
+                            value={form.name}
+                            onChange={set}
+                            style={inputStyle}
+                            placeholder="Max Mustermann"
+                            required
+                        />
+                    </div>
                 </div>
-                <div>
-                    <label style={labelStyle}>Name Ihres Unternehmens</label>
-                    <input name="unternehmen" value={form.unternehmen} onChange={set} style={inputStyle} />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label style={labelStyle}>Art des Betriebs / Branche</label>
+                        <select name="branche" value={form.branche} onChange={set} style={selectStyle}>
+                            <option value="Gastronomie & Café">Gastronomie &amp; Café</option>
+                            <option value="Bäckerei / Konditorei">Bäckerei / Konditorei</option>
+                            <option value="Hotel & Gastgewerbe">Hotel &amp; Gastgewerbe</option>
+                            <option value="Büro, Kanzlei & Praxis">Büro, Kanzlei &amp; Praxis</option>
+                            <option value="Einzelhandel & Supermarkt">Einzelhandel &amp; Supermarkt</option>
+                            <option value="Lager & Logistik">Lager &amp; Logistik</option>
+                            <option value="Lebensmittelverarbeitung">Lebensmittelverarbeitung</option>
+                            <option value="Sonstiges Kleingewerbe">Sonstiges Kleingewerbe</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style={labelStyle}>Schädling / Anliegen</label>
+                        <select name="schaedling" value={form.schaedling} onChange={set} style={selectStyle}>
+                            <option value="Schaben / Kakerlaken">Schaben / Kakerlaken (Akut)</option>
+                            <option value="Mäuse / Ratten">Mäuse / Ratten (Nager)</option>
+                            <option value="Fliegen / Vorratsschädlinge">Fliegen / Vorratsschädlinge</option>
+                            <option value="Bettwanzen">Bettwanzen</option>
+                            <option value="Wespen / Hornissen">Wespen / Hornissen</option>
+                            <option value="Regelmäßiges Monitoring & HACCP">Regelmäßiges Monitoring &amp; HACCP</option>
+                            <option value="Akuter Befall (Art unklar)">Akuter Befall (Art unklar)</option>
+                            <option value="Sonstiger Bedarf">Sonstiger Bedarf</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label style={labelStyle}>Telefonnummer</label>
-                    <input name="telefon" type="tel" value={form.telefon} onChange={set} style={inputStyle} />
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label style={labelStyle}>Telefonnummer für Rückruf *</label>
+                        <input
+                            name="telefon"
+                            type="tel"
+                            value={form.telefon}
+                            onChange={set}
+                            style={inputStyle}
+                            placeholder="0170 1234567"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label style={labelStyle}>Postleitzahl (PLZ) *</label>
+                        <input
+                            name="plz"
+                            type="text"
+                            value={form.plz}
+                            onChange={set}
+                            style={inputStyle}
+                            placeholder="12345"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label style={labelStyle}>E-Mail-Adresse *</label>
+                        <input
+                            name="email"
+                            type="email"
+                            value={form.email}
+                            onChange={set}
+                            style={inputStyle}
+                            placeholder="kontakt@betrieb.de"
+                            required
+                        />
+                    </div>
                 </div>
+
                 <div>
-                    <label style={labelStyle}>Postleitzahl (PLZ)</label>
-                    <input name="plz" type="text" value={form.plz} onChange={set} style={inputStyle} placeholder="12345" />
-                </div>
-                <div>
-                    <label style={labelStyle}>E-Mail-Adresse</label>
-                    <input name="email" type="email" value={form.email} onChange={set} style={inputStyle} />
-                </div>
-                <div>
-                    <label style={labelStyle}>Anmerkungen (optional)</label>
-                    <textarea name="nachricht" value={form.nachricht} onChange={set} rows={4}
+                    <label style={labelStyle}>Details / Nachricht (optional)</label>
+                    <textarea
+                        name="nachricht"
+                        value={form.nachricht}
+                        onChange={set}
+                        rows={4}
                         style={{ ...inputStyle, resize: 'vertical' }}
-                        placeholder="Schildern Sie uns mehr weitere relevante Informationen..."
+                        placeholder="Zusätzliche Angaben, z. B. betroffene Bereiche (Küche, Gastraum, Lager), gewünschte Uhrzeiten für diskreten Einsatz..."
                     />
                 </div>
+
                 <div style={{ paddingTop: '6px' }}>
-                    <button type="submit" disabled={loading} className="btn-color-hover" style={{
-                        padding: '12px 28px', background: loading ? '#9ca3af' : '#C8102E', color: '#fff',
-                        border: 'none', borderRadius: '6px', fontSize: '14px',
-                        fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer',
-                    }}
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="btn-color-hover"
+                        style={{
+                            padding: '14px 32px',
+                            background: loading ? '#9ca3af' : '#C8102E',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '6px',
+                            fontSize: '15px',
+                            fontWeight: 700,
+                            cursor: loading ? 'not-allowed' : 'pointer',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                        }}
                     >
-                        {loading ? 'Wird gesendet...' : 'Anfrage senden'}
+                        {loading ? 'Wird gesendet...' : 'B2B-Anfrage unverbindlich senden'}
                     </button>
                 </div>
             </form>

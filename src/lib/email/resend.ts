@@ -177,9 +177,35 @@ export async function cancelScheduledEmail(emailId: string) {
 }
 
 export async function sendAdminNotification(lead: any) {
-    const subject = `NEUER LEAD: ${lead.schaedling || 'Schädlingsbekämpfung'} in ${lead.plz}`;
+    const isB2B = lead.kunde_typ === 'B2B' || lead.kunde_typ === 'Firmenkunde' || lead.kunde_typ === 'Öffentlicher Sektor' || !!lead.firma;
+    const subject = isB2B
+        ? `B2B-ANFRAGE: ${lead.firma || lead.name} (${lead.schaedling || 'Gewerbe'}) in ${lead.plz}`
+        : `NEUER LEAD: ${lead.schaedling || 'Schädlingsbekämpfung'} in ${lead.plz}`;
     
-    const html = `
+    const html = isB2B ? `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+            <div style="background: #1e293b; color: #ffffff; padding: 20px; text-align: center;">
+                <h2 style="margin: 0; font-size: 20px;">Neue B2B-Anfrage (Gewerbe / Firma / Cafe)</h2>
+            </div>
+            <div style="padding: 24px;">
+                <p><strong>Firma / Betrieb:</strong> ${lead.firma || 'Nicht angegeben'}</p>
+                <p><strong>Ansprechpartner:</strong> ${lead.name}</p>
+                <p><strong>Branche / Objekt:</strong> ${lead.objekt_typ || '-'}</p>
+                <p><strong>Schädling / Bedarf:</strong> ${lead.schaedling || '-'}</p>
+                <p><strong>Telefon:</strong> <a href="tel:${lead.telefon}">${lead.telefon}</a></p>
+                <p><strong>E-Mail:</strong> <a href="mailto:${lead.email}">${lead.email}</a></p>
+                <p><strong>PLZ / Ort:</strong> ${lead.plz}</p>
+                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 16px 0;" />
+                <p><strong>Nachricht / Details:</strong></p>
+                <p style="background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0; white-space: pre-wrap;">${lead.zugang_beschreibung || 'Keine zusätzliche Nachricht angegeben.'}</p>
+                <div style="margin-top: 24px; text-align: center;">
+                    <a href="https://kammerjaeger-structon.de/admin" style="display: inline-block; background: #C8102E; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">
+                        Im Admin Dashboard öffnen
+                    </a>
+                </div>
+            </div>
+        </div>
+    ` : `
         <h2>Neue Kundenanfrage</h2>
         <p><strong>PLZ/Ort:</strong> ${lead.plz}</p>
         <p><strong>Name:</strong> ${lead.name}</p>
@@ -228,9 +254,22 @@ export async function sendAdminNotification(lead: any) {
 export async function sendCustomerConfirmation(lead: any) {
     if (!lead.email) return { success: false, error: 'No customer email' };
 
-    const subject = 'Ihre Anfrage bei Kammerjäger Structon';
+    const isB2B = lead.kunde_typ === 'B2B' || lead.kunde_typ === 'Firmenkunde' || lead.kunde_typ === 'Öffentlicher Sektor' || !!lead.firma;
+    const subject = isB2B
+        ? 'Ihre B2B-Anfrage bei Kammerjäger Structon'
+        : 'Ihre Anfrage bei Kammerjäger Structon';
     
-    const html = `
+    const html = isB2B ? `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+            <h2 style="color: #C8102E;">Vielen Dank für Ihre Geschäftskunden-Anfrage!</h2>
+            <p>Hallo <strong>${lead.name}</strong>,</p>
+            <p>wir haben Ihre Anfrage für <strong>${lead.firma || 'Ihr Unternehmen'}</strong> zum Thema <strong>${lead.schaedling || 'Schädlingsschutz'}</strong> erfolgreich entgegengenommen.</p>
+            <p>Unser B2B-Team wird sich zeitnah telefonisch unter <strong>${lead.telefon}</strong> bei Ihnen melden, um die Situation diskret abzustimmen und eine maßgeschneiderte Lösung anzubieten.</p>
+            <br />
+            <p>Mit freundlichen Grüßen,</p>
+            <p><strong>Ihr Kammerjäger Structon Team</strong></p>
+        </div>
+    ` : `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
             <h2 style="color: #C8102E;">Vielen Dank für Ihre Anfrage, ${lead.name}!</h2>
             <p>Wir haben Ihr Problem mit <strong>${lead.schaedling || 'Schädlingen'}</strong> in unserem System erfasst.</p>

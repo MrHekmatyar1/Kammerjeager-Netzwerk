@@ -596,7 +596,7 @@ export default function GeschaeftskundenPage() {
                                 {
                                     title: 'Hotellerie & Gewerbe',
                                     desc: 'Schnelle und unauffällige Lösungen für höchste Gästezufriedenheit. Unsere Techniker arbeiten diskret in neutraler Kleidung.',
-                                    img: '/b2b/b2b_hotel.png',
+                                    img: '/b2b/b2b_hotel.jpg',
                                     link: 'Mehr erfahren'
                                 },
                                 {

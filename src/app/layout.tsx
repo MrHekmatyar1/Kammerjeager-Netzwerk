@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import ClientLayout from '@/components/layout/ClientLayout';
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
+import { Analytics } from '@vercel/analytics/next';
 
 const SITE_URL = 'https://kammerjaeger-structon.de';
 
@@ -68,6 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* Google Analytics — lädt nur wenn Tracking-ID gesetzt ist */}
             <GoogleAnalytics />
             <ClientLayout>{children}</ClientLayout>
+            <Analytics />
         </body>
         </html>
     );

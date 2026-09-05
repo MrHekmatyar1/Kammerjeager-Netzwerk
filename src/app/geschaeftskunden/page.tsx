@@ -207,6 +207,7 @@ function KontaktForm() {
         branche: 'Gastronomie & Café',
         sonstigesBranche: '',
         schaedling: 'Schaben / Kakerlaken',
+        sonstigesSchaedling: '',
         telefon: '',
         plz: '',
         email: '',
@@ -230,6 +231,10 @@ function KontaktForm() {
             setError('Bitte beschreiben Sie kurz die Tätigkeit / Branche Ihres Betriebs.');
             return;
         }
+        if (form.schaedling === 'Sonstiger Bedarf' && !form.sonstigesSchaedling.trim()) {
+            setError('Bitte beschreiben Sie kurz Ihr Anliegen bzw. den Schädling.');
+            return;
+        }
         setError('');
         setLoading(true);
         try {
@@ -237,9 +242,16 @@ function KontaktForm() {
                 ? `Sonstiges (${form.sonstigesBranche.trim()})`
                 : form.branche;
 
+            const resolvedSchaedling = form.schaedling === 'Sonstiger Bedarf' && form.sonstigesSchaedling.trim()
+                ? `Sonstiges (${form.sonstigesSchaedling.trim()})`
+                : form.schaedling;
+
             const notes = [
                 form.branche === 'Sonstiges Kleingewerbe' && form.sonstigesBranche.trim()
                     ? `Gewerbe: ${form.sonstigesBranche.trim()}`
+                    : null,
+                form.schaedling === 'Sonstiger Bedarf' && form.sonstigesSchaedling.trim()
+                    ? `Schädling-Detail: ${form.sonstigesSchaedling.trim()}`
                     : null,
                 form.nachricht.trim() || null
             ].filter(Boolean).join(' | ');
@@ -255,7 +267,7 @@ function KontaktForm() {
                     plz: form.plz,
                     kundeTyp: 'B2B',
                     objektTyp: resolvedBranche,
-                    schaedling: form.schaedling,
+                    schaedling: resolvedSchaedling,
                     zugangInfo: notes || null,
                 })
             });
@@ -381,19 +393,41 @@ function KontaktForm() {
                     </Field>
                 </div>
 
-                {form.branche === 'Sonstiges Kleingewerbe' && (
-                    <div style={{ animation: 'b2bFadeIn 0.25s ease' }}>
-                        <Field label="Genaue Tätigkeit / Was macht Ihr Betrieb?" required>
-                            <input
-                                type="text"
-                                name="sonstigesBranche"
-                                value={form.sonstigesBranche}
-                                onChange={set('sonstigesBranche')}
-                                required
-                                placeholder="z. B. Autowerkstatt, Kosmetikstudio, Schreinerei, Dienstleistungen …"
-                                style={inp}
-                            />
-                        </Field>
+                {(form.branche === 'Sonstiges Kleingewerbe' || form.schaedling === 'Sonstiger Bedarf') && (
+                    <div
+                        className={
+                            form.branche === 'Sonstiges Kleingewerbe' && form.schaedling === 'Sonstiger Bedarf'
+                                ? 'grid grid-cols-1 md:grid-cols-2 gap-5'
+                                : 'w-full'
+                        }
+                        style={{ animation: 'b2bFadeIn 0.25s ease' }}
+                    >
+                        {form.branche === 'Sonstiges Kleingewerbe' && (
+                            <Field label="Genaue Tätigkeit / Was macht Ihr Betrieb?" required>
+                                <input
+                                    type="text"
+                                    name="sonstigesBranche"
+                                    value={form.sonstigesBranche}
+                                    onChange={set('sonstigesBranche')}
+                                    required
+                                    placeholder="z. B. Autowerkstatt, Kosmetikstudio, Schreinerei, Dienstleistungen …"
+                                    style={inp}
+                                />
+                            </Field>
+                        )}
+                        {form.schaedling === 'Sonstiger Bedarf' && (
+                            <Field label="Genaues Anliegen / Welcher Schädling?" required>
+                                <input
+                                    type="text"
+                                    name="sonstigesSchaedling"
+                                    value={form.sonstigesSchaedling}
+                                    onChange={set('sonstigesSchaedling')}
+                                    required
+                                    placeholder="z. B. Ameisen, Taubenabwehr, Marder, Holzschädlinge …"
+                                    style={inp}
+                                />
+                            </Field>
+                        )}
                     </div>
                 )}
 

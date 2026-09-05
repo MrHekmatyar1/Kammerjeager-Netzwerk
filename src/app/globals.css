@@ -346,3 +346,14 @@ body[data-modal-open] .dashboard-drawer-toggle {
     opacity: 0 !important;
     pointer-events: none !important;
 }
+
+/* Скрытие полосы прокрутки с сохранением скролла пальцем / колесом */
+.no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+.no-scrollbar {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+}

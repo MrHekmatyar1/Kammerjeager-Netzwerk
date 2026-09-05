@@ -79,14 +79,19 @@ export default function DashboardMarketplace() {
 
     useEffect(() => { loadLeads(); }, [loadLeads]);
 
-    // Синхронизируем data-modal-open на body чтобы layout мог скрывать стрелку
+    // Синхронизируем data-modal-open на body чтобы layout мог скрывать стрелку, и блокируем фоновый скролл
     useEffect(() => {
         if (selectedLead) {
             document.body.setAttribute('data-modal-open', '1');
+            document.body.style.overflow = 'hidden';
         } else {
             document.body.removeAttribute('data-modal-open');
+            document.body.style.overflow = '';
         }
-        return () => { document.body.removeAttribute('data-modal-open'); };
+        return () => {
+            document.body.removeAttribute('data-modal-open');
+            document.body.style.overflow = '';
+        };
     }, [selectedLead]);
 
     const handleAccept = async () => {
@@ -249,14 +254,14 @@ export default function DashboardMarketplace() {
 
             {/* ── Modal: Lead Detail / Accept ──────────────────────────────── */}
             {selectedLead && !showRejectModal && (
-                <div style={{ position: 'fixed', top: '68px', left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.28)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000, padding: '20px 16px 16px' }}>
-                    <div style={{ background: '#fff', width: '100%', maxWidth: '540px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.25)', maxHeight: 'calc(100vh - 68px - 40px)', overflowY: 'auto' }}>
+                <div style={{ position: 'fixed', top: '68px', left: 0, right: 0, bottom: 0, height: 'calc(100dvh - 68px)', background: 'rgba(15,23,42,0.28)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000, padding: '12px 16px 36px', boxSizing: 'border-box' }}>
+                    <div className="no-scrollbar" style={{ background: '#fff', width: '100%', maxWidth: '540px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.25)', maxHeight: 'calc(100dvh - 68px - 48px)', overflowY: 'auto', scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
 
                         {/* Modal Header */}
-                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ padding: '16px 20px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
                                 <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>Auftragsdetails</h2>
-                                <p style={{ color: '#64748b', fontSize: '13px', margin: '6px 0 0' }}>
+                                <p style={{ color: '#64748b', fontSize: '13px', margin: '4px 0 0' }}>
                                     {selectedLead.schaedling} · PLZ {selectedLead.plz} · {timeAgo(selectedLead.created_at)}
                                 </p>
                             </div>
@@ -264,8 +269,8 @@ export default function DashboardMarketplace() {
                         </div>
 
                         {/* Lead Details */}
-                        <div style={{ padding: '20px 24px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                        <div style={{ padding: '16px 20px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                                 {[
                                     { label: 'Schädling', value: selectedLead.schaedling },
                                     { label: 'PLZ', value: selectedLead.plz },
@@ -276,25 +281,25 @@ export default function DashboardMarketplace() {
                                     { label: 'Fläche', value: selectedLead.flaeche },
                                     { label: 'Zugang', value: selectedLead.zugang },
                                 ].filter(f => f.value).map(f => (
-                                    <div key={f.label} style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '10px 14px' }}>
-                                        <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '3px' }}>{f.label}</div>
+                                    <div key={f.label} style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '9px 12px' }}>
+                                        <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '2px' }}>{f.label}</div>
                                         <div style={{ fontSize: '14px', color: '#0f172a', fontWeight: 600 }}>{f.value}</div>
                                     </div>
                                 ))}
                             </div>
                             {selectedLead.zugang_beschreibung && (
-                                <div style={{ marginTop: '12px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '10px 14px' }}>
-                                    <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', marginBottom: '3px' }}>Zugangsbeschreibung</div>
+                                <div style={{ marginTop: '10px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '9px 12px' }}>
+                                    <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', marginBottom: '2px' }}>Zugangsbeschreibung</div>
                                     <div style={{ fontSize: '14px', color: '#0f172a' }}>{selectedLead.zugang_beschreibung}</div>
                                 </div>
                             )}
                         </div>
 
                         {/* Legal agreement */}
-                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0' }}>
-                            <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '14px', marginBottom: '16px' }}>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', marginBottom: '6px' }}>Rechtliche Vereinbarung</div>
-                                <p style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6, margin: 0 }}>
+                        <div style={{ padding: '16px 20px', borderBottom: '1px solid #e2e8f0' }}>
+                            <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '12px 14px', marginBottom: '14px' }}>
+                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>Rechtliche Vereinbarung</div>
+                                <p style={{ fontSize: '13px', color: '#475569', lineHeight: 1.55, margin: 0 }}>
                                     Durch Annahme verpflichten Sie sich, im Falle einer Barzahlung den <strong>korrekten und vollständigen Rechnungsbetrag</strong> im Portal einzutragen.
                                     Bei Falschangaben wird eine <strong style={{ color: '#b91c1c' }}>Vertragsstrafe von 480 € + entgangene Provision</strong> fällig.
                                 </p>
@@ -306,14 +311,14 @@ export default function DashboardMarketplace() {
                                     onChange={e => setAgreed(e.target.checked)}
                                     style={{ marginTop: '2px', width: '16px', height: '16px', accentColor: '#C8102E', flexShrink: 0 }}
                                 />
-                                <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: 500, lineHeight: 1.5 }}>
+                                <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: 500, lineHeight: 1.45 }}>
                                     Ich akzeptiere die Bedingungen und bestätige, den korrekten Rechnungsbetrag einzutragen.
                                 </span>
                             </label>
                         </div>
 
                         {/* Action buttons */}
-                        <div style={{ padding: '20px 24px', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                        <div style={{ padding: '16px 20px', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
                             <button
                                 onClick={() => setShowRejectModal(true)}
                                 disabled={actionLoading}
@@ -335,12 +340,12 @@ export default function DashboardMarketplace() {
 
             {/* ── Modal: Reject Reason ─────────────────────────────────────── */}
             {selectedLead && showRejectModal && (
-                <div style={{ position: 'fixed', top: '68px', left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.28)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 1001, padding: '20px 16px 16px' }}>
-                    <div style={{ background: '#fff', width: '100%', maxWidth: '420px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.25)' }}>
-                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0' }}>
+                <div style={{ position: 'fixed', top: '68px', left: 0, right: 0, bottom: 0, height: 'calc(100dvh - 68px)', background: 'rgba(15,23,42,0.28)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 1001, padding: '12px 16px 36px', boxSizing: 'border-box' }}>
+                    <div className="no-scrollbar" style={{ background: '#fff', width: '100%', maxWidth: '420px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.25)', maxHeight: 'calc(100dvh - 68px - 48px)', overflowY: 'auto', scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
+                        <div style={{ padding: '16px 20px', borderBottom: '1px solid #e2e8f0' }}>
                             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>Auftrag ablehnen</h2>
                         </div>
-                        <div style={{ padding: '20px 24px' }}>
+                        <div style={{ padding: '16px 20px' }}>
                             <label style={{ display: 'block', fontSize: '13px', color: '#475569', fontWeight: 600, marginBottom: '8px' }}>
                                 Grund (optional)
                             </label>

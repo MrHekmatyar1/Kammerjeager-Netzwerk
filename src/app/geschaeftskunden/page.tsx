@@ -205,6 +205,7 @@ function KontaktForm() {
         unternehmen: '',
         name: '',
         branche: 'Gastronomie & Café',
+        sonstigesBranche: '',
         schaedling: 'Schaben / Kakerlaken',
         telefon: '',
         plz: '',
@@ -225,9 +226,24 @@ function KontaktForm() {
             setError('Bitte füllen Sie alle Pflichtfelder aus.');
             return;
         }
+        if (form.branche === 'Sonstiges Kleingewerbe' && !form.sonstigesBranche.trim()) {
+            setError('Bitte beschreiben Sie kurz die Tätigkeit / Branche Ihres Betriebs.');
+            return;
+        }
         setError('');
         setLoading(true);
         try {
+            const resolvedBranche = form.branche === 'Sonstiges Kleingewerbe' && form.sonstigesBranche.trim()
+                ? `Sonstiges (${form.sonstigesBranche.trim()})`
+                : form.branche;
+
+            const notes = [
+                form.branche === 'Sonstiges Kleingewerbe' && form.sonstigesBranche.trim()
+                    ? `Gewerbe: ${form.sonstigesBranche.trim()}`
+                    : null,
+                form.nachricht.trim() || null
+            ].filter(Boolean).join(' | ');
+
             const res = await fetch('/api/leads', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -238,9 +254,9 @@ function KontaktForm() {
                     email: form.email,
                     plz: form.plz,
                     kundeTyp: 'B2B',
-                    objektTyp: form.branche,
+                    objektTyp: resolvedBranche,
                     schaedling: form.schaedling,
-                    zugangInfo: form.nachricht || null,
+                    zugangInfo: notes || null,
                 })
             });
             if (!res.ok) {
@@ -365,6 +381,22 @@ function KontaktForm() {
                     </Field>
                 </div>
 
+                {form.branche === 'Sonstiges Kleingewerbe' && (
+                    <div style={{ animation: 'b2bFadeIn 0.25s ease' }}>
+                        <Field label="Genaue Tätigkeit / Was macht Ihr Betrieb?" required>
+                            <input
+                                type="text"
+                                name="sonstigesBranche"
+                                value={form.sonstigesBranche}
+                                onChange={set('sonstigesBranche')}
+                                required
+                                placeholder="z. B. Autowerkstatt, Kosmetikstudio, Schreinerei, Dienstleistungen …"
+                                style={inp}
+                            />
+                        </Field>
+                    </div>
+                )}
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <Field label="Telefonnummer für Rückruf" required>
                         <input
@@ -451,6 +483,10 @@ function KontaktForm() {
             <style>{`
                 .b2b-field input:focus, .b2b-field textarea:focus {
                     border-bottom-color: #C8102E !important;
+                }
+                @keyframes b2bFadeIn {
+                    from { opacity: 0; transform: translateY(-4px); }
+                    to { opacity: 1; transform: translateY(0); }
                 }
             `}</style>
         </div>

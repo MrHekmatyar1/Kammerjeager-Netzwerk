@@ -18,26 +18,151 @@ const inp: React.CSSProperties = {
     boxSizing: 'border-box',
 };
 
-const sel: React.CSSProperties = {
-    width: '100%',
-    padding: '9px 20px 7px 0',
-    border: 'none',
-    borderBottom: '1px solid #c8c8c8',
-    fontSize: '14px',
-    color: '#1a1a1a',
-    background: 'transparent',
-    outline: 'none',
-    fontFamily: 'inherit',
-    borderRadius: '0',
-    boxSizing: 'border-box',
-    cursor: 'pointer',
-    appearance: 'none',
-    WebkitAppearance: 'none',
-    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'right 2px center',
-    backgroundSize: '13px',
-};
+const BRANCHE_OPTIONS = [
+    { value: 'Gastronomie & Café', label: 'Gastronomie & Café' },
+    { value: 'Bäckerei / Konditorei', label: 'Bäckerei / Konditorei' },
+    { value: 'Hotel & Gastgewerbe', label: 'Hotel & Gastgewerbe' },
+    { value: 'Büro, Kanzlei & Praxis', label: 'Büro, Kanzlei & Praxis' },
+    { value: 'Einzelhandel & Supermarkt', label: 'Einzelhandel & Supermarkt' },
+    { value: 'Lager & Logistik', label: 'Lager & Logistik' },
+    { value: 'Lebensmittelverarbeitung', label: 'Lebensmittelverarbeitung' },
+    { value: 'Sonstiges Kleingewerbe', label: 'Sonstiges Kleingewerbe' },
+];
+
+const SCHAEDLING_OPTIONS = [
+    { value: 'Schaben / Kakerlaken', label: 'Schaben / Kakerlaken (Akut)' },
+    { value: 'Mäuse / Ratten', label: 'Mäuse / Ratten (Nager)' },
+    { value: 'Fliegen / Vorratsschädlinge', label: 'Fliegen / Vorratsschädlinge' },
+    { value: 'Bettwanzen', label: 'Bettwanzen' },
+    { value: 'Wespen / Hornissen', label: 'Wespen / Hornissen' },
+    { value: 'Regelmäßiges Monitoring & HACCP', label: 'Regelmäßiges Monitoring & HACCP' },
+    { value: 'Akuter Befall (Art unklar)', label: 'Akuter Befall (Art unklar)' },
+    { value: 'Sonstiger Bedarf', label: 'Sonstiger Bedarf' },
+];
+
+function CustomSelect({
+    value,
+    onChange,
+    options,
+}: {
+    value: string;
+    onChange: (val: string) => void;
+    options: { value: string; label: string }[];
+}) {
+    const [open, setOpen] = useState(false);
+    const ref = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (ref.current && !ref.current.contains(e.target as Node)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const selectedLabel = options.find(o => o.value === value)?.label || value;
+
+    return (
+        <div ref={ref} style={{ position: 'relative', width: '100%' }}>
+            <button
+                type="button"
+                onClick={() => setOpen(p => !p)}
+                style={{
+                    width: '100%',
+                    padding: '9px 20px 7px 0',
+                    border: 'none',
+                    borderBottom: open ? '1.5px solid #C8102E' : '1px solid #c8c8c8',
+                    fontSize: '14px',
+                    color: '#1a1a1a',
+                    background: 'transparent',
+                    outline: 'none',
+                    fontFamily: 'inherit',
+                    borderRadius: 0,
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    boxSizing: 'border-box',
+                    transition: 'border-color 0.15s ease',
+                }}
+            >
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {selectedLabel}
+                </span>
+                <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#888"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{
+                        transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+                        transition: 'transform 0.2s ease',
+                        flexShrink: 0,
+                    }}
+                >
+                    <polyline points="6 9 12 15 18 9" />
+                </svg>
+            </button>
+
+            {open && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: 'calc(100% + 6px)',
+                        left: 0,
+                        right: 0,
+                        zIndex: 50,
+                        background: '#ffffff',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '12px',
+                        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05)',
+                        padding: '6px',
+                        maxHeight: '230px',
+                        overflowY: 'auto',
+                    }}
+                >
+                    {options.map(opt => {
+                        const isSelected = opt.value === value;
+                        return (
+                            <div
+                                key={opt.value}
+                                onClick={() => {
+                                    onChange(opt.value);
+                                    setOpen(false);
+                                }}
+                                style={{
+                                    padding: '9px 12px',
+                                    fontSize: '13.5px',
+                                    borderRadius: '8px',
+                                    cursor: 'pointer',
+                                    color: isSelected ? '#C8102E' : '#1e293b',
+                                    backgroundColor: isSelected ? '#fef2f2' : 'transparent',
+                                    fontWeight: isSelected ? 600 : 400,
+                                    transition: 'background-color 0.15s ease, color 0.15s ease',
+                                }}
+                                onMouseEnter={e => {
+                                    if (!isSelected) e.currentTarget.style.backgroundColor = '#f8fafc';
+                                }}
+                                onMouseLeave={e => {
+                                    if (!isSelected) e.currentTarget.style.backgroundColor = 'transparent';
+                                }}
+                            >
+                                {opt.label}
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
+        </div>
+    );
+}
 
 const txtArea: React.CSSProperties = {
     width: '100%',
@@ -91,7 +216,7 @@ function KontaktForm() {
     const [error, setError] = useState('');
 
     const set = (k: keyof typeof form) => (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => setForm(p => ({ ...p, [k]: e.target.value }));
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -167,8 +292,8 @@ function KontaktForm() {
             border: '1.5px solid #c8cdd5',
             boxShadow: '0 8px 30px rgba(0,0,0,0.04)',
             width: '100%',
-            overflow: 'hidden',
-            padding: '32px 28px 36px',
+            overflow: 'visible',
+            padding: '34px 30px 36px',
             boxSizing: 'border-box',
         }}>
             <div style={{ marginBottom: '24px' }}>
@@ -225,28 +350,18 @@ function KontaktForm() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <Field label="Art des Betriebs / Branche">
-                        <select name="branche" value={form.branche} onChange={set('branche')} style={sel}>
-                            <option value="Gastronomie & Café">Gastronomie &amp; Café</option>
-                            <option value="Bäckerei / Konditorei">Bäckerei / Konditorei</option>
-                            <option value="Hotel & Gastgewerbe">Hotel &amp; Gastgewerbe</option>
-                            <option value="Büro, Kanzlei & Praxis">Büro, Kanzlei &amp; Praxis</option>
-                            <option value="Einzelhandel & Supermarkt">Einzelhandel &amp; Supermarkt</option>
-                            <option value="Lager & Logistik">Lager &amp; Logistik</option>
-                            <option value="Lebensmittelverarbeitung">Lebensmittelverarbeitung</option>
-                            <option value="Sonstiges Kleingewerbe">Sonstiges Kleingewerbe</option>
-                        </select>
+                        <CustomSelect
+                            value={form.branche}
+                            onChange={val => setForm(p => ({ ...p, branche: val }))}
+                            options={BRANCHE_OPTIONS}
+                        />
                     </Field>
                     <Field label="Schädling / Anliegen">
-                        <select name="schaedling" value={form.schaedling} onChange={set('schaedling')} style={sel}>
-                            <option value="Schaben / Kakerlaken">Schaben / Kakerlaken (Akut)</option>
-                            <option value="Mäuse / Ratten">Mäuse / Ratten (Nager)</option>
-                            <option value="Fliegen / Vorratsschädlinge">Fliegen / Vorratsschädlinge</option>
-                            <option value="Bettwanzen">Bettwanzen</option>
-                            <option value="Wespen / Hornissen">Wespen / Hornissen</option>
-                            <option value="Regelmäßiges Monitoring & HACCP">Regelmäßiges Monitoring &amp; HACCP</option>
-                            <option value="Akuter Befall (Art unklar)">Akuter Befall (Art unklar)</option>
-                            <option value="Sonstiger Bedarf">Sonstiger Bedarf</option>
-                        </select>
+                        <CustomSelect
+                            value={form.schaedling}
+                            onChange={val => setForm(p => ({ ...p, schaedling: val }))}
+                            options={SCHAEDLING_OPTIONS}
+                        />
                     </Field>
                 </div>
 
@@ -304,8 +419,8 @@ function KontaktForm() {
                     </div>
                 )}
 
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '4px' }}>
-                    <p style={{ fontSize: '11.5px', color: '#999', lineHeight: 1.6, marginBottom: '16px', textAlign: 'center', maxWidth: '480px' }}>
+                <div>
+                    <p style={{ fontSize: '12px', color: '#999', lineHeight: 1.6, marginBottom: '18px' }}>
                         Mit dem Klick auf „Anfrage absenden" stimme ich zu, dass Kammerjäger-Zentrale mich unter der angegebenen Nummer per Telefon oder E-Mail kontaktieren darf.{' '}
                         Ich habe die <a href="/datenschutz" target="_blank" style={{ color: '#C8102E', textDecoration: 'underline' }}>Datenschutzerklärung</a> gelesen.
                     </p>
@@ -314,16 +429,16 @@ function KontaktForm() {
                         disabled={loading}
                         className="btn-color-hover"
                         style={{
-                            width: 'auto',
-                            minWidth: '220px',
+                            width: '100%',
                             backgroundColor: loading ? '#c0c0c0' : '#C8102E',
                             color: '#fff',
-                            padding: '13px 36px',
+                            padding: '16px',
                             fontWeight: 700,
-                            fontSize: '12px',
-                            letterSpacing: '0.12em',
+                            fontSize: '13px',
+                            letterSpacing: '0.14em',
                             textTransform: 'uppercase',
                             border: 'none',
+                            borderRadius: '8px',
                             cursor: loading ? 'not-allowed' : 'pointer',
                             fontFamily: 'inherit',
                         }}
@@ -334,7 +449,7 @@ function KontaktForm() {
             </form>
 
             <style>{`
-                .b2b-field input:focus, .b2b-field select:focus, .b2b-field textarea:focus {
+                .b2b-field input:focus, .b2b-field textarea:focus {
                     border-bottom-color: #C8102E !important;
                 }
             `}</style>

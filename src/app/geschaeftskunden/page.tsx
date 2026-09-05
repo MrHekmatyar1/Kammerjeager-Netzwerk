@@ -4,78 +4,91 @@ import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
-const inputStyle: React.CSSProperties = {
+const inp: React.CSSProperties = {
     width: '100%',
-    padding: '12px 16px',
-    border: '1px solid #d1d5db',
-    borderRadius: '6px',
-    fontSize: '14px',
-    color: '#374151',
-    background: '#fff',
+    padding: '13px 0 10px',
+    border: 'none',
+    borderBottom: '1px solid #c8c8c8',
+    fontSize: '15px',
+    color: '#1a1a1a',
+    background: 'transparent',
     outline: 'none',
-    boxSizing: 'border-box',
     fontFamily: 'inherit',
-    transition: 'border-color 0.15s',
+    borderRadius: '0',
+    boxSizing: 'border-box',
 };
 
-const labelStyle: React.CSSProperties = {
+const fieldLbl: React.CSSProperties = {
+    fontSize: '11px',
+    fontWeight: 700,
+    letterSpacing: '0.13em',
+    textTransform: 'uppercase',
+    color: '#888',
     display: 'block',
-    fontSize: '13px',
-    fontWeight: 500,
-    color: '#374151',
-    marginBottom: '6px',
+    marginBottom: '2px',
 };
 
-const selectStyle: React.CSSProperties = {
-    ...inputStyle,
-    cursor: 'pointer',
-    backgroundColor: '#fff',
-};
+function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+    return (
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <label style={fieldLbl}>{label}{required && <span style={{ color: '#C8102E' }}> *</span>}</label>
+            {children}
+        </div>
+    );
+}
 
 function KontaktForm() {
     const [form, setForm] = useState({
         name: '',
-        unternehmen: '',
-        branche: 'Gastronomie & Café',
-        schaedling: 'Schaben / Kakerlaken',
         telefon: '',
         email: '',
         plz: '',
-        nachricht: '',
+        strasse: '',
+        hausnummer: '',
+        etage: '',
+        unternehmen: '',
     });
     const [sent, setSent] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
-    const set = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-        setForm(p => ({ ...p, [e.target.name]: e.target.value }));
+    const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
+        setForm(p => ({ ...p, [k]: e.target.value }));
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!form.name || !form.unternehmen || !form.telefon || !form.email || !form.plz) {
-            alert('Bitte füllen Sie alle Pflichtfelder aus (Name, Firma, Telefon, E-Mail, PLZ).');
+        if (!form.name || !form.telefon || !form.email || !form.plz || !form.strasse || !form.hausnummer) {
+            setError('Bitte füllen Sie alle Pflichtfelder aus.');
             return;
         }
+        setError('');
         setLoading(true);
         try {
-            await fetch('/api/leads', {
+            const res = await fetch('/api/leads', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     name: form.name,
-                    firma: form.unternehmen,
                     telefon: form.telefon,
                     email: form.email,
                     plz: form.plz,
+                    strasse: form.strasse,
+                    hausnummer: form.hausnummer,
+                    etage: form.etage,
+                    firma: form.unternehmen,
                     kundeTyp: 'B2B',
-                    objektTyp: form.branche,
-                    schaedling: form.schaedling,
-                    zugangInfo: form.nachricht
+                    schaedling: 'Gewerblicher Schutz',
+                    objektTyp: 'Gewerbe & B2B',
                 })
             });
-            setSent(true);
-        } catch (error) {
-            console.error('Error submitting B2B form:', error);
-            alert('Fehler beim Senden. Bitte versuchen Sie es später noch einmal.');
+            if (!res.ok) {
+                const data = await res.json().catch(() => ({}));
+                setError(data.error || 'Fehler beim Senden.');
+            } else {
+                setSent(true);
+            }
+        } catch {
+            setError('Netzwerkfehler. Bitte versuchen Sie es erneut.');
         } finally {
             setLoading(false);
         }
@@ -83,161 +96,159 @@ function KontaktForm() {
 
     if (sent) {
         return (
-            <div style={{ textAlign: 'center', padding: '40px 0' }}>
+            <div style={{
+                background: '#ffffff',
+                borderRadius: '20px',
+                border: '1.5px solid #c8cdd5',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.04)',
+                width: '100%',
+                padding: '60px 24px',
+                textAlign: 'center',
+            }}>
                 <h3 style={{
                     fontFamily: "'Barlow Condensed', sans-serif",
-                    fontSize: '28px', fontWeight: 900,
-                    textTransform: 'uppercase', color: '#1E293B', margin: '0 0 8px',
-                }}>Vielen Dank für Ihre Anfrage!</h3>
-                <p style={{ color: '#64748b', fontSize: '15px', lineHeight: 1.6 }}>
-                    Ihre Anfrage für <strong>{form.unternehmen}</strong> wurde erfolgreich übermittelt.<br />
-                    Unser B2B-Team wird sich schnellstmöglich mit Ihnen in Verbindung setzen.
+                    fontSize: '32px',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    color: '#1E293B',
+                    margin: '0 0 12px',
+                }}>
+                    Vielen Dank für Ihre Anfrage!
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '15px', lineHeight: 1.6, maxWidth: '440px', margin: '0 auto' }}>
+                    Wir haben Ihre Daten erfolgreich erhalten. Einer unserer Experten für Gewerbekunden wird sich schnellstmöglich mit Ihnen in Verbindung setzen.
                 </p>
             </div>
         );
     }
 
     return (
-        <div>
-            <p style={{ fontSize: '14px', color: '#374151', marginBottom: '6px' }}>
-                Füllen Sie das folgende Formular aus und wir rufen Sie zeitnah für eine diskrete Beratung zurück.
-            </p>
-            <p style={{ fontSize: '14px', color: '#374151', marginBottom: '24px' }}>
-                Oder rufen Sie uns direkt an unter:{' '}
-                <a href="tel:016092376320" style={{ color: '#C8102E', fontWeight: 600, textDecoration: 'none' }}>
-                    0160 92376320
-                </a>{' '}
-                (Mo – Fr, 9–18 Uhr)
-            </p>
+        <div style={{
+            background: '#ffffff',
+            borderRadius: '20px',
+            border: '1.5px solid #c8cdd5',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.04)',
+            width: '100%',
+            overflow: 'hidden',
+        }}>
+            <div style={{ width: '100%', padding: '36px 32px 40px' }}>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'minmax(0,1fr) minmax(0,1.15fr)',
+                    gap: '80px',
+                    alignItems: 'start',
+                }} className="orkin-grid">
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label style={labelStyle}>Name des Betriebs / Firma *</label>
-                        <input
-                            name="unternehmen"
-                            value={form.unternehmen}
-                            onChange={set}
-                            style={inputStyle}
-                            placeholder="z. B. Café Müller / Bistro Sun"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label style={labelStyle}>Ansprechpartner (Vor- und Nachname) *</label>
-                        <input
-                            name="name"
-                            value={form.name}
-                            onChange={set}
-                            style={inputStyle}
-                            placeholder="Max Mustermann"
-                            required
-                        />
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label style={labelStyle}>Art des Betriebs / Branche</label>
-                        <select name="branche" value={form.branche} onChange={set} style={selectStyle}>
-                            <option value="Gastronomie & Café">Gastronomie &amp; Café</option>
-                            <option value="Bäckerei / Konditorei">Bäckerei / Konditorei</option>
-                            <option value="Hotel & Gastgewerbe">Hotel &amp; Gastgewerbe</option>
-                            <option value="Büro, Kanzlei & Praxis">Büro, Kanzlei &amp; Praxis</option>
-                            <option value="Einzelhandel & Supermarkt">Einzelhandel &amp; Supermarkt</option>
-                            <option value="Lager & Logistik">Lager &amp; Logistik</option>
-                            <option value="Lebensmittelverarbeitung">Lebensmittelverarbeitung</option>
-                            <option value="Sonstiges Kleingewerbe">Sonstiges Kleingewerbe</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label style={labelStyle}>Schädling / Anliegen</label>
-                        <select name="schaedling" value={form.schaedling} onChange={set} style={selectStyle}>
-                            <option value="Schaben / Kakerlaken">Schaben / Kakerlaken (Akut)</option>
-                            <option value="Mäuse / Ratten">Mäuse / Ratten (Nager)</option>
-                            <option value="Fliegen / Vorratsschädlinge">Fliegen / Vorratsschädlinge</option>
-                            <option value="Bettwanzen">Bettwanzen</option>
-                            <option value="Wespen / Hornissen">Wespen / Hornissen</option>
-                            <option value="Regelmäßiges Monitoring & HACCP">Regelmäßiges Monitoring &amp; HACCP</option>
-                            <option value="Akuter Befall (Art unklar)">Akuter Befall (Art unklar)</option>
-                            <option value="Sonstiger Bedarf">Sonstiger Bedarf</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label style={labelStyle}>Telefonnummer für Rückruf *</label>
-                        <input
-                            name="telefon"
-                            type="tel"
-                            value={form.telefon}
-                            onChange={set}
-                            style={inputStyle}
-                            placeholder="0170 1234567"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label style={labelStyle}>Postleitzahl (PLZ) *</label>
-                        <input
-                            name="plz"
-                            type="text"
-                            value={form.plz}
-                            onChange={set}
-                            style={inputStyle}
-                            placeholder="12345"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label style={labelStyle}>E-Mail-Adresse *</label>
-                        <input
-                            name="email"
-                            type="email"
-                            value={form.email}
-                            onChange={set}
-                            style={inputStyle}
-                            placeholder="kontakt@betrieb.de"
-                            required
-                        />
-                    </div>
-                </div>
-
-                <div>
-                    <label style={labelStyle}>Details / Nachricht (optional)</label>
-                    <textarea
-                        name="nachricht"
-                        value={form.nachricht}
-                        onChange={set}
-                        rows={4}
-                        style={{ ...inputStyle, resize: 'vertical' }}
-                        placeholder="Zusätzliche Angaben, z. B. betroffene Bereiche (Küche, Gastraum, Lager), gewünschte Uhrzeiten für diskreten Einsatz..."
-                    />
-                </div>
-
-                <div style={{ paddingTop: '6px' }}>
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="btn-color-hover"
-                        style={{
-                            padding: '14px 32px',
-                            background: loading ? '#9ca3af' : '#C8102E',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '6px',
-                            fontSize: '15px',
-                            fontWeight: 700,
-                            cursor: loading ? 'not-allowed' : 'pointer',
+                    {/* LEFT */}
+                    <div style={{ paddingTop: '4px' }}>
+                        <button
+                            type="button"
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                color: '#aaa',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                                fontSize: '11px',
+                                fontWeight: 700,
+                                letterSpacing: '0.1em',
+                                textTransform: 'uppercase',
+                                padding: '0 0 32px 0',
+                            }}
+                        >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                                <path d="M19 12H5M12 5l-7 7 7 7" />
+                            </svg>
+                            Zurück nach oben
+                        </button>
+                        <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#C8102E', marginBottom: '12px' }}>
+                            Schritt 3 von 3
+                        </p>
+                        <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '20px' }}>
+                            Kostenloses Angebot anfordern
+                        </p>
+                        <h2 style={{
+                            fontFamily: "'Barlow Condensed', sans-serif",
+                            fontWeight: 900,
+                            fontSize: 'clamp(1.8rem, 3vw, 2.6rem)',
+                            lineHeight: 1.05,
+                            color: '#1a1a1a',
+                            marginBottom: '22px',
                             textTransform: 'uppercase',
-                            letterSpacing: '0.05em',
-                        }}
-                    >
-                        {loading ? 'Wird gesendet...' : 'B2B-Anfrage unverbindlich senden'}
-                    </button>
+                            letterSpacing: '-0.02em',
+                        }}>
+                            Ihr kostenloses,<br />persönliches Angebot<br />ohne Verpflichtung.
+                        </h2>
+                        <p style={{ fontSize: '14px', color: '#666', lineHeight: 1.8, maxWidth: '300px' }}>
+                            Unsere Schädlingsbekämpfer sind ausgebildet, alle Arten von Schädlingsproblemen zu diagnostizieren. Da jeder Fall einzigartig ist, entwickeln wir ein individuelles Konzept für Sie.
+                        </p>
+                        <div style={{ marginTop: '28px', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 14px', background: '#f8f8f8', border: '1px solid #eee' }}>
+                            <span style={{ fontSize: '11px', color: '#aaa', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Schädling:</span>
+                            <span style={{ fontSize: '13px', fontWeight: 700, color: '#1a1a1a' }}>Gewerblicher Schutz</span>
+                        </div>
+                    </div>
+
+                    {/* RIGHT */}
+                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+                        <Field label="Vollständiger Name" required>
+                            <input type="text" value={form.name} onChange={set('name')} required placeholder="Max Mustermann" style={inp} />
+                        </Field>
+                        <Field label="Telefonnummer" required>
+                            <input type="tel" value={form.telefon} onChange={set('telefon')} required placeholder="+49 30 …" style={inp} />
+                        </Field>
+                        <Field label="E-Mail-Adresse" required>
+                            <input type="email" value={form.email} onChange={set('email')} required placeholder="info@beispiel.de" style={inp} />
+                        </Field>
+                        <Field label="Postleitzahl" required>
+                            <input type="text" value={form.plz} onChange={set('plz')} required placeholder="12205" style={inp} />
+                        </Field>
+                        <Field label="Straße" required>
+                            <input type="text" value={form.strasse} onChange={set('strasse')} required placeholder="Musterstraße" style={inp} />
+                        </Field>
+                        <div style={{ display: 'flex', gap: '16px' }}>
+                            <div style={{ flex: 1 }}>
+                                <Field label="Hausnummer" required>
+                                    <input type="text" value={form.hausnummer} onChange={set('hausnummer')} required placeholder="12a" style={inp} />
+                                </Field>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <Field label="Etage">
+                                    <input type="text" value={form.etage} onChange={set('etage')} placeholder="EG, 1. OG..." style={inp} />
+                                </Field>
+                            </div>
+                        </div>
+                        <Field label="Unternehmensname">
+                            <input type="text" value={form.unternehmen} onChange={set('unternehmen')} placeholder="Muster GmbH (optional)" style={inp} />
+                        </Field>
+
+                        {error && (
+                            <div style={{ padding: '10px 14px', background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', fontSize: '13px' }}>
+                                {error}
+                            </div>
+                        )}
+
+                        <div>
+                            <p style={{ fontSize: '12px', color: '#999', lineHeight: 1.7, marginBottom: '20px' }}>
+                                Mit dem Klick auf „Absenden" stimme ich zu, dass Kammerjäger-Zentrale mich unter der angegebenen Nummer per Telefon oder E-Mail kontaktieren darf.{' '}
+                                Ich habe die <a href="/datenschutz" target="_blank" style={{ color: '#C8102E', textDecoration: 'underline' }}>Datenschutzerklärung</a> gelesen.
+                            </p>
+                            <button type="submit" disabled={loading} className="btn-color-hover" style={{
+                                width: '100%', backgroundColor: loading ? '#c0c0c0' : '#C8102E',
+                                color: '#fff', padding: '15px', fontWeight: 700, fontSize: '13px',
+                                letterSpacing: '0.14em', textTransform: 'uppercase', border: 'none',
+                                cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'inherit',
+                            }}>
+                                {loading ? 'Wird gesendet …' : 'Absenden'}
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+
+                <style>{`@media (max-width: 768px) { .orkin-grid { grid-template-columns: 1fr !important; gap: 40px !important; } }`}</style>
+            </div>
         </div>
     );
 }
@@ -357,15 +368,8 @@ export default function GeschaeftskundenPage() {
                 </section>
 
                 {/* ── Контактная форма ── */}
-                <section id="kontakt" className="w-full bg-[#F8FAFC] py-20 px-6">
-                    <div style={{ maxWidth: '740px', margin: '0 auto' }}>
-                        <h2 style={{
-                            fontFamily: "'Barlow Condensed', sans-serif",
-                            fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)',
-                            fontWeight: 900, color: '#1E293B', marginBottom: '16px',
-                        }}>
-                            Interesse? Kontaktieren Sie uns!
-                        </h2>
+                <section id="kontakt" className="w-full flex flex-col items-center px-6 pt-[80px] pb-[140px]" style={{ background: '#f1f4f8' }}>
+                    <div className="w-full max-w-[850px]">
                         <KontaktForm />
                     </div>
                 </section>

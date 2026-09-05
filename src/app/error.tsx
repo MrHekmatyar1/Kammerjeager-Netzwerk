@@ -123,9 +123,6 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
                     ← Zur Startseite
                 </Link>
             </div>
-
-            {/* Decorative bug icon */}
-            <p style={{ marginTop: '60px', fontSize: '48px', opacity: 0.12, userSelect: 'none' }}>🐛</p>
         </div>
     );
 }

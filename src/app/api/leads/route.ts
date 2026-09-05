@@ -125,12 +125,12 @@ export async function POST(req: NextRequest) {
                     if (assignedMaster.telegram_chat_id) {
                         const { sendTelegramMessage } = await import('@/lib/telegram');
                         const tgMessage =
-                            `🚨 <b>Neuer Auftrag!</b>\n\n` +
+                            `<b>Neuer Auftrag!</b>\n\n` +
                             `<b>PLZ:</b> ${entry.plz}\n` +
                             `<b>Schädling:</b> ${entry.schaedling || 'Nicht angegeben'}\n` +
                             `<b>Kundentyp:</b> ${entry.kunde_typ || ''} ${entry.objekt_typ ? `(${entry.objekt_typ})` : ''}\n` +
                             `<b>Befall:</b> ${entry.befall || '-'}, ${entry.raeume ? `${entry.raeume} Räume` : ''}\n\n` +
-                            `📲 Jetzt im Dashboard ansehen: https://kammerjaeger-structon.de/dashboard`;
+                            `Jetzt im Dashboard ansehen: https://kammerjaeger-structon.de/dashboard`;
                         sendTelegramMessage(assignedMaster.telegram_chat_id, tgMessage)
                             .catch(e => console.error('[TG] Send Error:', e));
                     }
@@ -159,16 +159,16 @@ export async function POST(req: NextRequest) {
         
         if (adminTgId) {
             const { sendTelegramMessage } = await import('@/lib/telegram');
-            const masterName = entry.master_id ? 'Ein Partner' : 'UNASSIGNED ⚠️'; // simplification for fallback
+            const masterName = entry.master_id ? 'Ein Partner' : 'UNASSIGNED'; // simplification for fallback
             const tgMessage = 
-                `🚨 <b>Neuer Lead eingegangen!</b>\n\n` +
+                `<b>Neuer Lead eingegangen!</b>\n\n` +
                 `<b>Name:</b> ${entry.name}\n` +
                 `<b>Telefon:</b> <a href="tel:${entry.telefon}">${entry.telefon}</a>\n` +
                 `<b>PLZ:</b> ${entry.plz}\n` +
                 `<b>Schädling:</b> ${entry.schaedling || 'Nicht angegeben'}\n` +
                 `<b>Kundentyp:</b> ${entry.kunde_typ || '-'}\n` +
                 `<b>Status:</b> ${masterName}\n\n` +
-                `📲 <a href="https://kammerjaeger-structon.de/admin">Admin Dashboard öffnen</a>`;
+                `<a href="https://kammerjaeger-structon.de/admin">Admin Dashboard öffnen</a>`;
             try {
                 await sendTelegramMessage(adminTgId, tgMessage);
             } catch (e) {

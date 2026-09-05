@@ -12,7 +12,7 @@ const FROM_EMAIL = 'onboarding@resend.dev';
 
 // ─── Уведомление партнёру о новом лиде ────────────────────────────────────
 export async function sendPartnerLeadNotification(partnerEmail: string, partnerName: string, lead: any) {
-    const subject = `🚨 Neuer Auftrag: ${lead.schaedling || 'Schädlingsbekämpfung'} in ${lead.plz}`;
+    const subject = `Neuer Auftrag: ${lead.schaedling || 'Schädlingsbekämpfung'} in ${lead.plz}`;
 
     const html = `
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 620px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
@@ -24,9 +24,8 @@ export async function sendPartnerLeadNotification(partnerEmail: string, partnerN
             </div>
 
             <!-- Urgency banner -->
-            <div style="background: #C8102E; padding: 12px 32px; display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 20px;">🚨</span>
-                <span style="color: #fff; font-weight: 700; font-size: 15px;">Bitte reagieren Sie schnell — Aufträge werden zuerst kommen, zuerst serviert!</span>
+            <div style="background: #C8102E; padding: 12px 32px; text-align: center;">
+                <span style="color: #fff; font-weight: 700; font-size: 15px;">Bitte reagieren Sie schnell — Aufträge werden direkt vergeben!</span>
             </div>
 
             <!-- Body -->
@@ -69,7 +68,7 @@ export async function sendPartnerLeadNotification(partnerEmail: string, partnerN
                 <!-- CTA -->
                 <div style="text-align: center; margin-bottom: 24px;">
                     <a href="https://kammerjaeger-structon.de/api/partner/leads/accept-from-email?lead_id=${lead.id}&master_id=${lead.master_id}" style="display: inline-block; background: #C8102E; color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.05em;">
-                        ✅ Auftrag jetzt annehmen
+                        Auftrag jetzt annehmen
                     </a>
                 </div>
 
@@ -118,7 +117,7 @@ export async function sendClientStatusUpdate(lead: any, partnerName?: string, de
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 580px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
             <div style="background: #0f172a; padding: 28px 32px; text-align: center;">
                 <div style="font-size: 13px; color: #94a3b8; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px;">Kammerjäger Structon</div>
-                <div style="font-size: 22px; font-weight: 900; color: #ffffff;">✅ Ihr Experte ist unterwegs!</div>
+                <div style="font-size: 22px; font-weight: 900; color: #ffffff;">Ihr Experte ist unterwegs!</div>
             </div>
             <div style="padding: 32px;">
                 <p style="font-size: 16px; color: #1e293b; margin: 0 0 20px; line-height: 1.6;">
@@ -126,7 +125,7 @@ export async function sendClientStatusUpdate(lead: any, partnerName?: string, de
                     ein zertifizierter Schädlingsbekämpfer${partnerName ? ` (<strong>${partnerName}</strong>)` : ''} hat Ihren Auftrag angenommen und wird sich <strong>in Kürze bei Ihnen melden</strong>.
                 </p>
                 <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
-                    <div style="font-weight: 700; color: #166534; margin-bottom: 8px;">📞 Was passiert als nächstes?</div>
+                    <div style="font-weight: 700; color: #166534; margin-bottom: 8px;">Was passiert als nächstes?</div>
                     <p style="color: #15803d; font-size: 14px; margin: 0; line-height: 1.7;">
                         Der Experte wird Sie unter <strong>${lead.telefon}</strong> kontaktieren, um einen Termin zu vereinbaren und alle Details zu besprechen.
                     </p>

@@ -50,7 +50,7 @@ https.get(CSV_URL, (res) => {
 
         fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true });
         fs.writeFileSync(OUT_FILE, JSON.stringify(result), 'utf8');
-        console.log(`✅ Written ${count} PLZ entries to ${OUT_FILE}`);
+        console.log(`Written ${count} PLZ entries to ${OUT_FILE}`);
         console.log(`File size: ${(fs.statSync(OUT_FILE).size / 1024).toFixed(1)} KB`);
     });
 }).on('error', err => {

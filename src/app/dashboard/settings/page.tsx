@@ -65,12 +65,12 @@ export default function SettingsPage() {
             const data = await res.json();
 
             if (res.ok) {
-                setMessage({ text: '✅ Einstellungen erfolgreich gespeichert!', type: 'success' });
+                setMessage({ text: 'Einstellungen erfolgreich gespeichert!', type: 'success' });
             } else {
-                setMessage({ text: `❌ ${data.error}`, type: 'error' });
+                setMessage({ text: data.error || 'Fehler beim Speichern.', type: 'error' });
             }
         } catch (err) {
-            setMessage({ text: '❌ Netzwerkfehler beim Speichern.', type: 'error' });
+            setMessage({ text: 'Netzwerkfehler beim Speichern.', type: 'error' });
         } finally {
             setSaving(false);
             setTimeout(() => {

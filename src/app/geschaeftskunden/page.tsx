@@ -700,17 +700,17 @@ export default function GeschaeftskundenPage() {
                     </div>
                 </section>
 
-                {/* ── FAQ ── */}
-                <div className="mt-16 md:mt-24">
-                    <FAQ />
-                </div>
-
                 {/* ── Контактная форма ── */}
                 <section id="kontakt" className="w-full flex flex-col items-center px-6 pt-[60px] pb-[110px] mt-16 md:mt-24" style={{ background: '#f1f4f8' }}>
                     <div className="w-full max-w-[720px]">
                         <KontaktForm />
                     </div>
                 </section>
+
+                {/* ── FAQ ── */}
+                <div className="mt-16 md:mt-24">
+                    <FAQ />
+                </div>
 
             </main>
 

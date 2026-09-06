@@ -23,10 +23,11 @@ export default function AuthModal() {
     const handleGoogleLogin = async () => {
         setLoading(true);
         setError('');
+        const nextUrl = role === 'kunden' ? '/kunden' : '/dashboard';
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+                redirectTo: `${window.location.origin}/auth/callback?next=${nextUrl}&role=${role}`,
                 queryParams: {
                     access_type: 'offline',
                     prompt: 'consent',
@@ -267,7 +268,11 @@ export default function AuthModal() {
                                             else {
                                                 setOpen(false);
                                                 const isAdmin = authData.user?.email?.toLowerCase() === 'edorkalchuk@gmail.com';
-                                                const isKunde = authData.user?.user_metadata?.role === 'kunden';
+                                                
+                                                // Если у юзера роль была сохранена, или он выбрал ее сейчас
+                                                const finalRole = authData.user?.user_metadata?.role || role;
+                                                const isKunde = finalRole === 'kunden';
+                                                
                                                 router.push((isKunde && !isAdmin) ? '/kunden' : '/dashboard');
                                             }
                                         } else {

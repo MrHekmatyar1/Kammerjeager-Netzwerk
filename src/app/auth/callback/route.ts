@@ -6,6 +6,7 @@ export async function GET(request: Request) {
     const { searchParams, origin } = new URL(request.url);
     const code = searchParams.get('code');
     const next = searchParams.get('next') ?? '/dashboard';
+    const role = searchParams.get('role');
 
     if (code) {
         const cookieStore = await cookies();
@@ -26,8 +27,14 @@ export async function GET(request: Request) {
                 },
             }
         );
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        const { data: sessionData, error } = await supabase.auth.exchangeCodeForSession(code);
         if (!error) {
+            // Если передан role и у юзера еще нет роли, сохраним ее
+            if (role && sessionData.user && !sessionData.user.user_metadata?.role) {
+                await supabase.auth.updateUser({
+                    data: { role: role === 'kunden' ? 'kunden' : 'partner' }
+                });
+            }
             return NextResponse.redirect(`${origin}${next}`);
         }
     }

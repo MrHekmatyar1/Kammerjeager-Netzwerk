@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
         // Найти мастера по email или user_id
         const { data: master, error: masterError } = await supabase
             .from('masters')
-            .select('id, name, email, billing_model')
+            .select('id, name, email, billing_model, plz_bereiche')
             .or(`email.eq.${user.email},user_id.eq.${user.id}`)
             .maybeSingle();
 
@@ -48,9 +48,23 @@ export async function GET(req: NextRequest) {
         let query = supabase
             .from('leads')
             .select('*')
-            .eq('master_id', master.id)
             .in('status', statuses)
             .order('created_at', { ascending: false });
+
+        // Fetch leads assigned to this master, OR unassigned leads in their PLZ areas
+        if (master.plz_bereiche && master.plz_bereiche.length > 0) {
+            const parsedPlz = master.plz_bereiche
+                .flatMap((p: string) => p.split(/[\s,]+/))
+                .filter(Boolean);
+            const plzList = parsedPlz.join(','); // Format for PostgREST
+            if (plzList) {
+                query = query.or(`master_id.eq.${master.id},and(master_id.is.null,plz.in.(${plzList}))`);
+            } else {
+                query = query.eq('master_id', master.id);
+            }
+        } else {
+            query = query.eq('master_id', master.id);
+        }
 
         const { data: leads, error: leadsError } = await query;
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { updateLeadStatus } from '@/app/admin/actions';
+import { updateLeadStatus, assignLeadManually } from '@/app/admin/actions';
 
 export type Lead = {
     id: number;
@@ -24,6 +24,16 @@ export type Lead = {
     created_at: string;
     erstellt_am?: string; // Fallback for old local JSON
     status: string;
+    master_id?: number | null;
+    billing_override_type?: string | null;
+    billing_override_value?: number | null;
+};
+
+export type Master = {
+    id: number;
+    name: string;
+    firma: string | null;
+    is_active: boolean;
 };
 
 // Цвета для бейджиков статуса
@@ -41,10 +51,17 @@ const STATUS_LABELS: Record<string, string> = {
     'storniert': 'Storniert',
 };
 
-export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
+export default function LeadsTable({ initialLeads, masters }: { initialLeads: Lead[], masters?: Master[] }) {
     const [leads, setLeads] = useState<Lead[]>(initialLeads);
     const [filter, setFilter] = useState<'all' | 'b2b' | 'privat'>('all');
     const [isPending, startTransition] = useTransition();
+
+    // Modal state
+    const [selectedLeadForAssign, setSelectedLeadForAssign] = useState<Lead | null>(null);
+    const [assignMasterId, setAssignMasterId] = useState<string>('');
+    const [priceType, setPriceType] = useState<string>('default');
+    const [priceValue, setPriceValue] = useState<string>('');
+    const [isAssigning, setIsAssigning] = useState(false);
 
     const isB2BLead = (lead: Lead) =>
         lead.kunde_typ === 'B2B' ||
@@ -78,6 +95,33 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                 setLeads(initialLeads);
             }
         });
+    };
+
+    const handleAssign = async () => {
+        if (!selectedLeadForAssign || !assignMasterId) return;
+        setIsAssigning(true);
+        try {
+            const overrideType = priceType === 'default' ? null : priceType;
+            const overrideValue = (priceType === 'fixed' || priceType === 'percentage') ? parseFloat(priceValue) : null;
+            
+            await assignLeadManually(selectedLeadForAssign.id, parseInt(assignMasterId), overrideType, overrideValue);
+            
+            // Оптимистичное обновление
+            setLeads(current => current.map(lead => lead.id === selectedLeadForAssign.id ? { 
+                ...lead, 
+                master_id: parseInt(assignMasterId), 
+                status: 'neu',
+                billing_override_type: overrideType,
+                billing_override_value: overrideValue
+            } : lead));
+            
+            setSelectedLeadForAssign(null);
+        } catch (error) {
+            console.error(error);
+            alert('Fehler bei der Zuweisung.');
+        } finally {
+            setIsAssigning(false);
+        }
     };
 
     if (leads.length === 0) {
@@ -145,6 +189,7 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                                         <th className="px-6 py-4 font-semibold">Ort / PLZ</th>
                                         <th className="px-6 py-4 font-semibold">Schädling &amp; Details</th>
                                         <th className="px-6 py-4 font-semibold">Status</th>
+                                        <th className="px-6 py-4 font-semibold text-right">Aktionen</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -229,6 +274,14 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                                                         </div>
                                                     </div>
+                                                </td>
+                                                <td className="px-6 py-4 border-y border-r border-slate-200 rounded-r-xl group-hover:border-slate-300 text-right">
+                                                    <button
+                                                        onClick={() => setSelectedLeadForAssign(lead)}
+                                                        className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-200"
+                                                    >
+                                                        Zuweisen
+                                                    </button>
                                                 </td>
                                             </tr>
                                         );
@@ -324,6 +377,14 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className="pt-3 border-t border-slate-100 text-right">
+                                            <button
+                                                onClick={() => setSelectedLeadForAssign(lead)}
+                                                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-200 w-full"
+                                            >
+                                                Zuweisen (Manuell)
+                                            </button>
+                                        </div>
                                     </div>
                                 );
                             })}
@@ -331,6 +392,83 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                     </>
                 )}
             </div>
+
+            {/* Modal for Manual Assignment */}
+            {selectedLeadForAssign && (
+                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, height: '100dvh', background: 'rgba(15,23,42,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '16px', boxSizing: 'border-box', backdropFilter: 'blur(2px)' }}>
+                    <div style={{ background: '#fff', width: '100%', maxWidth: '500px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.25)' }}>
+                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>Lead manuell zuweisen</h2>
+                            <button onClick={() => setSelectedLeadForAssign(null)} style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer', color: '#94a3b8', lineHeight: 1, padding: '4px' }}>×</button>
+                        </div>
+                        <div style={{ padding: '20px 24px' }}>
+                            <div className="mb-4">
+                                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Partner auswählen</label>
+                                <select 
+                                    value={assignMasterId} 
+                                    onChange={(e) => setAssignMasterId(e.target.value)}
+                                    className="w-full border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                >
+                                    <option value="">-- Bitte wählen --</option>
+                                    {masters?.filter(m => m.is_active).map(m => (
+                                        <option key={m.id} value={m.id}>
+                                            {m.name} {m.firma ? `(${m.firma})` : ''}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            <div className="mb-4">
+                                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Abrechnungsmodell für diesen Lead</label>
+                                <select 
+                                    value={priceType} 
+                                    onChange={(e) => {
+                                        setPriceType(e.target.value);
+                                        if (e.target.value === 'free' || e.target.value === 'default') setPriceValue('');
+                                    }}
+                                    className="w-full border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                >
+                                    <option value="default">Standard (laut Schädling/Vertrag)</option>
+                                    <option value="free">Kostenlos (0 €)</option>
+                                    <option value="fixed">Eigener Fixpreis (€)</option>
+                                    <option value="percentage">Eigene Provision (%)</option>
+                                </select>
+                            </div>
+
+                            {(priceType === 'fixed' || priceType === 'percentage') && (
+                                <div className="mb-6">
+                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                        Betrag ({priceType === 'fixed' ? '€' : '%'})
+                                    </label>
+                                    <input 
+                                        type="number" 
+                                        value={priceValue}
+                                        onChange={(e) => setPriceValue(e.target.value)}
+                                        placeholder={priceType === 'fixed' ? 'z.B. 25' : 'z.B. 15'}
+                                        className="w-full border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
+                            )}
+                            
+                            <div className="flex gap-3 justify-end mt-8">
+                                <button
+                                    onClick={() => setSelectedLeadForAssign(null)}
+                                    className="px-5 py-2.5 rounded-lg font-bold text-sm bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 transition-colors"
+                                >
+                                    Abbrechen
+                                </button>
+                                <button
+                                    onClick={handleAssign}
+                                    disabled={!assignMasterId || isAssigning || ((priceType === 'fixed' || priceType === 'percentage') && !priceValue)}
+                                    className="px-5 py-2.5 rounded-lg font-bold text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+                                >
+                                    {isAssigning ? 'Weist zu...' : 'Jetzt zuweisen'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -4,7 +4,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { createClient as createServerClient } from '@/lib/supabase/server';
-import { sendClientStatusUpdate } from '@/lib/email/resend';
+import { sendClientStatusUpdate, sendCompletionLinkEmail } from '@/lib/email/resend';
+import { getLeadPricing } from '@/lib/pricing';
 
 const supabaseAdmin = () => createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
         // Находим мастера по email текущего пользователя
         const { data: master } = await supabase
             .from('masters')
-            .select('id, name, email, credits')
+            .select('id, name, email, credits, billing_model')
             .or(`email.eq.${user.email},user_id.eq.${user.id}`)
             .single();
 
@@ -54,9 +55,15 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: `Lead ist bereits im Status: ${lead.status}` }, { status: 409 });
         }
 
-        const LEAD_PRICE = 25; // 25 Credits / Euro
-        if ((master.credits || 0) < LEAD_PRICE) {
-            return NextResponse.json({ error: 'Nicht genügend Guthaben. Bitte laden Sie Ihr Konto auf.' }, { status: 402 });
+        const pricing = getLeadPricing(lead.schaedling, master.billing_model || 'pay_per_lead', lead.billing_override_type, lead.billing_override_value);
+        let deductAmount = 0;
+        
+        if (pricing.type === 'fixed') {
+            deductAmount = pricing.numericValue;
+        }
+
+        if (deductAmount > 0 && (master.credits || 0) < deductAmount) {
+            return NextResponse.json({ error: `Nicht genügend Guthaben. Preis: ${deductAmount} €. Bitte laden Sie Ihr Konto auf.` }, { status: 402 });
         }
 
         // Меняем статус на 'angenommen' и списываем кредиты
@@ -73,11 +80,13 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Fehler beim Aktualisieren des Leads.' }, { status: 500 });
         }
 
-        // Deduct credits
-        await supabase
-            .from('masters')
-            .update({ credits: master.credits - LEAD_PRICE })
-            .eq('id', master.id);
+        // Deduct credits if needed
+        if (deductAmount > 0) {
+            await supabase
+                .from('masters')
+                .update({ credits: master.credits - deductAmount })
+                .eq('id', master.id);
+        }
 
         // Email клиенту: подтверждение что эксперт найден (задержка 10 минут)
         const emailResult = await sendClientStatusUpdate(lead, master.name || undefined, 10);
@@ -88,6 +97,9 @@ export async function POST(req: NextRequest) {
                 .update({ client_notif_email_id: emailResult.data.id })
                 .eq('id', leadId);
         }
+
+        // Email мастеру: ссылка для завершения заказа (отправляется без задержки)
+        await sendCompletionLinkEmail(master.email, master.name || 'Partner', lead);
 
         return NextResponse.json({ success: true, status: 'angenommen' });
     } catch (err) {

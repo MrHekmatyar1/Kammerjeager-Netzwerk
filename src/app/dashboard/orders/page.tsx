@@ -32,6 +32,8 @@ interface Lead {
     status: string;
     invoice_amount?: number;
     commission_amount?: number;
+    billing_override_type?: string | null;
+    billing_override_value?: number | null;
 }
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; color: string; border: string }> = {
@@ -46,37 +48,7 @@ const STATUS_CONFIG: Record<string, { label: string; bg: string; color: string; 
 const UPDATABLE_STATUSES = ['angenommen', 'kontaktiert', 'termin_vereinbart', 'in_arbeit'];
 const ALL_STATUSES = ['angenommen', 'kontaktiert', 'termin_vereinbart', 'in_arbeit', 'abgeschlossen', 'storniert'];
 
-function getLeadPricing(schaedling: string | null, billingModel: string): { label: string, value: string, isFixed: boolean, numericValue: number } {
-    const defaultPricing = { label: 'Provision', value: '20%', isFixed: false, numericValue: 0 };
-    if (billingModel !== 'pay_per_lead') return defaultPricing;
-    if (!schaedling) return defaultPricing;
-    
-    const s = schaedling.toLowerCase();
-    if (s.includes('beratung') || s.includes('sonstige')) return defaultPricing;
-
-    const fixedPrices: Record<string, number> = {
-        'wespen': 35,
-        'ameisen': 40,
-        'flöhe': 50,
-        'floh': 50,
-        'mäuse': 60,
-        'ratten': 60,
-        'schaben': 60,
-        'kakerlaken': 60,
-        'marder': 70,
-        'tauben': 70,
-        'bettwanzen': 90,
-    };
-
-    for (const key of Object.keys(fixedPrices)) {
-        if (s.includes(key)) {
-            const price = fixedPrices[key] as number;
-            return { label: 'Fixpreis', value: `${price} €`, isFixed: true, numericValue: price };
-        }
-    }
-
-    return defaultPricing;
-}
+import { getLeadPricing } from '@/lib/pricing';
 
 export default function DashboardOrders() {
     const [orders, setOrders] = useState<Lead[]>([]);
@@ -87,6 +59,7 @@ export default function DashboardOrders() {
     const [closingId, setClosingId] = useState<number | null>(null);
     const [invoiceInput, setInvoiceInput] = useState<Record<number, string>>({});
     const [actionLoading, setActionLoading] = useState<number | null>(null);
+    const [confirmModalData, setConfirmModalData] = useState<{ leadId: number; amount: string; isFixed: boolean; pricing: any } | null>(null);
 
     const loadOrders = useCallback(async () => {
         try {
@@ -130,21 +103,24 @@ export default function DashboardOrders() {
         }
     };
 
-    const handleComplete = async (leadId: number) => {
-        const pricing = getLeadPricing(orders.find(o => o.id === leadId)?.schaedling || null, billingModel);
+    const handleCompleteIntent = (leadId: number) => {
+        const lead = orders.find(o => o.id === leadId);
+        const pricing = getLeadPricing(lead?.schaedling || null, billingModel, lead?.billing_override_type, lead?.billing_override_value);
         
         let amount = '0';
-        if (!pricing.isFixed) {
+        if (pricing.type === 'percentage') {
             amount = invoiceInput[leadId] || '0';
             if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
                 alert('Bitte geben Sie einen gültigen Rechnungsbetrag ein.');
                 return;
             }
-            const commission = (Number(amount) * 0.2).toFixed(2);
-            if (!confirm(`Rechnungsbetrag: ${Number(amount).toFixed(2)} €\nProvision (20%): ${commission} €\n\nMöchten Sie den Auftrag jetzt abschließen?`)) return;
-        } else {
-            if (!confirm(`Möchten Sie diesen Auftrag jetzt abschließen?\n(Leadgebühr: ${pricing.value})`)) return;
         }
+        setConfirmModalData({ leadId, amount, isFixed: pricing.type !== 'percentage', pricing });
+    };
+
+    const executeComplete = async () => {
+        if (!confirmModalData) return;
+        const { leadId, amount } = confirmModalData;
 
         setActionLoading(leadId);
         try {
@@ -166,6 +142,7 @@ export default function DashboardOrders() {
             alert('Netzwerkfehler.');
         } finally {
             setActionLoading(null);
+            setConfirmModalData(null);
         }
     };
 
@@ -314,9 +291,9 @@ export default function DashboardOrders() {
                                     {isCompleted ? (
                                         <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '16px' }}>
                                             <div style={{ color: '#166534', fontWeight: 700, marginBottom: '6px' }}>Auftrag abgeschlossen</div>
-                                            {getLeadPricing(order.schaedling, billingModel).isFixed ? (
+                                            {getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).type !== 'percentage' ? (
                                                 <div style={{ color: '#15803d', fontSize: '14px', marginBottom: '4px' }}>
-                                                    Leadgebühr (Fixpreis): <strong>{getLeadPricing(order.schaedling, billingModel).value}</strong>
+                                                    Leadgebühr ({getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).label}): <strong>{getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).value}</strong>
                                                 </div>
                                             ) : (
                                                 <>
@@ -340,7 +317,7 @@ export default function DashboardOrders() {
                                         </div>
                                     ) : isClosing ? (
                                         <div>
-                                            {!getLeadPricing(order.schaedling, billingModel).isFixed ? (
+                                            {getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).type === 'percentage' ? (
                                                 <div style={{ marginBottom: '10px' }}>
                                                     <label style={{ display: 'block', fontSize: '12px', color: '#475569', fontWeight: 600, marginBottom: '6px' }}>Finaler Rechnungsbetrag (€)</label>
                                                     <div style={{ display: 'flex', gap: '8px' }}>
@@ -354,7 +331,7 @@ export default function DashboardOrders() {
                                                             style={{ flex: 1, padding: '8px 12px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '15px', outline: 'none', fontFamily: 'inherit' }}
                                                         />
                                                         <button
-                                                            onClick={() => handleComplete(order.id)}
+                                                            onClick={() => handleCompleteIntent(order.id)}
                                                             disabled={actionLoading === order.id}
                                                             className="btn-color-hover bg-[#C8102E] text-white border border-transparent px-[14px] py-0 rounded-lg text-[13px] font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                                                         >
@@ -363,17 +340,17 @@ export default function DashboardOrders() {
                                                     </div>
                                                     {invoiceInput[order.id] && !isNaN(Number(invoiceInput[order.id])) && Number(invoiceInput[order.id]) > 0 && (
                                                         <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px' }}>
-                                                            Provision: <strong>{(Number(invoiceInput[order.id]) * 0.2).toFixed(2)} €</strong>
+                                                            Provision ({getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).value}): <strong>{(Number(invoiceInput[order.id]) * getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).numericValue).toFixed(2)} €</strong>
                                                         </div>
                                                     )}
                                                 </div>
                                             ) : (
                                                 <div style={{ marginBottom: '10px' }}>
                                                     <div style={{ fontSize: '13px', color: '#475569', marginBottom: '8px' }}>
-                                                        Dieser Auftrag läuft über den Fixpreis ({getLeadPricing(order.schaedling, billingModel).value}). Bitte schließen Sie den Auftrag ab.
+                                                        Dieser Auftrag läuft über: {getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).label} ({getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).value}). Bitte schließen Sie den Auftrag ab.
                                                     </div>
                                                     <button
-                                                        onClick={() => handleComplete(order.id)}
+                                                        onClick={() => handleCompleteIntent(order.id)}
                                                         disabled={actionLoading === order.id}
                                                         className="btn-color-hover w-full bg-[#C8102E] text-white border border-transparent px-[14px] py-[10px] rounded-lg text-[13px] font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                                                     >
@@ -388,9 +365,9 @@ export default function DashboardOrders() {
                                     ) : (
                                         <div>
                                             <p style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '12px', lineHeight: 1.5 }}>
-                                                {getLeadPricing(order.schaedling, billingModel).isFixed 
-                                                    ? `Kosten: ${getLeadPricing(order.schaedling, billingModel).value} Fixpreis pro Lead.`
-                                                    : `Nach Abschluss der Arbeiten tragen Sie den Rechnungsbetrag ein.\nProvision: 20% des Endpreises.`
+                                                {getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).type !== 'percentage'
+                                                    ? `Kosten: ${getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).value} (${getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).label}) pro Lead.`
+                                                    : `Nach Abschluss der Arbeiten tragen Sie den Rechnungsbetrag ein.\nProvision: ${getLeadPricing(order.schaedling, billingModel, order.billing_override_type, order.billing_override_value).value} des Endpreises.`
                                                 }
                                             </p>
                                             <button
@@ -407,6 +384,74 @@ export default function DashboardOrders() {
                     );
                 })}
             </div>
+
+            {/* Custom Confirm Modal */}
+            {confirmModalData && (
+                <div style={{ position: 'fixed', inset: 0, zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+                    {/* Blurred Backdrop */}
+                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }} />
+                    
+                    {/* Modal Content */}
+                    <div style={{ position: 'relative', background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '420px', overflow: 'hidden', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}>
+                        <div style={{ background: '#0f172a', padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                                Kammerjäger Structon · Partner-Portal
+                            </div>
+                            <button onClick={() => setConfirmModalData(null)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', padding: '4px', margin: '-4px' }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div style={{ padding: '24px' }}>
+                            <h3 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '28px', fontWeight: 900, textTransform: 'uppercase', color: '#0f172a', marginBottom: '16px', lineHeight: 1 }}>
+                                Auftrag abschließen
+                            </h3>
+                            
+                            <div style={{ color: '#475569', fontSize: '15px', lineHeight: 1.6, marginBottom: '24px' }}>
+                                {!confirmModalData.isFixed ? (
+                                    <>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                                            <span>Rechnungsbetrag:</span>
+                                            <strong style={{ color: '#0f172a' }}>{Number(confirmModalData.amount).toFixed(2)} €</strong>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid #e2e8f0' }}>
+                                            <span>Provision ({confirmModalData.pricing.value}):</span>
+                                            <strong style={{ color: '#C8102E' }}>{(Number(confirmModalData.amount) * confirmModalData.pricing.numericValue).toFixed(2)} €</strong>
+                                        </div>
+                                        <div style={{ marginTop: '16px', fontWeight: 600, color: '#0f172a' }}>
+                                            Möchten Sie diesen Auftrag jetzt endgültig abschließen?
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid #e2e8f0' }}>
+                                            <span>Leadgebühr:</span>
+                                            <strong style={{ color: '#0f172a' }}>{confirmModalData.pricing.value}</strong>
+                                        </div>
+                                        <div style={{ marginTop: '16px', fontWeight: 600, color: '#0f172a' }}>
+                                            Möchten Sie diesen Auftrag jetzt endgültig abschließen?
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+
+                            <button 
+                                onClick={executeComplete}
+                                disabled={actionLoading !== null}
+                                className="w-full bg-[#cbd5e1] text-white hover:bg-[#94a3b8] transition-colors py-[14px] rounded-lg font-bold text-[14px] uppercase tracking-wider"
+                                style={{
+                                    background: actionLoading !== null ? '#94a3b8' : '#cbd5e1', // Using the light blueish-grey from the PLZ modal
+                                    color: '#ffffff'
+                                }}
+                            >
+                                {actionLoading !== null ? 'Wird abgeschlossen...' : 'Auftrag abschließen →'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

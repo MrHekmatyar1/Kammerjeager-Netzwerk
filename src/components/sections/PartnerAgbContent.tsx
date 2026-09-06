@@ -35,15 +35,21 @@ export default function PartnerAgbContent() {
                 </div>
 
                 <div>
-                    <h3 className="font-bold text-[#1E293B] mb-2 text-lg">§ 3 Vergütung, Preise und Abrechnung</h3>
+                    <h3 className="font-bold text-[#1E293B] mb-2 text-lg">§ 3 Vergütung, Abrechnungsmodelle und Vertragsstrafe</h3>
                     <p>
-                        (1) Für jeden vom Vermittler an den Partner übermittelten und vom Partner akzeptierten Lead zahlt der Partner eine Vermittlungsprovision (Lead-Gebühr).
+                        (1) Die Vergütung für übermittelte Kundenanfragen erfolgt abhängig vom Schädling und der individuellen Vereinbarung entweder als <strong>Fixpreis pro Lead</strong> oder als <strong>prozentuale Provision</strong> auf den Netto-Endkundenumsatz.
                     </p>
                     <p className="mt-2">
-                        (2) Die Höhe der Lead-Gebühr richtet sich nach der aktuellen Preisliste oder der individuellen vertraglichen Vereinbarung.
+                        (2) <strong>Fixpreis-Modell:</strong> Die Gebühr (z.B. für Mäuse, Ratten, Schaben) wird sofort bei Annahme des Leads im Portal fällig und über ein Prepaid-Guthaben (Credits) oder nachträgliche Rechnungsstellung abgerechnet.
                     </p>
                     <p className="mt-2">
-                        (3) Die Abrechnung erfolgt wöchentlich oder monatlich. Die Zahlung erfolgt wahlweise per automatischer Belastung (SEPA-Lastschrift/Kreditkarte via Stripe) oder per Überweisung innerhalb von 7 Tagen nach Rechnungsstellung.
+                        (3) <strong>Provisions-Modell:</strong> Bei Anfragen ohne fest kalkulierbaren Preis (z.B. Beratung, unbekannter Schädling) fällt eine prozentuale Provision (i.d.R. 20%) an. Diese wird nach Abschluss des Auftrags auf Basis des vom Partner im Portal eingetragenen Rechnungsbetrags berechnet.
+                    </p>
+                    <p className="mt-2">
+                        (4) <strong>Meldepflicht und Vertragsstrafe:</strong> Der Partner verpflichtet sich, bei Provisions-Leads den korrekten und vollständigen Rechnungsbetrag unverzüglich im Portal einzutragen. Die Abrechnung der Provision (sowie ggf. die Zahlung des Endkunden) hat über die vom Vermittler bereitgestellte Stripe-Zahlungslösung zu erfolgen, um eine automatische Provisionsabführung zu gewährleisten. Bei nachgewiesenen Falschangaben, Barzahlungen unter Umgehung des Systems oder Unterschlagung von Umsätzen wird eine <strong>Vertragsstrafe in Höhe von 280,00 € zzgl. der entgangenen Provision</strong> fällig.
+                    </p>
+                    <p className="mt-2">
+                        (5) Die reguläre Abrechnung erfolgt wöchentlich oder monatlich. Die Zahlung erfolgt wahlweise per automatischer Belastung (SEPA-Lastschrift/Kreditkarte) oder per Überweisung innerhalb von 7 Tagen nach Rechnungsstellung.
                     </p>
                 </div>
 

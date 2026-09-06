@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import LeadsTable from '@/components/admin/LeadsTable';
+import { getMasters } from './actions';
 
 export const revalidate = 0; // Всегда свежие данные для админки
 
@@ -21,6 +22,8 @@ export default async function AdminPage() {
         );
     }
 
+    const masters = await getMasters();
+
     return (
         <div className="space-y-6">
             <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
@@ -38,7 +41,7 @@ export default async function AdminPage() {
             </header>
 
             {/* Таблица лидов */}
-            <LeadsTable initialLeads={leads || []} />
+            <LeadsTable initialLeads={leads || []} masters={masters || []} />
         </div>
     );
 }

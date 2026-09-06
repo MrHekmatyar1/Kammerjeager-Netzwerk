@@ -7,6 +7,7 @@
 // ==========================================
 
 import { useEffect, useState, useCallback } from 'react';
+import { getLeadPricing } from '@/lib/pricing';
 
 interface Lead {
     id: number;
@@ -23,6 +24,8 @@ interface Lead {
     zugang_beschreibung: string | null;
     created_at: string;
     status: string;
+    billing_override_type?: string | null;
+    billing_override_value?: number | null;
 }
 
 // Время с момента создания в читаемом формате
@@ -44,37 +47,7 @@ function getUrgencyColor(dateStr: string): string {
     return '#64748b';
 }
 
-function getLeadPricing(schaedling: string | null, billingModel: string): { label: string, value: string } {
-    const defaultPricing = { label: 'Provision', value: '20%' };
-    if (billingModel !== 'pay_per_lead') return defaultPricing;
-    if (!schaedling) return defaultPricing;
-    
-    const s = schaedling.toLowerCase();
-    if (s.includes('beratung') || s.includes('sonstige')) return defaultPricing;
-
-    const fixedPrices: Record<string, string> = {
-        'wespen': '35 €',
-        'ameisen': '40 €',
-        'flöhe': '50 €',
-        'floh': '50 €',
-        'mäuse': '60 €',
-        'ratten': '60 €',
-        'schaben': '60 €',
-        'kakerlaken': '60 €',
-        'marder': '70 €',
-        'tauben': '70 €',
-        'bettwanzen': '90 €',
-    };
-
-    for (const key of Object.keys(fixedPrices)) {
-        if (s.includes(key)) {
-            const price = fixedPrices[key] as string;
-            return { label: 'Fixpreis', value: price };
-        }
-    }
-
-    return defaultPricing;
-}
+// Removed local getLeadPricing
 
 export default function DashboardMarketplace() {
     const [leads, setLeads] = useState<Lead[]>([]);
@@ -91,7 +64,7 @@ export default function DashboardMarketplace() {
         try {
             setLoading(true);
             setError('');
-            const res = await fetch('/api/partner/leads?status=neu');
+            const res = await fetch('/api/partner/leads?status=neu,unassigned');
             if (!res.ok) {
                 const d = await res.json();
                 if (res.status === 401) {
@@ -277,7 +250,7 @@ export default function DashboardMarketplace() {
                         </div>
                         <div style={{ textAlign: 'right', flexShrink: 0 }}>
                             <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '10px' }}>
-                                {getLeadPricing(lead.schaedling, billingModel).label}: <strong>{getLeadPricing(lead.schaedling, billingModel).value}</strong>
+                                {getLeadPricing(lead.schaedling, billingModel, lead.billing_override_type, lead.billing_override_value).label}: <strong>{getLeadPricing(lead.schaedling, billingModel, lead.billing_override_type, lead.billing_override_value).value}</strong>
                             </div>
                             <button
                                 onClick={() => { setSelectedLead(lead); setAgreed(false); setShowRejectModal(false); }}
@@ -338,8 +311,8 @@ export default function DashboardMarketplace() {
                             <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '12px 14px', marginBottom: '14px' }}>
                                 <div style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>Rechtliche Vereinbarung</div>
                                 <p style={{ fontSize: '13px', color: '#475569', lineHeight: 1.55, margin: 0 }}>
-                                    Durch Annahme verpflichten Sie sich, im Falle einer Barzahlung den <strong>korrekten und vollständigen Rechnungsbetrag</strong> im Portal einzutragen.
-                                    Bei Falschangaben wird eine <strong style={{ color: '#b91c1c' }}>Vertragsstrafe von 480 € + entgangene Provision</strong> fällig.
+                                    Durch Annahme verpflichten Sie sich, im Falle einer prozentualen Provision die Abrechnung zwingend über die <strong>Stripe-Zahlungsfunktion</strong> des Portals abzuwickeln, damit unsere Provision automatisch einbehalten wird.
+                                    Bei Barzahlungen unter Umgehung des Systems oder Falschangaben wird eine <strong style={{ color: '#b91c1c' }}>Vertragsstrafe von 280 € + entgangene Provision</strong> fällig.
                                 </p>
                             </div>
                             <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer' }}>
@@ -350,7 +323,7 @@ export default function DashboardMarketplace() {
                                     style={{ marginTop: '2px', width: '16px', height: '16px', accentColor: '#C8102E', flexShrink: 0 }}
                                 />
                                 <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: 500, lineHeight: 1.45 }}>
-                                    Ich akzeptiere die Bedingungen und bestätige, den korrekten Rechnungsbetrag einzutragen.
+                                    Ich akzeptiere die Bedingungen und bestätige, Provisions-Leads korrekt über Stripe abzurechnen.
                                 </span>
                             </label>
                         </div>

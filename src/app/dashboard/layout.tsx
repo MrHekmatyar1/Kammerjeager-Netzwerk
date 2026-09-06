@@ -170,6 +170,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 setTimeout(() => window.dispatchEvent(new CustomEvent('open-auth-modal')), 500);
             } else {
                 setUser(session.user);
+                
+                // Проверка на роль клиента
+                if (session.user.user_metadata?.role === 'kunden' && session.user.email?.toLowerCase() !== 'edorkalchuk@gmail.com') {
+                    router.push('/kunden');
+                    return;
+                }
+
                 const { data: master } = await supabase
                     .from('masters')
                     .select('credits, plz_bereiche')

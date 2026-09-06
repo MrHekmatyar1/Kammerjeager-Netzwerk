@@ -17,6 +17,9 @@ interface Lead {
     strasse?: string;
     created_at: string;
     status: string;
+    termin_time?: string;
+    name?: string;
+    telefon?: string;
     masters?: MasterInfo;
 }
 
@@ -34,6 +37,9 @@ export default function KundenDashboard() {
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [editingLead, setEditingLead] = useState<Lead | null>(null);
+    const [editForm, setEditForm] = useState({ name: '', telefon: '', termin_time: '' });
+    const [saving, setSaving] = useState(false);
     const router = useRouter();
     const supabase = createClient();
 
@@ -43,6 +49,11 @@ export default function KundenDashboard() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) {
                 router.push('/');
+                return;
+            }
+
+            if (user.user_metadata?.role === 'partner' && user.email?.toLowerCase() !== 'edorkalchuk@gmail.com') {
+                router.push('/dashboard');
                 return;
             }
 
@@ -64,6 +75,53 @@ export default function KundenDashboard() {
     useEffect(() => {
         loadLeads();
     }, [loadLeads]);
+
+    const handleEditClick = (lead: Lead) => {
+        setEditingLead(lead);
+        let formattedTime = '';
+        if (lead.termin_time) {
+            // Convert to YYYY-MM-DDThh:mm for datetime-local input
+            const d = new Date(lead.termin_time);
+            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+            formattedTime = d.toISOString().slice(0, 16);
+        }
+        setEditForm({
+            name: lead.name || '',
+            telefon: lead.telefon || '',
+            termin_time: formattedTime
+        });
+    };
+
+    const handleSaveEdit = async () => {
+        if (!editingLead) return;
+        setSaving(true);
+        try {
+            const res = await fetch('/api/kunden/leads/update', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    leadId: editingLead.id,
+                    name: editForm.name,
+                    telefon: editForm.telefon,
+                    termin_time: editForm.termin_time ? new Date(editForm.termin_time).toISOString() : null
+                })
+            });
+            if (!res.ok) throw new Error('Fehler beim Speichern');
+            
+            // Update local state
+            setLeads(leads.map(l => l.id === editingLead.id ? { 
+                ...l, 
+                name: editForm.name, 
+                telefon: editForm.telefon, 
+                termin_time: editForm.termin_time ? new Date(editForm.termin_time).toISOString() : undefined 
+            } : l));
+            setEditingLead(null);
+        } catch (err) {
+            alert('Fehler beim Speichern der Daten. Bitte versuchen Sie es erneut.');
+        } finally {
+            setSaving(false);
+        }
+    };
 
     return (
         <div style={{ minHeight: 'calc(100vh - 70px)', background: '#f1f5f9', paddingTop: '100px', paddingBottom: '60px' }}>
@@ -134,11 +192,26 @@ export default function KundenDashboard() {
                                     <div style={{ padding: '24px' }}>
                                         {/* Status Message */}
                                         {lead.status === 'neu' && (
-                                            <p style={{ color: '#475569', fontSize: '14px', margin: 0, lineHeight: 1.5 }}>
+                                            <p style={{ color: '#475569', fontSize: '14px', margin: '0 0 16px', lineHeight: 1.5 }}>
                                                 Wir suchen aktuell einen passenden, zertifizierten Kammerjäger in Ihrer Region. 
                                                 Sobald ein Partner den Auftrag übernimmt, sehen Sie hier seine Kontaktdaten.
                                             </p>
                                         )}
+                                        
+                                        {/* Termin Info */}
+                                        <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <div>
+                                                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginBottom: '4px' }}>Wunschtermin</div>
+                                                <div style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a' }}>
+                                                    {lead.termin_time ? new Date(lead.termin_time).toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' }) + ' Uhr' : 'Noch nicht festgelegt'}
+                                                </div>
+                                            </div>
+                                            {lead.status !== 'abgeschlossen' && lead.status !== 'storniert' && (
+                                                <button onClick={() => handleEditClick(lead)} style={{ background: 'none', border: '1px solid #cbd5e1', padding: '8px 16px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, color: '#475569', cursor: 'pointer', fontFamily: 'inherit' }}>
+                                                    Bearbeiten
+                                                </button>
+                                            )}
+                                        </div>
                                         
                                         {lead.status !== 'neu' && lead.status !== 'storniert' && partner && (
                                             <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '16px' }}>
@@ -174,6 +247,61 @@ export default function KundenDashboard() {
                     </div>
                 )}
             </div>
+
+            {/* Edit Modal */}
+            {editingLead && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+                    <div style={{ background: '#fff', padding: '24px', borderRadius: '16px', width: '100%', maxWidth: '400px' }}>
+                        <h3 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 800 }}>Termin & Daten bearbeiten</h3>
+                        
+                        <div style={{ marginBottom: '16px' }}>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>Wunschtermin</label>
+                            <input 
+                                type="datetime-local" 
+                                value={editForm.termin_time}
+                                onChange={e => setEditForm({...editForm, termin_time: e.target.value})}
+                                style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontFamily: 'inherit' }}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: '16px' }}>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>Name vor Ort</label>
+                            <input 
+                                type="text" 
+                                value={editForm.name}
+                                onChange={e => setEditForm({...editForm, name: e.target.value})}
+                                style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontFamily: 'inherit' }}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: '24px' }}>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>Telefonnummer (Für Rückfragen)</label>
+                            <input 
+                                type="tel" 
+                                value={editForm.telefon}
+                                onChange={e => setEditForm({...editForm, telefon: e.target.value})}
+                                style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontFamily: 'inherit' }}
+                            />
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '12px' }}>
+                            <button 
+                                onClick={() => setEditingLead(null)}
+                                style={{ flex: 1, padding: '12px', background: '#f1f5f9', color: '#475569', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}
+                            >
+                                Abbrechen
+                            </button>
+                            <button 
+                                onClick={handleSaveEdit}
+                                disabled={saving}
+                                style={{ flex: 1, padding: '12px', background: '#0f172a', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer' }}
+                            >
+                                {saving ? 'Speichert...' : 'Speichern'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

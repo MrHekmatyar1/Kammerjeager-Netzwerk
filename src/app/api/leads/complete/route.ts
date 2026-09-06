@@ -4,8 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { createClient as createServerClient } from '@/lib/supabase/server';
-
-const COMMISSION_RATE = 0.20; // 20% комиссия
+import { getLeadPricing } from '@/lib/pricing';
 
 const supabaseAdmin = () => createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -37,7 +36,7 @@ export async function POST(req: NextRequest) {
         // Находим мастера
         const { data: master } = await supabase
             .from('masters')
-            .select('id, name')
+            .select('id, name, billing_model, credits')
             .or(`email.eq.${user.email},user_id.eq.${user.id}`)
             .single();
 
@@ -48,7 +47,7 @@ export async function POST(req: NextRequest) {
         // Проверяем что лид принадлежит этому партнёру
         const { data: lead, error: fetchError } = await supabase
             .from('leads')
-            .select('id, status, master_id, schaedling, plz')
+            .select('id, status, master_id, schaedling, plz, billing_override_type, billing_override_value')
             .eq('id', leadId)
             .eq('master_id', master.id)
             .single();
@@ -65,7 +64,14 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Stornierte Aufträge können nicht abgeschlossen werden.' }, { status: 409 });
         }
 
-        const commissionAmount = Math.round(amount * COMMISSION_RATE * 100) / 100;
+        const pricing = getLeadPricing(lead.schaedling, master.billing_model || 'pay_per_lead', lead.billing_override_type, lead.billing_override_value);
+        let commissionRate = 0;
+        let commissionAmount = 0;
+
+        if (pricing.type === 'percentage') {
+            commissionRate = pricing.numericValue;
+            commissionAmount = Math.round(amount * commissionRate * 100) / 100;
+        }
 
         // Обновляем лид
         const { error: updateError } = await supabase
@@ -83,11 +89,19 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Fehler beim Abschließen.' }, { status: 500 });
         }
 
+        // Deduct commission from master credits
+        if (commissionAmount > 0) {
+            await supabase
+                .from('masters')
+                .update({ credits: (master.credits || 0) - commissionAmount })
+                .eq('id', master.id);
+        }
+
         return NextResponse.json({
             success: true,
             invoiceAmount: amount,
             commissionAmount,
-            commissionRate: COMMISSION_RATE,
+            commissionRate: commissionRate,
         });
     } catch (err) {
         console.error('[leads/complete] Error:', err);

@@ -309,3 +309,115 @@ export async function sendCustomerConfirmation(lead: any) {
         return { success: false, error: err };
     }
 }
+
+// ─── Email мастеру со ссылкой на завершение заказа ──────────────────────────
+export async function sendCompletionLinkEmail(partnerEmail: string, partnerName: string, lead: any) {
+    const subject = `Auftrag abschließen: ${lead.schaedling || 'Schädlingsbekämpfung'} in ${lead.plz}`;
+
+    const html = `
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 620px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+            <div style="background: #0f172a; padding: 28px 32px; text-align: center;">
+                <div style="font-size: 13px; color: #94a3b8; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px;">Kammerjäger Structon</div>
+                <div style="font-size: 22px; font-weight: 900; color: #ffffff;">Bitte bestätigen Sie den Abschluss</div>
+            </div>
+            <div style="padding: 32px;">
+                <p style="font-size: 16px; color: #1e293b; margin: 0 0 24px; line-height: 1.6;">
+                    Hallo <strong>${partnerName}</strong>,<br>
+                    Sie haben kürzlich den Auftrag in <strong>${lead.plz}</strong> übernommen. 
+                    Sobald Sie die Arbeit vor Ort abgeschlossen haben, bestätigen Sie dies bitte über den untenstehenden Button.
+                </p>
+
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <a href="https://kammerjaeger-structon.de/partner/confirm/${lead.id}" style="display: inline-block; background: #C8102E; color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.05em;">
+                        Auftrag jetzt abschließen
+                    </a>
+                </div>
+
+                <p style="font-size: 13px; color: #94a3b8; text-align: center; margin: 0;">
+                    <em>Hinweis:</em> Bei Provisions-Leads werden Sie im nächsten Schritt nach dem Rechnungsbetrag gefragt.
+                </p>
+            </div>
+            <div style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 32px; text-align: center;">
+                <p style="font-size: 12px; color: #94a3b8; margin: 0;">kammerjaeger-structon.de · Automatische Benachrichtigung</p>
+            </div>
+        </div>
+    `;
+
+    if (!resend) {
+        console.log('--- [EMAIL FALLBACK] COMPLETION LINK NOTIFICATION ---');
+        console.log(`TO: ${partnerEmail}`);
+        console.log(`SUBJECT: ${subject}`);
+        return { success: true, fallback: true };
+    }
+
+    try {
+        const { data, error } = await resend.emails.send({
+            from: FROM_EMAIL,
+            to: partnerEmail,
+            subject,
+            html,
+        });
+        if (error) { console.error('[Resend Completion Link] Error:', error); return { success: false, error }; }
+        return { success: true, data };
+    } catch (err) {
+        console.error('[Resend Completion Link] Exception:', err);
+        return { success: false, error: err };
+    }
+}
+
+// ─── Email мастеру об изменении данных/времени заказа клиентом ─────────────
+export async function sendTerminUpdateEmail(partnerEmail: string, partnerName: string, lead: any) {
+    const subject = `Termin / Daten aktualisiert: ${lead.plz}`;
+
+    const terminText = lead.termin_time 
+        ? new Date(lead.termin_time).toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' }) + ' Uhr'
+        : 'Noch nicht festgelegt';
+
+    const html = `
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 620px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+            <div style="background: #0f172a; padding: 28px 32px; text-align: center;">
+                <div style="font-size: 13px; color: #94a3b8; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px;">Kammerjäger Structon</div>
+                <div style="font-size: 22px; font-weight: 900; color: #ffffff;">Auftragsdaten aktualisiert</div>
+            </div>
+            <div style="padding: 32px;">
+                <p style="font-size: 16px; color: #1e293b; margin: 0 0 24px; line-height: 1.6;">
+                    Hallo <strong>${partnerName}</strong>,<br>
+                    der Kunde für den Auftrag in <strong>${lead.plz}</strong> hat seine Daten oder den gewünschten Termin aktualisiert.
+                </p>
+
+                <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+                    <p style="margin: 0 0 8px; font-size: 14px; color: #475569;"><strong>Neuer Termin:</strong> ${terminText}</p>
+                    <p style="margin: 0 0 8px; font-size: 14px; color: #475569;"><strong>Kunde:</strong> ${lead.name}</p>
+                    <p style="margin: 0; font-size: 14px; color: #475569;"><strong>Telefon:</strong> <a href="tel:${lead.telefon}" style="color: #1d4ed8; text-decoration: none;">${lead.telefon}</a></p>
+                </div>
+
+                <div style="text-align: center;">
+                    <a href="https://kammerjaeger-structon.de/dashboard/orders" style="display: inline-block; background: #C8102E; color: #ffffff; text-decoration: none; padding: 12px 32px; border-radius: 6px; font-weight: 700; font-size: 14px;">
+                        Zum Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+
+    if (!resend) {
+        console.log('--- [EMAIL FALLBACK] TERMIN UPDATE NOTIFICATION ---');
+        console.log(`TO: ${partnerEmail}`);
+        console.log(`SUBJECT: ${subject}`);
+        return { success: true, fallback: true };
+    }
+
+    try {
+        const { data, error } = await resend.emails.send({
+            from: FROM_EMAIL,
+            to: partnerEmail,
+            subject,
+            html,
+        });
+        if (error) { console.error('[Resend Termin Update] Error:', error); return { success: false, error }; }
+        return { success: true, data };
+    } catch (err) {
+        console.error('[Resend Termin Update] Exception:', err);
+        return { success: false, error: err };
+    }
+}

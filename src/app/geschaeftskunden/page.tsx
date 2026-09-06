@@ -661,9 +661,9 @@ export default function GeschaeftskundenPage() {
                                 <svg viewBox="0 0 100 100" className="w-full h-full">
                                     {/* r=34, C=213.6 */}
                                     <path id="textCircle" d="M 50, 16 a 34,34 0 1,1 0,68 a 34,34 0 1,1 0,-68" fill="none" />
-                                    <text style={{ fontSize: '7.5px', fontWeight: 800, textTransform: 'uppercase' }} fill="#1a1a1a">
+                                    <text style={{ fontSize: '5.6px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em' }} fill="#1a1a1a">
                                         <textPath href="#textCircle" startOffset="0" textLength="213.6" lengthAdjust="spacing">
-                                            KAMMERJÄGER-ZENTRALE &nbsp;●&nbsp; GARANTIE &nbsp;●&nbsp; KAMMERJÄGER-ZENTRALE &nbsp;●&nbsp; GARANTIE &nbsp;●&nbsp; 
+                                            KAMMERJÄGER-ZENTRALE ● GARANTIE ● KAMMERJÄGER-ZENTRALE ● GARANTIE ● 
                                         </textPath>
                                     </text>
                                 </svg>

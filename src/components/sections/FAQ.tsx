@@ -49,7 +49,7 @@ export default function FAQ() {
     const rightFaqs = faqs.slice(mid);
 
     return (
-        <section className="bg-[#1a1a1a] text-white py-24 md:py-32 px-4 md:px-8">
+        <section className="bg-[#1a1a1a] text-white py-16 px-4 md:px-8">
             <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl md:text-4xl font-black mb-10 tracking-tight">Häufig gestellte Fragen</h2>
 

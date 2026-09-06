@@ -645,7 +645,7 @@ export default function GeschaeftskundenPage() {
                 </section>
 
                 {/* ── Unsere Garantie (Orkin Style) ── */}
-                <section className="w-full bg-[#f4f4f4] py-24 md:py-32 px-6 flex justify-center border-t border-b border-gray-200">
+                <section className="w-full bg-[#f4f4f4] py-20 px-6 flex justify-center border-t border-b border-gray-200">
                     <div className="w-full max-w-[900px] flex flex-col md:flex-row items-center justify-center gap-10 md:gap-14">
                         
                         {/* Minimalist Badge with Logo */}
@@ -701,10 +701,12 @@ export default function GeschaeftskundenPage() {
                 </section>
 
                 {/* ── FAQ ── */}
-                <FAQ />
+                <div className="mt-16 md:mt-24">
+                    <FAQ />
+                </div>
 
                 {/* ── Контактная форма ── */}
-                <section id="kontakt" className="w-full flex flex-col items-center px-6 pt-[100px] pb-[140px]" style={{ background: '#f1f4f8' }}>
+                <section id="kontakt" className="w-full flex flex-col items-center px-6 pt-[60px] pb-[110px] mt-16 md:mt-24" style={{ background: '#f1f4f8' }}>
                     <div className="w-full max-w-[720px]">
                         <KontaktForm />
                     </div>

@@ -651,10 +651,10 @@ export default function GeschaeftskundenPage() {
                         <div className="shrink-0 relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 rounded-full bg-white shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
                             
                             {/* Outer border */}
-                            <div className="absolute inset-[6px] rounded-full border-[1.5px] border-[#1a1a1a]"></div>
+                            <div className="absolute inset-[6px] rounded-full border-[2.5px] border-[#1a1a1a]"></div>
                             
                             {/* Inner border */}
-                            <div className="absolute inset-[32px] md:inset-[38px] rounded-full border-[1.5px] border-[#1a1a1a] bg-[#f8f9fa]"></div>
+                            <div className="absolute inset-[32px] md:inset-[38px] rounded-full border-[2.5px] border-[#1a1a1a] bg-[#f8f9fa]"></div>
 
                             {/* Circular Text SVG */}
                             <div className="absolute inset-0 w-full h-full animate-[spin_25s_linear_infinite]">
@@ -663,7 +663,7 @@ export default function GeschaeftskundenPage() {
                                     <path id="textCircle" d="M 50, 16 a 34,34 0 1,1 0,68 a 34,34 0 1,1 0,-68" fill="none" />
                                     <text style={{ fontSize: '7.5px', fontWeight: 800, textTransform: 'uppercase' }} fill="#1a1a1a">
                                         <textPath href="#textCircle" startOffset="0" textLength="213.6" lengthAdjust="spacing">
-                                            KAMMERJÄGER-ZENTRALE • GARANTIE • KAMMERJÄGER-ZENTRALE • GARANTIE • 
+                                            KAMMERJÄGER-ZENTRALE &nbsp;●&nbsp; GARANTIE &nbsp;●&nbsp; KAMMERJÄGER-ZENTRALE &nbsp;●&nbsp; GARANTIE &nbsp;●&nbsp; 
                                         </textPath>
                                     </text>
                                 </svg>
@@ -672,13 +672,6 @@ export default function GeschaeftskundenPage() {
                             {/* Center Logo */}
                             <div className="relative z-10 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
                                 <img src="/logo_k.png" alt="Garantie Logo" className="w-full h-full object-contain drop-shadow-sm" />
-                            </div>
-
-                            {/* Checkmark icon */}
-                            <div className="absolute bottom-1 right-1 md:bottom-2 md:right-2 bg-[#C8102E] text-white rounded-full p-2 border-4 border-[#f4f4f4] shadow-md z-20">
-                                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M5 13l4 4L19 7" />
-                                </svg>
                             </div>
                         </div>
 

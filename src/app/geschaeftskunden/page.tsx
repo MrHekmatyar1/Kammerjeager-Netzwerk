@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import FAQ from '@/components/sections/FAQ';
 
 const inp: React.CSSProperties = {
     width: '100%',
@@ -698,6 +699,9 @@ export default function GeschaeftskundenPage() {
                         </div>
                     </div>
                 </section>
+
+                {/* ── FAQ ── */}
+                <FAQ />
 
                 {/* ── Контактная форма ── */}
                 <section id="kontakt" className="w-full flex flex-col items-center px-6 pt-[60px] pb-[110px]" style={{ background: '#f1f4f8' }}>

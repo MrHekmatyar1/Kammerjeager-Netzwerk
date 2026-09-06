@@ -127,17 +127,17 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                 </button>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-slate-300 overflow-hidden">
+            <div className="">
                 {filteredLeads.length === 0 ? (
-                    <div className="p-8 text-center text-slate-500 text-sm">
+                    <div className="p-8 text-center text-slate-500 text-sm bg-white rounded-xl shadow-sm border border-slate-200">
                         Keine Leads in dieser Kategorie gefunden.
                     </div>
                 ) : (
                     <>
                         {/* Desktop View */}
-                        <div className="hidden md:block overflow-x-auto">
-                            <table className="w-full text-sm text-left text-slate-600">
-                                <thead className="text-xs text-slate-600 uppercase bg-slate-100 border-b border-slate-300">
+                        <div className="hidden md:block overflow-x-auto pb-4">
+                            <table className="w-full text-sm text-left text-slate-600" style={{ borderCollapse: 'separate', borderSpacing: '0 12px' }}>
+                                <thead className="text-xs text-slate-500 uppercase bg-transparent">
                                     <tr>
                                         <th className="px-6 py-4 font-semibold">Datum</th>
                                         <th className="px-6 py-4 font-semibold">Kunde / Firma</th>
@@ -147,18 +147,18 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                                         <th className="px-6 py-4 font-semibold">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-200">
+                                <tbody>
                                     {filteredLeads.map((lead) => {
                                         const b2b = isB2BLead(lead);
                                         return (
-                                            <tr key={lead.id} className="hover:bg-slate-50/70 transition-colors">
-                                                <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500">
+                                            <tr key={lead.id} className="bg-white hover:bg-slate-50 transition-colors shadow-sm group">
+                                                <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500 border-y border-l border-slate-200 rounded-l-xl group-hover:border-slate-300">
                                                     {new Date(lead.created_at || lead.erstellt_am || new Date()).toLocaleDateString('de-DE', {
                                                         day: '2-digit', month: '2-digit', year: 'numeric',
                                                         hour: '2-digit', minute: '2-digit'
                                                     })}
                                                 </td>
-                                                <td className="px-6 py-4">
+                                                <td className="px-6 py-4 border-y border-slate-200 group-hover:border-slate-300">
                                                     {b2b ? (
                                                         <div>
                                                             <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200 uppercase tracking-wider mb-1">
@@ -178,7 +178,7 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                                                         </div>
                                                     )}
                                                 </td>
-                                                <td className="px-6 py-4">
+                                                <td className="px-6 py-4 border-y border-slate-200 group-hover:border-slate-300">
                                                     <a href={`tel:${lead.telefon}`} className="font-semibold text-slate-800 hover:text-[#C8102E] transition-colors block">
                                                         {lead.telefon}
                                                     </a>
@@ -186,13 +186,13 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                                                         {lead.email}
                                                     </a>
                                                 </td>
-                                                <td className="px-6 py-4">
+                                                <td className="px-6 py-4 border-y border-slate-200 group-hover:border-slate-300">
                                                     <div className="font-medium text-slate-800">
                                                         {lead.plz} {lead.strasse || ''} {lead.hausnummer || ''}
                                                     </div>
                                                     {lead.etage && <div className="text-xs text-slate-400 mt-0.5">Etage: {lead.etage}</div>}
                                                 </td>
-                                                <td className="px-6 py-4">
+                                                <td className="px-6 py-4 border-y border-slate-200 group-hover:border-slate-300">
                                                     <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-red-50 text-[#C8102E] font-medium text-xs border border-red-100 mb-1">
                                                         {lead.schaedling || 'Unbekannt'}
                                                     </div>
@@ -211,7 +211,7 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                                                         </div>
                                                     )}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                <td className="px-6 py-4 whitespace-nowrap border-y border-r border-slate-200 rounded-r-xl group-hover:border-slate-300">
                                                     <div className="relative">
                                                         <select
                                                             value={lead.status}
@@ -238,11 +238,11 @@ export default function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
                         </div>
 
                         {/* Mobile View */}
-                        <div className="block md:hidden divide-y divide-slate-100">
+                        <div className="block md:hidden flex flex-col gap-4 pb-4">
                             {filteredLeads.map((lead) => {
                                 const b2b = isB2BLead(lead);
                                 return (
-                                    <div key={`mob-${lead.id}`} className="p-4 sm:p-5 flex flex-col gap-4 hover:bg-slate-50/50 transition-colors">
+                                    <div key={`mob-${lead.id}`} className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-5 flex flex-col gap-4">
                                         <div className="flex justify-between items-start gap-2">
                                             <div>
                                                 {b2b && (

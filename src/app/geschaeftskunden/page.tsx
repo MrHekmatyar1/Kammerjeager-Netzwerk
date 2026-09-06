@@ -661,8 +661,8 @@ export default function GeschaeftskundenPage() {
 
                                 {/* Spinning Text */}
                                 <g className="origin-center animate-[spin_25s_linear_infinite]" style={{ transformOrigin: 'center' }}>
-                                    {/* Text path: r=39 (exactly between 31 and 47) -> Circumference = 245 */}
-                                    <path id="textCircle" d="M 50, 11 A 39,39 0 1,1 49.9,11" fill="none" />
+                                    {/* Text path: r=35.6 (centers the 6.8px text perfectly between r=31 and r=47) -> C=224 */}
+                                    <path id="textCircle" d="M 50, 14.4 A 35.6,35.6 0 1,1 49.9,14.4" fill="none" />
                                     <text 
                                         style={{ 
                                             fontSize: '6.8px', 
@@ -672,7 +672,7 @@ export default function GeschaeftskundenPage() {
                                         }} 
                                         fill="#1a1a1a"
                                     >
-                                        <textPath href="#textCircle" startOffset="0%" textLength="245" lengthAdjust="spacing">
+                                        <textPath href="#textCircle" startOffset="0%" textLength="224" lengthAdjust="spacing">
                                             KAMMERJÄGER-ZENTRALE ● GARANTIE ● KAMMERJÄGER-ZENTRALE ● GARANTIE ● 
                                         </textPath>
                                     </text>
@@ -680,8 +680,8 @@ export default function GeschaeftskundenPage() {
                             </svg>
 
                             {/* Center Logo - Increased size to almost touch the inner ring (inner ring is 62% diameter) */}
-                            <div className="relative z-10 flex items-center justify-center rounded-full bg-transparent" style={{ width: '58%', height: '58%' }}>
-                                <img src="/logo_k.png" alt="Garantie Logo" className="w-full h-full object-contain drop-shadow-sm" />
+                            <div className="relative z-10 flex items-center justify-center rounded-full bg-transparent overflow-hidden" style={{ width: '58%', height: '58%' }}>
+                                <img src="/logo_k.png" alt="Garantie Logo" className="w-full h-full object-contain drop-shadow-sm mix-blend-multiply" />
                             </div>
                         </div>
 

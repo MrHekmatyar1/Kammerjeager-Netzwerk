@@ -701,7 +701,7 @@ export default function GeschaeftskundenPage() {
                 </section>
 
                 {/* ── Контактная форма ── */}
-                <section id="kontakt" className="w-full flex flex-col items-center px-6 pt-[60px] pb-[110px] mt-16 md:mt-24" style={{ background: '#f1f4f8' }}>
+                <section id="kontakt" className="w-full flex flex-col items-center px-6 pt-[60px] pb-[60px] mt-16 md:mt-24" style={{ background: '#f1f4f8' }}>
                     <div className="w-full max-w-[720px]">
                         <KontaktForm />
                     </div>

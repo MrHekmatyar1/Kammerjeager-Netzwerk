@@ -135,12 +135,6 @@ export default function BranchePage({ params }: { params: Promise<{ branche: str
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
                     <div className="relative z-10 w-full max-w-[1200px] mx-auto px-6 pb-12">
-                        {/* Breadcrumb */}
-                        <p className="text-white/60 text-xs font-semibold uppercase tracking-[0.15em] mb-4">
-                            <Link href="/geschaeftskunden" className="hover:text-white transition-colors no-underline text-white/60">Geschäftskunden</Link>
-                            {' / '}
-                            <span className="text-white/80">{data.breadcrumb}</span>
-                        </p>
                         {/* Title */}
                         <h1
                             className="text-white uppercase leading-[1.0] tracking-[-0.02em]"
@@ -149,11 +143,11 @@ export default function BranchePage({ params }: { params: Promise<{ branche: str
                                 fontWeight: 900,
                                 fontSize: 'clamp(2.5rem, 7vw, 5rem)',
                                 whiteSpace: 'pre-line',
+                                textShadow: '0 2px 20px rgba(0,0,0,0.5)',
                             }}
                         >
                             {data.title}
                         </h1>
-                        <p className="text-white/70 mt-3 text-[15px] font-medium">{data.subtitle}</p>
                     </div>
                 </section>
 

@@ -36,9 +36,9 @@ export default function ConfirmClient({ lead, billingModel }: { lead: any, billi
         
         let clientX = 0;
         if ('touches' in e) {
-            clientX = e.touches[0].clientX;
+            clientX = (e as unknown as TouchEvent).touches[0]?.clientX || 0;
         } else {
-            clientX = (e as MouseEvent).clientX;
+            clientX = (e as unknown as MouseEvent).clientX || 0;
         }
 
         let newPos = clientX - sliderRect.left - (thumbWidth / 2);

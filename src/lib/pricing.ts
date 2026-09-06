@@ -46,7 +46,7 @@ export function getLeadPricing(
 
     for (const key of Object.keys(fixedPrices)) {
         if (s.includes(key)) {
-            const price = fixedPrices[key];
+            const price = fixedPrices[key] as number;
             return { type: 'fixed', label: 'Fixpreis', value: `${price} €`, numericValue: price };
         }
     }

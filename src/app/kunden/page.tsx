@@ -109,12 +109,18 @@ export default function KundenDashboard() {
             if (!res.ok) throw new Error('Fehler beim Speichern');
             
             // Update local state
-            setLeads(leads.map(l => l.id === editingLead.id ? { 
-                ...l, 
-                name: editForm.name, 
-                telefon: editForm.telefon, 
-                termin_time: editForm.termin_time ? new Date(editForm.termin_time).toISOString() : undefined 
-            } : l));
+            setLeads(leads.map(l => {
+                if (l.id === editingLead.id) {
+                    const updatedLead = { ...l, name: editForm.name, telefon: editForm.telefon };
+                    if (editForm.termin_time) {
+                        updatedLead.termin_time = new Date(editForm.termin_time).toISOString();
+                    } else {
+                        delete updatedLead.termin_time;
+                    }
+                    return updatedLead;
+                }
+                return l;
+            }));
             setEditingLead(null);
         } catch (err) {
             alert('Fehler beim Speichern der Daten. Bitte versuchen Sie es erneut.');

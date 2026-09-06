@@ -648,25 +648,50 @@ export default function GeschaeftskundenPage() {
                     <div className="w-full max-w-[900px] flex flex-col md:flex-row items-center justify-center gap-10 md:gap-14">
                         
                         {/* Minimalist Badge with Logo */}
-                        <div className="shrink-0 relative flex items-center justify-center w-36 h-36 md:w-44 md:h-44 rounded-full border-4 border-[#1a1a1a] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.08)] p-8">
-                            <img src="/logo_k.png" alt="Netzwerk Garantie" className="w-full h-full object-contain [clip-path:circle(45%_at_50%_50%)]" />
-                            <div className="absolute -bottom-1 -right-1 bg-[#C8102E] text-white rounded-full p-2.5 border-4 border-white shadow-md">
-                                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+                        <div className="shrink-0 relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 rounded-full bg-white shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
+                            
+                            {/* Outer border */}
+                            <div className="absolute inset-[6px] rounded-full border-[1.5px] border-[#1a1a1a]"></div>
+                            
+                            {/* Inner border */}
+                            <div className="absolute inset-[32px] md:inset-[38px] rounded-full border-[1.5px] border-[#1a1a1a] bg-[#f8f9fa]"></div>
+
+                            {/* Circular Text SVG */}
+                            <div className="absolute inset-0 w-full h-full animate-[spin_25s_linear_infinite]">
+                                <svg viewBox="0 0 100 100" className="w-full h-full">
+                                    {/* r=34, C=213.6 */}
+                                    <path id="textCircle" d="M 50, 16 a 34,34 0 1,1 0,68 a 34,34 0 1,1 0,-68" fill="none" />
+                                    <text style={{ fontSize: '7.5px', fontWeight: 800, textTransform: 'uppercase' }} fill="#1a1a1a">
+                                        <textPath href="#textCircle" startOffset="0" textLength="213.6" lengthAdjust="spacing">
+                                            KAMMERJÄGER-ZENTRALE • GARANTIE • KAMMERJÄGER-ZENTRALE • GARANTIE • 
+                                        </textPath>
+                                    </text>
+                                </svg>
+                            </div>
+
+                            {/* Center Logo */}
+                            <div className="relative z-10 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
+                                <img src="/logo_k.png" alt="Garantie Logo" className="w-full h-full object-contain drop-shadow-sm" />
+                            </div>
+
+                            {/* Checkmark icon */}
+                            <div className="absolute bottom-1 right-1 md:bottom-2 md:right-2 bg-[#C8102E] text-white rounded-full p-2 border-4 border-[#f4f4f4] shadow-md z-20">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                         </div>
 
                         {/* Content */}
-                        <div className="flex-1 border-l-[5px] border-[#4db8b8] pl-6 md:pl-10">
+                        <div className="flex-1 border-l-[4px] md:border-l-[5px] border-[#4db8b8] pl-6 md:pl-10">
                             <p style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#C8102E', marginBottom: '12px' }}>
                                 Die Kammerjäger-Zentrale Garantie
                             </p>
                             <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 900, color: '#1a1a1a', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '18px' }}>
-                                Wir sind erst zufrieden, wenn Sie es sind.
+                                Garantiert schädlingsfrei.<br />Ohne Wenn und Aber.
                             </h2>
                             <p className="text-gray-600 text-[16px] leading-relaxed font-medium">
-                                Mit strengen Qualitätskontrollen unserer Partner und einer <strong className="text-black">30-Tage-Nachbesserungsgarantie</strong> sorgen wir dafür, dass Ihr Betrieb schädlingsfrei bleibt. Ihre Zufriedenheit und der Schutz Ihres guten Rufs sind unser oberstes Ziel.
+                                Wir setzen auf nachhaltige Prävention und effektive Lösungen. Sollte wider Erwarten innerhalb von 30 Tagen nach unserem Einsatz erneuter Handlungsbedarf bestehen, greift unsere <strong className="text-black">kostenfreie Nachbesserungsgarantie</strong>. Der Schutz Ihres Betriebs und Ihres guten Rufs hat für uns höchste Priorität.
                             </p>
                         </div>
                     </div>

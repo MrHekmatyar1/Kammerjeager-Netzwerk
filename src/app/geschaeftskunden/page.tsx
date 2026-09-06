@@ -648,39 +648,38 @@ export default function GeschaeftskundenPage() {
                     <div className="w-full max-w-[900px] flex flex-col md:flex-row items-center justify-center gap-10 md:gap-14">
                         
                         {/* Minimalist Badge with Logo */}
-                        <div className="shrink-0 relative flex items-center justify-center w-48 h-48 md:w-56 md:h-56 rounded-full bg-white shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
+                        <div className="shrink-0 relative flex items-center justify-center w-48 h-48 md:w-56 md:h-56 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
                             
                             {/* Complete SVG for Rings and Text */}
                             <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full pointer-events-none">
                                 {/* Outer Ring */}
-                                <circle cx="50" cy="50" r="46" fill="none" stroke="#1a1a1a" strokeWidth="2.5" />
+                                <circle cx="50" cy="50" r="47" fill="#ffffff" stroke="#1a1a1a" strokeWidth="2.5" />
                                 
                                 {/* Inner Ring */}
-                                <circle cx="50" cy="50" r="30" fill="#f8f9fa" stroke="#1a1a1a" strokeWidth="2.5" />
+                                <circle cx="50" cy="50" r="31" fill="#f8f9fa" stroke="#1a1a1a" strokeWidth="2.5" />
 
                                 {/* Spinning Text */}
                                 <g className="origin-center animate-[spin_25s_linear_infinite]" style={{ transformOrigin: 'center' }}>
-                                    {/* Text path: r=38 (exactly between 30 and 46) */}
-                                    <path id="textCircle" d="M 50, 12 A 38,38 0 1,1 49.9,12" fill="none" />
+                                    {/* Text path: r=39 (exactly between 31 and 47) -> Circumference = 245 */}
+                                    <path id="textCircle" d="M 50, 11 A 39,39 0 1,1 49.9,11" fill="none" />
                                     <text 
                                         style={{ 
-                                            fontSize: '8px', 
+                                            fontSize: '6.8px', 
                                             fontWeight: 800, 
                                             textTransform: 'uppercase',
-                                            fontFamily: 'system-ui, -apple-system, sans-serif',
-                                            letterSpacing: '0.12em'
+                                            fontFamily: 'system-ui, -apple-system, sans-serif'
                                         }} 
                                         fill="#1a1a1a"
                                     >
-                                        <textPath href="#textCircle" startOffset="0%" textLength="237" lengthAdjust="spacing">
+                                        <textPath href="#textCircle" startOffset="0%" textLength="245" lengthAdjust="spacing">
                                             KAMMERJÄGER-ZENTRALE ● GARANTIE ● KAMMERJÄGER-ZENTRALE ● GARANTIE ● 
                                         </textPath>
                                     </text>
                                 </g>
                             </svg>
 
-                            {/* Center Logo */}
-                            <div className="relative z-10 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-100 p-2">
+                            {/* Center Logo - Increased size to almost touch the inner ring (inner ring is 62% diameter) */}
+                            <div className="relative z-10 flex items-center justify-center rounded-full bg-transparent" style={{ width: '58%', height: '58%' }}>
                                 <img src="/logo_k.png" alt="Garantie Logo" className="w-full h-full object-contain drop-shadow-sm" />
                             </div>
                         </div>

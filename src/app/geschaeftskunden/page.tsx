@@ -648,29 +648,39 @@ export default function GeschaeftskundenPage() {
                     <div className="w-full max-w-[900px] flex flex-col md:flex-row items-center justify-center gap-10 md:gap-14">
                         
                         {/* Minimalist Badge with Logo */}
-                        <div className="shrink-0 relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 rounded-full bg-white shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
+                        <div className="shrink-0 relative flex items-center justify-center w-48 h-48 md:w-56 md:h-56 rounded-full bg-white shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
                             
-                            {/* Outer border */}
-                            <div className="absolute inset-[6px] rounded-full border-[2.5px] border-[#1a1a1a]"></div>
-                            
-                            {/* Inner border */}
-                            <div className="absolute inset-[32px] md:inset-[38px] rounded-full border-[2.5px] border-[#1a1a1a] bg-[#f8f9fa]"></div>
+                            {/* Complete SVG for Rings and Text */}
+                            <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full pointer-events-none">
+                                {/* Outer Ring */}
+                                <circle cx="50" cy="50" r="46" fill="none" stroke="#1a1a1a" strokeWidth="2.5" />
+                                
+                                {/* Inner Ring */}
+                                <circle cx="50" cy="50" r="30" fill="#f8f9fa" stroke="#1a1a1a" strokeWidth="2.5" />
 
-                            {/* Circular Text SVG */}
-                            <div className="absolute inset-0 w-full h-full animate-[spin_25s_linear_infinite]">
-                                <svg viewBox="0 0 100 100" className="w-full h-full">
-                                    {/* r=34, C=213.6 */}
-                                    <path id="textCircle" d="M 50, 16 a 34,34 0 1,1 0,68 a 34,34 0 1,1 0,-68" fill="none" />
-                                    <text style={{ fontSize: '5.6px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em' }} fill="#1a1a1a">
-                                        <textPath href="#textCircle" startOffset="0" textLength="213.6" lengthAdjust="spacing">
+                                {/* Spinning Text */}
+                                <g className="origin-center animate-[spin_25s_linear_infinite]" style={{ transformOrigin: 'center' }}>
+                                    {/* Text path: r=38 (exactly between 30 and 46) */}
+                                    <path id="textCircle" d="M 50, 12 A 38,38 0 1,1 49.9,12" fill="none" />
+                                    <text 
+                                        style={{ 
+                                            fontSize: '8px', 
+                                            fontWeight: 800, 
+                                            textTransform: 'uppercase',
+                                            fontFamily: 'system-ui, -apple-system, sans-serif',
+                                            letterSpacing: '0.12em'
+                                        }} 
+                                        fill="#1a1a1a"
+                                    >
+                                        <textPath href="#textCircle" startOffset="0%" textLength="237" lengthAdjust="spacing">
                                             KAMMERJÄGER-ZENTRALE ● GARANTIE ● KAMMERJÄGER-ZENTRALE ● GARANTIE ● 
                                         </textPath>
                                     </text>
-                                </svg>
-                            </div>
+                                </g>
+                            </svg>
 
                             {/* Center Logo */}
-                            <div className="relative z-10 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
+                            <div className="relative z-10 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-100 p-2">
                                 <img src="/logo_k.png" alt="Garantie Logo" className="w-full h-full object-contain drop-shadow-sm" />
                             </div>
                         </div>

@@ -594,24 +594,28 @@ export default function GeschaeftskundenPage() {
                                     title: 'Gastronomie & Lebensmittel',
                                     desc: 'HACCP-konforme Maßnahmen und lückenlose Dokumentation. Diskrete Einsätze außerhalb der Öffnungszeiten zum Schutz Ihres Rufs.',
                                     img: '/b2b/b2b_restaurant.png',
+                                    href: '/geschaeftskunden/gastronomie',
                                     link: 'Mehr erfahren'
                                 },
                                 {
                                     title: 'Hotellerie & Gewerbe',
                                     desc: 'Schnelle und unauffällige Lösungen für höchste Gästezufriedenheit. Unsere Techniker arbeiten diskret in neutraler Kleidung.',
                                     img: '/b2b/b2b_hotel.jpg',
+                                    href: '/geschaeftskunden/hotellerie',
                                     link: 'Mehr erfahren'
                                 },
                                 {
                                     title: 'Lager & Logistik',
                                     desc: 'Kontinuierliches Monitoring und proaktive Prävention zum Schutz von Waren, Lieferketten und Gebäudeinfrastruktur.',
                                     img: '/b2b/b2b_warehouse.png',
+                                    href: '/geschaeftskunden/lager',
                                     link: 'Mehr erfahren'
                                 },
                                 {
                                     title: 'Öffentlicher Sektor',
                                     desc: 'Sichere, umweltfreundliche und giftfreie Methoden für sensible Bereiche wie Schulen, Krankenhäuser und Behörden.',
                                     img: '/b2b/b2b_school.png',
+                                    href: '/geschaeftskunden/oeffentlich',
                                     link: 'Mehr erfahren'
                                 }
                             ].map((item, idx) => (
@@ -629,15 +633,16 @@ export default function GeschaeftskundenPage() {
                                     <p className="text-[#555] text-[15px] leading-relaxed mb-6 flex-grow font-medium" style={{ fontFamily: 'inherit' }}>
                                         {item.desc}
                                     </p>
-                                    <button 
-                                        className="text-[#C8102E] font-bold text-[13px] flex items-center gap-1.5 transition-all mt-auto uppercase tracking-[0.08em]"
+                                    <a 
+                                        href={item.href}
+                                        className="text-[#C8102E] font-bold text-[13px] flex items-center gap-1.5 transition-all mt-auto uppercase tracking-[0.08em] no-underline"
+                                        style={{ transition: 'gap 0.2s ease' }}
                                         onMouseEnter={e => (e.currentTarget.style.gap = '8px')}
                                         onMouseLeave={e => (e.currentTarget.style.gap = '6px')}
-                                        style={{ transition: 'gap 0.2s ease', cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}
                                     >
                                         {item.link} 
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                                    </button>
+                                    </a>
                                 </div>
                             ))}
                         </div>

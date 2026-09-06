@@ -12,7 +12,7 @@ type KundeTyp = 'Privatkunde' | 'Firmenkunde' | 'Öffentlicher Sektor' | '';
 const SUB_OPTS: Record<string, string[]> = {
     'Privatkunde': ['Haus / Wohnung', 'Garten', 'Sonstiges'],
     'Firmenkunde': ['Büro', 'Restaurant / Hotel', 'Lager / Halle', 'Sonstiges'],
-    'Öffentlicher Sektor': ['Schule / Kita', 'Behörde', 'Krankenhaus / Pflegeheim', 'Sonstiges'],
+    'Öffentlicher Sektor': ['Schule / Kita', 'Behörde', 'Krankenhaus', 'Sonstiges'],
 };
 
 interface QuizState {
